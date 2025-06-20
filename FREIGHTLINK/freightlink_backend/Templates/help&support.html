@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreightLink - Help & Support</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        :root {
+            --primary: #2C3E50;
+            --secondary: #34495E;
+            --accent: #F39C12;
+            --accent-hover: #E67E22;
+            --light: #ECF0F1;
+            --dark: #2C3E50;
+            --gray: #95A5A6;
+            --light-gray: #F8F9FA;
+            --success: #27AE60;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .rounded-md {
+            border-radius: 0.75rem;
+        }
+        
+        .shadow-custom {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--primary);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
+        }
+        .header .logo {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+        .header .nav-link {
+            color: #FFFFFF;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+            margin: 0 0.25rem;
+        }
+        .header .nav-link:hover, .header .nav-link.active {
+            color: var(--primary);
+            background-color: var(--accent);
+            border-radius: 2rem;
+        }
+        .header .nav-link.active {
+            font-weight: 600;
+        }
+
+        /* Dashboard Layout */
+        .dashboard-layout {
+            display: flex;
+            height: calc(100vh - 70px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background-color: var(--primary);
+            padding: 2rem 1rem;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+        }
+        .sidebar .menu-item {
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.75rem 1rem;
+            margin: 0.25rem 0;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .sidebar .menu-item i {
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+        .sidebar .menu-item:hover, .sidebar .menu-item.active {
+            background-color: var(--accent);
+            color: var(--primary);
+        }
+        .sidebar .menu-item.active {
+            font-weight: 600;
+        }
+        .sidebar .divider {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 1rem 0;
+        }
+        .sidebar .menu-title {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin: 1.5rem 0 0.5rem 1rem;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+        .page-subtitle {
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+
+        /* Help & Support Specific Styles */
+        .help-card {
+            background-color: #FFFFFF;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .help-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+        
+        .help-card h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .help-category {
+            background-color: #FFFFFF;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .help-category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+        
+        .category-icon {
+            width: 64px;
+            height: 64px;
+            background-color: rgba(243, 156, 18, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .category-icon i {
+            font-size: 2rem;
+            color: var(--accent);
+        }
+        
+        .accordion-button:not(.collapsed) {
+            background-color: rgba(243, 156, 18, 0.1);
+            color: var(--primary);
+            font-weight: 600;
+            box-shadow: none;
+        }
+        
+        .accordion-button:focus {
+            box-shadow: none;
+            border-color: rgba(243, 156, 18, 0.1);
+        }
+        
+        .accordion-button::after {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%232C3E50'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+        }
+        
+        .contact-method {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding: 1.25rem;
+            background-color: var(--light-gray);
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        
+        .contact-method:hover {
+            background-color: rgba(243, 156, 18, 0.1);
+        }
+        
+        .contact-icon {
+            width: 48px;
+            height: 48px;
+            background-color: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: white;
+        }
+        
+        .article-preview {
+            display: flex;
+            align-items: flex-start;
+            padding: 1.25rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .article-preview:hover {
+            background-color: rgba(243, 156, 18, 0.05);
+        }
+        
+        .article-preview:last-child {
+            border-bottom: none;
+        }
+        
+        .article-icon {
+            color: var(--accent);
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            margin-top: 0.25rem;
+        }
+        
+        .search-form {
+            position: relative;
+            margin-bottom: 2.5rem;
+        }
+        
+        .search-form input {
+            border-radius: 50px;
+            padding: 1rem 1.5rem;
+            padding-right: 3.5rem;
+            font-size: 1.1rem;
+            border: 2px solid var(--light-gray);
+            background-color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .search-form input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 5px 25px rgba(243, 156, 18, 0.15);
+        }
+        
+        .search-form button {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            bottom: 5px;
+            width: 50px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .search-form button:hover {
+            background-color: var(--accent-hover);
+            transform: scale(1.05);
+        }
+        
+        .btn-accent {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            color: var(--dark);
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+        }
+        
+        .btn-accent:hover {
+            background-color: var(--accent-hover);
+            border-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(230, 126, 34, 0.4);
+            color: var(--dark);
+        }
+        
+        .btn-outline-accent {
+            background-color: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            padding: 0.7rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline-accent:hover {
+            background-color: var(--accent);
+            color: var(--dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(230, 126, 34, 0.2);
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            border-radius: 50px;
+            background-color: rgba(243, 156, 18, 0.1);
+            color: var(--accent);
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .tag:hover {
+            background-color: var(--accent);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 991.98px) {
+            .sidebar {
+                width: 80px;
+                padding: 2rem 0.5rem;
+            }
+            .sidebar .menu-item span, .sidebar .menu-title {
+                display: none;
+            }
+            .sidebar .menu-item i {
+                margin-right: 0;
+                font-size: 1.5rem;
+            }
+            .main-content {
+                padding: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 767.98px) {
+            .dashboard-layout {
+                flex-direction: column;
+                height: auto;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                padding: 1rem;
+                display: flex;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            .sidebar .menu-item {
+                margin: 0 0.25rem;
+                padding: 0.5rem 1rem;
+            }
+            .sidebar .menu-item span {
+                display: none;
+            }
+            .sidebar .divider, .sidebar .menu-title {
+                display: none;
+            }
+            .main-content {
+                padding: 1.5rem 1rem;
+            }
+        }
+
+        /* Custom Modal Styles for alerts */
+        .modal-custom {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content-custom {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .close-button-custom {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close-button-custom:hover,
+        .close-button-custom:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header class="header text-white py-3 shadow-sm sticky-top">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="logo d-flex align-items-center">
+                    <i class="bi bi-truck me-2"></i>FreightLink
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="dropdown me-3">
+                        <a href="#" class="text-white dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-bell me-2"></i>
+                            <span class="badge bg-accent text-dark rounded-pill">3</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">New match found</a></li>
+                            <li><a class="dropdown-item" href="#">Cargo request accepted</a></li>
+                            <li><a class="dropdown-item" href="#">Payment received</a></li>
+                        </ul>
+                    </div>
+                    <div class="dropdown">
+                        <a href="#" class="text-white dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="rounded-circle bg-accent text-dark d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                                <i class="bi bi-person-fill"></i>
+                            </div>
+                            <span>John Doe</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="dashboard-layout">
+        <div class="sidebar">
+            <a href="dashboard.html" class="menu-item">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="mylisting.html" class="menu-item">
+                <i class="bi bi-box-seam-fill"></i>
+                <span>My Listings</span>
+            </a>
+            <a href="history.html" class="menu-item">
+                <i class="bi bi-clock-history"></i>
+                <span>History</span>
+            </a>
+            <a href="messages.html" class="menu-item">
+                <i class="bi bi-chat-left-text-fill"></i>
+                <span>Messages</span>
+            </a>
+            
+            <div class="divider"></div>
+            <div class="menu-title">Account</div>
+            
+            <a href="profile.html" class="menu-item active">
+                <i class="bi bi-person-fill"></i>
+                <span>Profile</span>
+            </a>
+            <a href="payments.html" class="menu-item">
+                <i class="bi bi-wallet2"></i>
+                <span>Payments</span>
+            </a>
+            <a href="settings (2).html" class="menu-item">
+                <i class="bi bi-gear-fill"></i>
+                <span>Settings</span>
+            </a>
+            <a href="help&support.html" class="menu-item">
+                <i class="bi bi-question-circle-fill"></i>
+                <span>Help & Support</span>
+            </a>
+            
+            <div class="divider"></div>
+            
+            <a href="#" class="menu-item">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+
+        <div class="main-content">
+            <h1 class="page-title">Help & Support</h1>
+            <p class="page-subtitle">Find answers to common questions or contact our support team for assistance.</p>
+
+            <div class="search-form">
+                <input type="text" class="form-control" placeholder="Search for help topics...">
+                <button type="submit">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="help-category h-100">
+                        <div class="p-4">
+                            <div class="category-icon">
+                                <i class="bi bi-truck"></i>
+                            </div>
+                            <h4>Shipping & Delivery</h4>
+                            <p class="text-muted">Find information about cargo transportation, delivery timelines, and tracking.</p>
+                            <a href="#" class="btn btn-sm btn-outline-accent mt-2">View Articles</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="help-category h-100">
+                        <div class="p-4">
+                            <div class="category-icon">
+                                <i class="bi bi-wallet2"></i>
+                            </div>
+                            <h4>Payments & Billing</h4>
+                            <p class="text-muted">Learn about payment methods, invoices, and managing your billing information.</p>
+                            <a href="#" class="btn btn-sm btn-outline-accent mt-2">View Articles</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="help-category h-100">
+                        <div class="p-4">
+                            <div class="category-icon">
+                                <i class="bi bi-person-plus"></i>
+                            </div>
+                            <h4>Account Management</h4>
+                            <p class="text-muted">Get help with your account settings, profile, and user permissions.</p>
+                            <a href="#" class="btn btn-sm btn-outline-accent mt-2">View Articles</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="help-category h-100">
+                        <div class="p-4">
+                            <div class="category-icon">
+                                <i class="bi bi-box-seam"></i>
+                            </div>
+                            <h4>Cargo Listings</h4>
+                            <p class="text-muted">Understand how to post cargo, manage your listings, and find the right transport.</p>
+                            <a href="#" class="btn btn-sm btn-outline-accent mt-2">View Articles</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="help-category h-100">
+                        <div class="p-4">
+                            <div class="category-icon">
+                                <i class="bi bi-shield-check"></i>
+                            </div>
+                            <h4>Safety & Security</h4>
+                            <p class="text-muted">Learn about our safety measures, cargo insurance, and secure transactions.</p>
+                            <a href="#" class="btn btn-sm btn-outline-accent mt-2">View Articles</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="help-category h-100">
+                        <div class="p-4">
+                            <div class="category-icon">
+                                <i class="bi bi-chat-dots"></i>
+                            </div>
+                            <h4>Communication</h4>
+                            <p class="text-muted">Get help with messaging, notifications, and communication tools.</p>
+                            <a href="#" class="btn btn-sm btn-outline-accent mt-2">View Articles</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="help-card">
+                        <h3><i class="bi bi-question-circle me-2 text-accent"></i>Frequently Asked Questions</h3>
+                        
+                        <div class="accordion" id="faqAccordion">
+                            <div id="faq-content">
+                                <div class="accordion-item border-0 mb-3 shadow-sm rounded">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button rounded" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="true" aria-controls="faq1">
+                                            How do I post my truck for available cargo?
+                                        </button>
+                                    </h2>
+                                    <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                                        <div class="accordion-body">
+                                            <p>To post your truck, follow these steps:</p>
+                                            <ol>
+                                                <li>Navigate to the "Find Available Cargo" page</li>
+                                                <li>Click on the "Post Your Truck" button at the bottom of the page</li>
+                                                <li>Fill out the truck details form with information about your vehicle</li>
+                                                <li>Specify your availability dates and preferred routes</li>
+                                                <li>Submit the form to make your truck visible to cargo owners</li>
+                                            </ol>
+                                            <p>Your truck listing will be active for 14 days unless you extend or remove it.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="accordion-item border-0 mb-3 shadow-sm rounded">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed rounded" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" aria-expanded="false" aria-controls="faq2">
+                                            How does the payment system work?
+                                        </button>
+                                    </h2>
+                                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                        <div class="accordion-body">
+                                            <p>FreightLink offers a secure payment system that works as follows:</p>
+                                            <ul>
+                                                <li>When a match is made, the cargo owner sets up a payment in escrow</li>
+                                                <li>The funds are held securely until the delivery is confirmed</li>
+                                                <li>After successful delivery, funds are released to the truck owner</li>
+                                                <li>Our platform accepts various payment methods including M-Pesa, bank transfers, and major credit cards</li>
+                                                <li>A service fee of 5% is charged on each successful transaction</li>
+                                            </ul>
+                                            <p>This system ensures that both parties are protected throughout the transaction process.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="accordion-item border-0 mb-3 shadow-sm rounded">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed rounded" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" aria-expanded="false" aria-controls="faq3">
+                                            What happens if cargo is damaged during transport?
+                                        </button>
+                                    </h2>
+                                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                        <div class="accordion-body">
+                                            <p>In case of cargo damage during transport:</p>
+                                            <ol>
+                                                <li>The cargo owner should document the damage with photos upon delivery</li>
+                                                <li>Report the issue through the platform's "Report Problem" feature within 24 hours</li>
+                                                <li>Our support team will review the case and contact both parties</li>
+                                                <li>If you've opted for FreightLink's Cargo Protection, the claim will be processed according to our insurance policy</li>
+                                                <li>Without Cargo Protection, resolution will be facilitated through our mediation process</li>
+                                            </ol>
+                                            <p>We recommend always choosing our Cargo Protection option for valuable shipments.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="accordion-item border-0 mb-3 shadow-sm rounded">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed rounded" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" aria-expanded="false" aria-controls="faq4">
+                                            How do I cancel a booking?
+                                        </button>
+                                    </h2>
+                                    <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                        <div class="accordion-body">
+                                            <p>To cancel a booking:</p>
+                                            <ol>
+                                                <li>Go to "My Listings" in your dashboard</li>
+                                                <li>Select the active booking you wish to cancel</li>
+                                                <li>Click the "Cancel Booking" button</li>
+                                                <li>Provide a reason for cancellation</li>
+                                                <li>Confirm your cancellation</li>
+                                            </ol>
+                                            <p><strong>Important:</strong> Cancellation policies vary based on how close to the pickup date you cancel:</p>
+                                            <ul>
+                                                <li>More than 48 hours before pickup: No penalty</li>
+                                                <li>24-48 hours before pickup: 25% cancellation fee</li>
+                                                <li>Less than 24 hours before pickup: 50% cancellation fee</li>
+                                            </ul>
+                                            <p>Excessive cancellations may affect your account rating.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="accordion-item border-0 shadow-sm rounded">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed rounded" type="button" data-bs-toggle="collapse" data-bs-target="#faq5" aria-expanded="false" aria-controls="faq5">
+                                            How are transport rates calculated?
+                                        </button>
+                                    </h2>
+                                    <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                        <div class="accordion-body">
+                                            <p>Transport rates on FreightLink are determined by several factors:</p>
+                                            <ul>
+                                                <li>Distance between pickup and delivery locations</li>
+                                                <li>Cargo weight and volume</li>
+                                                <li>Type of cargo and handling requirements</li>
+                                                <li>Truck type and capacity</li>
+                                                <li>Fuel costs and current market rates</li>
+                                                <li>Urgency of delivery</li>
+                                            </ul>
+                                            <p>Truck owners set their own rates, but our system provides recommendations based on current market conditions. Cargo owners can negotiate rates directly with truck owners through our messaging system.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <a href="#" class="btn btn-outline-accent">View All FAQs</a>
+                        </div>
+                    </div>
+                    
+                    <div class="help-card">
+                        <h3><i class="bi bi-file-text me-2 text-accent"></i>Popular Help Articles</h3>
+                        
+                        <div id="articles-content">
+                            <div class="article-preview">
+                                <div class="article-icon">
+                                    <i class="bi bi-book"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-1">Getting Started with FreightLink</h5>
+                                    <p class="text-muted mb-1">A complete guide for new users to navigate the platform.</p>
+                                    <div class="d-flex align-items-center">
+                                        <span class="tag">Beginner</span>
+                                        <span class="text-muted small ms-auto">5 min read</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="article-preview">
+                                <div class="article-icon">
+                                    <i class="bi bi-shield-lock"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-1">Understanding Our Security Measures</h5>
+                                    <p class="text-muted mb-1">Learn about how we protect your data and transactions.</p>
+                                    <div class="d-flex align-items-center">
+                                        <span class="tag">Security</span>
+                                        <span class="text-muted small ms-auto">8 min read</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="article-preview">
+                                <div class="article-icon">
+                                    <i class="bi bi-cash-coin"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-1">Managing Your Payments and Invoices</h5>
+                                    <p class="text-muted mb-1">Step-by-step guide to handle financial transactions.</p>
+                                    <div class="d-flex align-items-center">
+                                        <span class="tag">Payments</span>
+                                        <span class="text-muted small ms-auto">6 min read</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="article-preview">
+                                <div class="article-icon">
+                                    <i class="bi bi-geo-alt"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-1">Optimizing Your Route Planning</h5>
+                                    <p class="text-muted mb-1">Tips and tricks for efficient delivery routes.</p>
+                                    <div class="d-flex align-items-center">
+                                        <span class="tag">Logistics</span>
+                                        <span class="text-muted small ms-auto">10 min read</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="article-preview">
+                                <div class="article-icon">
+                                    <i class="bi bi-star"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-1">Improving Your Platform Rating</h5>
+                                    <p class="text-muted mb-1">How to maintain a high seller rating and get more business.</p>
+                                    <div class="d-flex align-items-center">
+                                        <span class="tag">Business</span>
+                                        <span class="text-muted small ms-auto">7 min read</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <a href="#" class="btn btn-outline-accent">Browse All Articles</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="help-card">
+                        <h3><i class="bi bi-headset me-2 text-accent"></i>Contact Support</h3>
+                        
+                        <div class="contact-method">
+                            <div class="contact-icon">
+                                <i class="bi bi-chat-dots-fill"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-1">Live Chat</h5>
+                                <p class="text-muted mb-2">Chat with our support team in real-time.</p>
+                                <button class="btn btn-sm btn-accent" onclick="startChat()">Start Chat</button>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-method">
+                            <div class="contact-icon">
+                                <i class="bi bi-envelope-fill"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-1">Email Support</h5>
+                                <p class="text-muted mb-2">We'll respond within 24 hours.</p>
+                                <a href="mailto:support@freightlink.com" class="btn btn-sm btn-accent">Email Us</a>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-method">
+                            <div class="contact-icon">
+                                <i class="bi bi-telephone-fill"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-1">Phone Support</h5>
+                                <p class="text-muted mb-2">Available Mon-Fri, 8am-6pm EAT</p>
+                                <a href="tel:+254700123456" class="btn btn-sm btn-accent">Call Us</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="help-card">
+                        <h3><i class="bi bi-play-circle me-2 text-accent"></i>Video Tutorials</h3>
+                        
+                        <div class="card mb-3 border-0 shadow-sm">
+                            <img src="https://placehold.co/400x225/E67E22/FFFFFF?text=Tutorial+1" class="card-img-top" alt="Tutorial thumbnail">
+                            <div class="card-body">
+                                <h5 class="card-title">How to Post Cargo</h5>
+                                <p class="card-text small text-muted">Learn how to create effective cargo listings in 5 minutes.</p>
+                                <a href="#" class="btn btn-sm btn-accent w-100">Watch Now</a>
+                            </div>
+                        </div>
+                        
+                        <div class="card mb-3 border-0 shadow-sm">
+                            <img src="https://placehold.co/400x225/2C3E50/FFFFFF?text=Tutorial+2" class="card-img-top" alt="Tutorial thumbnail">
+                            <div class="card-body">
+                                <h5 class="card-title">Understanding the Dashboard</h5>
+                                <p class="card-text small text-muted">Navigate through FreightLink's main features.</p>
+                                <a href="#" class="btn btn-sm btn-accent w-100">Watch Now</a>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-3">
+                            <a href="#" class="btn btn-outline-accent">View All Tutorials</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="help-card mt-4">
+                <h3><i class="bi bi-ticket-perforated me-2 text-accent"></i>Submit a Support Ticket</h3>
+                <p>Can't find what you're looking for? Submit a ticket and our support team will get back to you.</p>
+
+                <form id="supportTicketForm">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="name" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="subject" class="form-label">Subject</label>
+                        <input type="text" class="form-control" id="subject" name="subject" placeholder="Brief description of your issue" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Category</label>
+                        <select class="form-select" id="category" name="category" required>
+                            <option value="" selected>Select a category</option>
+                            <option value="Account Issues">Account Issues</option>
+                            <option value="Payment Problems">Payment Problems</option>
+                            <option value="Shipping & Delivery">Shipping & Delivery</option>
+                            <option value="Technical Support">Technical Support</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Message</label>
+                        <textarea class="form-control" id="message" name="message" rows="5" placeholder="Describe your issue in detail" required></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="attachment" class="form-label">Attachments (optional)</label>
+                        <input class="form-control" type="file" id="attachment" name="attachment">
+                        <div class="form-text">You can upload screenshots or relevant documents (max 5MB).</div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-accent px-5">Submit Ticket</button>
+                    </div>
+                </form>
+                <div id="form-message" class="mt-3 text-center"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="customModal" class="modal-custom">
+        <div class="modal-content-custom">
+            <span class="close-button-custom">&times;</span>
+            <p id="modalMessage"></p>
+            <button class="btn btn-accent" onclick="document.getElementById('customModal').style.display='none'">OK</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script>
+        // Function to show custom modal
+        function showCustomModal(message) {
+            const modal = document.getElementById('customModal');
+            const modalMessage = document.getElementById('modalMessage');
+            modalMessage.textContent = message;
+            modal.style.display = 'flex'; // Use flex to center the modal
+        }
+
+        // Get the <span> element that closes the modal
+        const closeButton = document.querySelector('.close-button-custom');
+        closeButton.onclick = function() {
+            document.getElementById('customModal').style.display = 'none';
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            const modal = document.getElementById('customModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add smooth scrolling to all help section links
+            document.querySelectorAll('.help-category a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    // Smooth scroll functionality would go here
+                    console.log('Category clicked:', this.textContent);
+                });
+            });
+            
+            // Search functionality
+            const searchForm = document.querySelector('.search-form');
+            searchForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const searchTerm = this.querySelector('input').value;
+                console.log('Search term:', searchTerm);
+                // Search implementation would go here
+                showCustomModal(`Searching for: "${searchTerm}". (This is a frontend search simulation. Integrate with Django for real search.)`);
+            });
+            
+            // Live chat button functionality
+            // Removed inline onclick and added event listener
+            document.querySelector('.contact-method .btn-accent').addEventListener('click', function() {
+                console.log('Chat requested');
+                // Chat functionality would be implemented here, potentially opening a new chat window or modal
+                showCustomModal('Live chat functionality would be initiated here. (Requires Django Channels or a similar real-time solution.)');
+            });
+
+            // --- Django Backend Integration ---
+
+            // 1. Handle Support Ticket Form Submission
+            const supportTicketForm = document.getElementById('supportTicketForm');
+            const formMessageDiv = document.getElementById('form-message');
+
+            if (supportTicketForm) {
+                supportTicketForm.addEventListener('submit', async function(e) {
+                    e.preventDefault(); // Prevent default form submission
+
+                    // Collect form data
+                    const formData = new FormData(supportTicketForm);
+                    const ticketData = {};
+                    formData.forEach((value, key) => {
+                        ticketData[key] = value;
+                    });
+
+                    // For file uploads, you'd typically send a FormData object directly,
+                    // but for a simple JSON example, we'll omit the file for now.
+                    // If you need to send files, you'd adjust the fetch body and headers.
+                    // Example for file upload:
+                    // const fileInput = document.getElementById('attachment');
+                    // if (fileInput.files.length > 0) {
+                    //     formData.append('attachment', fileInput.files[0]);
+                    // }
+
+                    console.log('Submitting ticket data:', ticketData);
+
+                    try {
+                        // Replace with your actual Django API endpoint for submitting tickets
+                        const response = await fetch('YOUR_DJANGO_TICKET_SUBMISSION_API_ENDPOINT/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                // Include CSRF token if your Django setup requires it
+                                // 'X-CSRFToken': getCookie('csrftoken'), 
+                            },
+                            body: JSON.stringify(ticketData),
+                        });
+
+                        if (response.ok) {
+                            const result = await response.json();
+                            showCustomModal('Ticket submitted successfully! Reference ID: ' + (result.id || 'N/A'));
+                            supportTicketForm.reset(); // Clear the form
+                        } else {
+                            const errorData = await response.json();
+                            console.error('Error submitting ticket:', errorData);
+                            showCustomModal('Failed to submit ticket. Please try again. Error: ' + JSON.stringify(errorData));
+                        }
+                    } catch (error) {
+                        console.error('Network error or unexpected issue:', error);
+                        showCustomModal('An unexpected error occurred. Please check your network connection.');
+                    }
+                });
+            }
+
+            // Helper function to get CSRF token (if needed for Django)
+            // function getCookie(name) {
+            //     let cookieValue = null;
+            //     if (document.cookie && document.cookie !== '') {
+            //         const cookies = document.cookie.split(';');
+            //         for (let i = 0; i < cookies.length; i++) {
+            //             const cookie = cookies[i].trim();
+            //             // Does this cookie string begin with the name we want?
+            //             if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            //                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            //                 break;
+            //             }
+            //         }
+            //     }
+            //     return cookieValue;
+            // }
+
+
+            // 2. Fetch FAQs from Django Backend
+            async function fetchFAQs() {
+                const faqContentDiv = document.getElementById('faq-content');
+                if (!faqContentDiv) return; // Exit if the element doesn't exist
+
+                try {
+                    // Replace with your actual Django API endpoint for FAQs
+                    const response = await fetch('YOUR_DJANGO_FAQS_API_ENDPOINT/'); 
+                    
+                    if (response.ok) {
+                        const faqs = await response.json();
+                        faqContentDiv.innerHTML = ''; // Clear existing static content
+
+                        faqs.forEach((faq, index) => {
+                            const accordionItem = `
+                                <div class="accordion-item border-0 mb-3 shadow-sm rounded">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button ${index === 0 ? '' : 'collapsed'} rounded" type="button" data-bs-toggle="collapse" data-bs-target="#faq${faq.id}" aria-expanded="${index === 0 ? 'true' : 'false'}" aria-controls="faq${faq.id}">
+                                            ${faq.question}
+                                        </button>
+                                    </h2>
+                                    <div id="faq${faq.id}" class="accordion-collapse collapse ${index === 0 ? 'show' : ''}" data-bs-parent="#faqAccordion">
+                                        <div class="accordion-body">
+                                            ${faq.answer}
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                            faqContentDiv.innerHTML += accordionItem;
+                        });
+                        // Re-initialize Bootstrap accordions if they were dynamically added
+                        new bootstrap.Collapse(document.getElementById('faqAccordion'), { toggle: false });
+                    } else {
+                        console.error('Failed to fetch FAQs:', response.statusText);
+                        // Optionally, display an error message on the page
+                        faqContentDiv.innerHTML = '<p class="text-danger">Failed to load FAQs. Please try again later.</p>';
+                    }
+                } catch (error) {
+                    console.error('Network error fetching FAQs:', error);
+                    faqContentDiv.innerHTML = '<p class="text-danger">An error occurred while fetching FAQs. Please check your internet connection.</p>';
+                }
+            }
+
+            // 3. Fetch Popular Articles from Django Backend
+            async function fetchArticles() {
+                const articlesContentDiv = document.getElementById('articles-content');
+                if (!articlesContentDiv) return; // Exit if the element doesn't exist
+
+                try {
+                    // Replace with your actual Django API endpoint for articles
+                    const response = await fetch('YOUR_DJANGO_ARTICLES_API_ENDPOINT/'); 
+                    
+                    if (response.ok) {
+                        const articles = await response.json();
+                        articlesContentDiv.innerHTML = ''; // Clear existing static content
+
+                        articles.forEach(article => {
+                            const articlePreview = `
+                                <div class="article-preview">
+                                    <div class="article-icon">
+                                        <i class="bi bi-book"></i> </div>
+                                    <div>
+                                        <h5 class="mb-1">${article.title}</h5>
+                                        <p class="text-muted mb-1">${article.summary}</p>
+                                        <div class="d-flex align-items-center">
+                                            <span class="tag">${article.category}</span>
+                                            <span class="text-muted small ms-auto">${article.read_time} min read</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                            articlesContentDiv.innerHTML += articlePreview;
+                        });
+                    } else {
+                        console.error('Failed to fetch articles:', response.statusText);
+                        articlesContentDiv.innerHTML = '<p class="text-danger">Failed to load articles. Please try again later.</p>';
+                    }
+                } catch (error) {
+                    console.error('Network error fetching articles:', error);
+                    articlesContentDiv.innerHTML = '<p class="text-danger">An error occurred while fetching articles. Please check your internet connection.</p>';
+                }
+            }
+
+            // Call the fetch functions when the DOM is fully loaded
+            // Uncomment these lines when you have your Django backend endpoints ready
+            // fetchFAQs();
+            // fetchArticles();
+        });
+
+        // Placeholder for startChat function if it was used in an inline onclick
+        function startChat() {
+            showCustomModal('Live chat functionality would be initiated here. (Requires Django Channels or a similar real-time solution.)');
+        }
+    </script>
+</body>
+</html>

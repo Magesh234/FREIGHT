@@ -1,0 +1,1650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreightLink</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        :root {
+            --primary: #2C3E50;
+            --secondary: #34495E;
+            --accent: #F39C12;
+            --accent-hover: #E67E22;
+            --light: #ECF0F1;
+            --dark: #2C3E50;
+            --gray: #95A5A6;
+            --light-gray: #F8F9FA;
+            --success: #27AE60;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .rounded-md {
+            border-radius: 0.75rem;
+        }
+        
+        .shadow-custom {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--primary);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
+        }
+        .header .logo {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+        .header .nav-link {
+            color: #FFFFFF;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+            margin: 0 0.25rem;
+        }
+        .header .nav-link:hover, .header .nav-link.active {
+            color: var(--primary);
+            background-color: var(--accent);
+            border-radius: 2rem;
+        }
+        .header .nav-link.active {
+            font-weight: 600;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: #FFFFFF;
+            text-align: center;
+            padding: 8rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('b290ef71-462a-452e-8ff3-33b5de7407d8.jpeg'); /* Placeholder image */
+            background-size: cover;
+            background-position: center;
+            opacity: 0.05;
+        }
+        .hero-section .container {
+            position: relative;
+            z-index: 2;
+        }
+        .hero-section h1 {
+            font-size: 3.2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #FFFFFF;
+        }
+        .hero-section p {
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .btn-primary, .btn-primary:focus {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            color: var(--dark);
+            padding: 0.75rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+        }
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+            border-color: var(--accent-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(230, 126, 34, 0.4);
+        }
+        .btn-secondary, .btn-secondary:focus {
+            background-color: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: #FFFFFF;
+            padding: 0.65rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            color: var(--primary);
+            text-align: center;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--accent);
+            border-radius: 2px;
+        }
+
+        /* Service Cards */
+        #services {
+            padding: 7rem 0;
+            background-color: #FFFFFF;
+        }
+        .service-card {
+            background-color: #FFFFFF;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            transition: all 0.3s ease;
+            border: none;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background-color: var(--accent);
+            z-index: 2;
+        }
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+        .service-card h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+        }
+        .service-card h3 i {
+            color: var(--accent);
+            margin-right: 0.75rem;
+            font-size: 1.5rem;
+        }
+        .service-card p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+        }
+        .service-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .service-card ul li {
+            margin-bottom: 0.85rem;
+            display: flex;
+            align-items: center;
+            font-size: 0.95rem;
+            color: var(--dark);
+        }
+        .service-card ul li i {
+            color: var(--success);
+            margin-right: 0.75rem;
+            font-size: 1.2rem;
+        }
+
+        /* How It Works Section */
+        .how-it-works-section {
+            background-color: var(--light-gray);
+            padding: 7rem 0;
+            text-align: center;
+            position: relative;
+        }
+        .how-it-works-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(44, 62, 80, 0.03) 0%, rgba(52, 73, 94, 0.03) 100%);
+        }
+        .step-card {
+            background-color: #FFFFFF;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            padding: 2.5rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            height: 100%;
+            transition: all 0.3s ease;
+            border: none;
+            position: relative;
+        }
+        .step-card::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background-color: var(--accent);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+            transform-origin: center;
+        }
+        .step-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+        }
+        .step-card:hover::before {
+            transform: scaleX(1);
+        }
+        .step-card h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--primary);
+        }
+        .step-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+        .step-card .fs-1 {
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            background-color: rgba(243, 156, 18, 0.1);
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        .step-card:hover .fs-1 {
+            transform: scale(1.1);
+            background-color: rgba(243, 156, 18, 0.15);
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background-color: #FFFFFF;
+            padding: 7rem 0;
+            text-align: center;
+        }
+        .contact-section p {
+            font-size: 1.1rem;
+            color: var(--gray);
+            margin-bottom: 0.75rem;
+        }
+        .contact-section a.text-accent {
+            color: var(--accent) !important;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .contact-section a.text-accent:hover {
+            color: var(--accent-hover) !important;
+            text-decoration: none;
+        }
+
+        /* Sign-Up & Log-In Sections */
+        .sign-up-section, .login-section {
+            padding: 7rem 0;
+            text-align: center;
+        }
+        .sign-up-section {
+            background-color: var(--light-gray);
+            position: relative;
+            overflow: hidden;
+        }
+        .sign-up-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(44, 62, 80, 0.03) 0%, rgba(52, 73, 94, 0.03) 100%);
+        }
+        .login-section {
+            background-color: #FFFFFF;
+        }
+
+        /* Modal Styling */
+        .modal-content {
+            border-radius: 1rem;
+            border: none;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: #FFFFFF;
+            border-bottom: none;
+            padding: 1.75rem;
+            text-align: center;
+        }
+        .modal-header .modal-title {
+            color: #FFFFFF;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0;
+            width: 100%;
+            text-align: center;
+        }
+        .modal-header .btn-close {
+            filter: invert(1) grayscale(100%) brightness(200%);
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+        .modal-header .btn-close:hover {
+            opacity: 1;
+        }
+        .modal-body {
+            padding: 2.5rem;
+            background-color: #FFFFFF;
+        }
+        .modal-body label {
+            font-weight: 500;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .form-control, .form-select {
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            border: 1px solid #DDE2E5;
+            transition: all 0.3s ease;
+            background-color: var(--light-gray);
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 0.25rem rgba(243, 156, 18, 0.25);
+            background-color: #FFFFFF;
+        }
+        .modal-footer {
+            justify-content: center;
+            padding: 1.5rem 2rem 2rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            background-color: #FFFFFF;
+        }
+
+        /* Text color error classes */
+        .text-danger {
+            color: #E74C3C !important;
+        }
+        .is-invalid {
+            border-color: #E74C3C !important;
+        }
+        .is-invalid:focus {
+            box-shadow: 0 0 0 0.25rem rgba(231, 76, 60, 0.25) !important;
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: rgba(255, 255, 255, 0.8);
+            padding: 4rem 0 3rem;
+            text-align: center;
+            position: relative;
+        }
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background-color: var(--accent);
+        }
+        .footer a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .footer a:hover {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        /* Custom Message Box Styling */
+        #messageBoxModal .modal-content {
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        #messageBoxModal .modal-header {
+            background-color: var(--primary);
+            color: white;
+            border-bottom: none;
+            padding: 1.25rem;
+        }
+        #messageBoxModal .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        #messageBoxModal .modal-body {
+            padding: 1.5rem;
+            font-size: 1rem;
+            color: var(--dark);
+        }
+        #messageBoxModal .modal-footer {
+            border-top: none;
+            padding: 1rem 1.5rem;
+            justify-content: flex-end;
+        }
+        #messageBoxModal .btn-primary {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            color: var(--dark);
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+        }
+        #messageBoxModal .btn-primary:hover {
+            background-color: var(--accent-hover);
+            border-color: var(--accent-hover);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .fadeInUp {
+            animation: fadeInUp 0.5s ease forwards;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 991.98px) {
+            .hero-section h1 {
+                font-size: 2.5rem;
+            }
+            .header .logo {
+                font-size: 1.5rem;
+            }
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+        
+        @media (max-width: 767.98px) {
+            .hero-section {
+                padding: 6rem 0;
+            }
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+            .hero-section p {
+                font-size: 1.1rem;
+            }
+            .section-title {
+                font-size: 1.75rem;
+            }
+            #services, .how-it-works-section, .contact-section, 
+            .sign-up-section, .login-section {
+                padding: 5rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header text-white py-3 shadow-sm sticky-top">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="logo d-flex align-items-center">
+                    <i class="bi bi-truck me-2"></i>FreightLink
+                </div>
+                <nav>
+                    <ul class="nav">
+                        <li class="nav-item"><a href="#home" class="nav-link active">Home</a></li>
+                        <li class="nav-item"><a href="#services" class="nav-link">Services</a></li>
+                        <li class="nav-item"><a href="#how-it-works" class="nav-link">How It Works</a></li>
+                        <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
+                        <li class="nav-item"><a href="#signup" class="nav-link">Sign Up</a></li>
+                        <li class="nav-item"><a href="#login" class="nav-link">Log In</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section id="home" class="hero-section">
+        <div class="container">
+            <h1>Connecting Businesses with Transport Solutions</h1>
+            <p>Efficiently utilize empty truck space and reduce delivery costs with FreightLink's smart logistics platform.</p>
+            <div class="d-flex justify-content-center gap-3">
+                <button onclick="window.location.href='#signup'" class="btn btn-primary">Get Started Today</button>
+                <button onclick="window.location.href='#how-it-works'" class="btn btn-secondary">Learn More</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="py-5">
+        <div class="container">
+            <h2 class="section-title">Our Services</h2>
+            <div class="row g-4 justify-content-center" id="services-container">
+                <div class="col-md-6 col-lg-4">
+                    <div class="service-card">
+                        <h3><i class="bi bi-building"></i>For Businesses</h3>
+                        <p>Find affordable and reliable transport options for your cargo, big or small.</p>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-check-circle-fill"></i>Post your cargo details easily</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Get matched with available trucks</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Track your shipment in real-time</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Secure online payments</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="service-card">
+                        <h3><i class="bi bi-truck"></i>For Truck Owners</h3>
+                        <p>Maximize your earnings by utilizing empty space and finding consistent loads.</p>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-check-circle-fill"></i>List your truck and route details</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Get matched with suitable cargo</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Optimize your routes and income</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Increase your overall revenue</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="service-card">
+                        <h3><i class="bi bi-shield-check"></i>Secure Transactions</h3>
+                        <p>Our platform ensures safe and reliable payment processes for all users.</p>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-check-circle-fill"></i>Integrated M-Pesa payments</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Verified user profiles</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Transparent transaction history</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Dispute resolution support</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="how-it-works" class="how-it-works-section">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <div class="row g-4 justify-content-center">
+                <div class="col-md-4 col-lg-2">
+                    <div class="step-card">
+                        <div class="fs-1 mb-3"><i class="bi bi-person-plus-fill"></i></div>
+                        <h3>1. Sign Up/Log In</h3>
+                        <p>Create an account or log in to access our platform services.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-2">
+                    <div class="step-card">
+                        <div class="fs-1 mb-3"><i class="bi bi-box-seam-fill"></i></div>
+                        <h3>2. Post or Find</h3>
+                        <p>Businesses post cargo; truck owners list available space.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-2">
+                    <div class="step-card">
+                        <div class="fs-1 mb-3"><i class="bi bi-link-45deg"></i></div>
+                        <h3>3. Match & Connect</h3>
+                        <p>Our smart system matches and connects both parties.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-2">
+                    <div class="step-card">
+                        <div class="fs-1 mb-3"><i class="bi bi-credit-card-fill"></i></div>
+                        <h3>4. Secure Payment</h3>
+                        <p>Transact securely using integrated M-Pesa.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-2">
+                    <div class="step-card">
+                        <div class="fs-1 mb-3"><i class="bi bi-star-fill"></i></div>
+                        <h3>5. Deliver & Rate</h3>
+                        <p>Cargo delivered, users provide valuable feedback.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <h2 class="section-title">Contact Us</h2>
+            <p>Have questions or need support? We're here to help!</p>
+            <div class="row justify-content-center mb-4">
+                <div class="col-md-8 col-lg-6">
+                    <div class="d-flex justify-content-center gap-4 mt-4">
+                        <div class="text-center">
+                            <div class="mb-3"><i class="bi bi-envelope fs-1 text-accent"></i></div>
+                            <p class="mb-2">Email:</p>
+                            <a href="mailto:support@freightlink.com" class="text-accent fw-bold">support@freightlink.com</a>
+                        </div>
+                        <div class="text-center">
+                            <div class="mb-3"><i class="bi bi-telephone fs-1 text-accent"></i></div>
+                            <p class="mb-2">Phone:</p>
+                            <a href="tel:+254700000000" class="text-accent fw-bold">+254 700 000 000</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="signup" class="sign-up-section">
+        <div class="container">
+            <h2 class="section-title">Ready to Get Started?</h2>
+            <p class="lead mb-4">Join FreightLink today and revolutionize your logistics.</p>
+            <button onclick="openSignupForm()" class="btn btn-primary btn-lg">Sign Up Now</button>
+        </div>
+    </section>
+
+    <section id="login" class="login-section">
+        <div class="container">
+            <h2 class="section-title">Welcome Back!</h2>
+            <p class="lead mb-4">Log in to access your FreightLink account.</p>
+            <button onclick="openLoginForm()" class="btn btn-primary btn-lg">Log In</button>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="mb-4">
+                <div class="logo fs-3 mb-3 text-white">
+                    <i class="bi bi-truck me-2"></i>FreightLink
+                </div>
+                <p class="mb-3">Connecting businesses and transporters across Africa</p>
+            </div>
+            <p>&copy; <script>document.write(new Date().getFullYear())</script> FreightLink. All rights reserved.</p>
+            <p><a href="#privacy">Privacy Policy</a> | <a href="#terms">Terms of Service</a></p>
+        </div>
+    </footer>
+
+    <div id="signupModal" class="modal fade" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title w-100 text-center" id="signupModalLabel">Create Your Account</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="signupForm" class="space-y-4">
+                        <div class="mb-3">
+                            <label for="signupName" class="form-label">Full Name:</label>
+                            <input type="text" id="signupName" name="full_name" class="form-control" placeholder="Enter your full name" required>
+                            <div id="signupNameError" class="text-danger text-xs mt-1" style="display: none;"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="signupEmail" class="form-label">Email Address:</label>
+                            <input type="email" id="signupEmail" name="email" class="form-control" placeholder="Enter your email" required>
+                            <div id="signupEmailError" class="text-danger text-xs mt-1" style="display: none;"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="signupPassword" class="form-label">Password:</label>
+                            <input type="password" id="signupPassword" name="password" class="form-control" placeholder="Create a password (min. 8 characters)" required>
+                            <div id="signupPasswordError" class="text-danger text-xs mt-1" style="display: none;"></div>
+                        </div>
+                         <div class="mb-3">
+                            <label for="signupRePassword" class="form-label">Re-enter Password:</label>
+                            <input type="password" id="signupRePassword" name="re_password" class="form-control" placeholder="Confirm your password" required>
+                            <div id="signupRePasswordError" class="text-danger text-xs mt-1" style="display: none;"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="signupPhone" class="form-label">Phone Number:</label>
+                            <input type="tel" id="signupPhone" name="phone_number" class="form-control" placeholder="+254xxxxxxxxx" required>
+                            <div id="signupPhoneError" class="text-danger text-xs mt-1" style="display: none;"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="signupUserType" class="form-label">User Type:</label>
+                            <select id="signupUserType" name="user_type" class="form-select" required>
+                                <option value="" disabled selected>Select User Type</option>
+                                <option value="business">Business (I have cargo)</option>
+                                <option value="truck_owner">Truck Owner (I have a truck)</option>
+                            </select>
+                            <div id="signupUserTypeError" class="text-danger text-xs mt-1" style="display: none;"></div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 mt-4">Sign Up</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <p class="text-center mb-0">Already have an account? <a href="#" onclick="closeSignupForm(); openLoginForm(); return false;" class="text-accent">Log In</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="loginModal" class="modal fade" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title w-100 text-center" id="loginModalLabel">Log In to Your Account</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm" class="space-y-4">
+                        <div class="mb-3">
+                            <label for="loginEmail" class="form-label">Email Address:</label>
+                            <input type="email" id="loginEmail" name="email" class="form-control" placeholder="Enter your email" required>
+                            <div id="loginEmailError" class="text-danger text-xs mt-1" style="display: none;"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="loginPassword" class="form-label">Password:</label>
+                            <input type="password" id="loginPassword" name="password" class="form-control" placeholder="Enter your password" required>
+                            <div id="loginPasswordError" class="text-danger text-xs mt-1" style="display: none;"></div>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" id="rememberMe" name="rememberMe" class="form-check-input">
+                            <label for="rememberMe" class="form-check-label">Remember me</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 mt-4">Log In</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <p class="text-center mb-0">Don't have an account? <a href="#" onclick="closeLoginForm(); openSignupForm(); return false;" class="text-accent">Sign Up</a></p>
+                    <p class="text-center mt-2"><a href="#" class="text-accent" onclick="forgotPassword(); return false;">Forgot Password?</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="messageBoxModal" tabindex="-1" aria-labelledby="messageBoxModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="messageBoxModalLabel">Message</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="messageBoxBody">
+                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+   <script>
+    // FreightLink JavaScript - Improved Version
+// IMPORTANT: Replace with your actual Django backend URL when deploying
+const API_BASE_URL = 'http://127.0.0.1:8000/api/';
+
+// Global variables
+let signupModal, loginModal, messageBoxModal;
+let isAuthenticated = false;
+let currentUser = null;
+
+/**
+ * Utility Functions
+ */
+
+/**
+ * Retrieves a cookie value by its name.
+ * @param {string} name - The name of the cookie.
+ * @returns {string|null} The cookie value or null if not found.
+ */
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+
+
+//Include csrf token in API calls
+const registerUser = async (userData) => {
+    const csrfToken = getCsrfToken();
+    
+    const response = await fetch('http://localhost:8000/api/auth/users/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken,
+        },
+        credentials: 'include', // Important for cookies
+        body: JSON.stringify(userData),
+    });
+    
+    return response.json();
+};
+
+
+/**
+ * Safely store data in localStorage with error handling
+ * @param {string} key - Storage key
+ * @param {string} value - Value to store
+ */
+function setLocalStorage(key, value) {
+    try {
+        localStorage.setItem(key, value);
+    } catch (error) {
+        console.warn('LocalStorage not available:', error);
+        // Fallback to sessionStorage or cookies if needed
+    }
+}
+
+/**
+ * Safely retrieve data from localStorage
+ * @param {string} key - Storage key
+ * @returns {string|null} Stored value or null
+ */
+function getLocalStorage(key) {
+    try {
+        return localStorage.getItem(key);
+    } catch (error) {
+        console.warn('LocalStorage not available:', error);
+        return null;
+    }
+}
+
+/**
+ * Remove item from localStorage
+ * @param {string} key - Storage key
+ */
+function removeLocalStorage(key) {
+    try {
+        localStorage.removeItem(key);
+    } catch (error) {
+        console.warn('LocalStorage not available:', error);
+    }
+}
+
+/**
+ * UI Helper Functions
+ */
+
+/**
+ * Displays a custom message box to the user.
+ * @param {string} title - The title of the message box.
+ * @param {string} message - The message content.
+ * @param {string} type - 'success', 'error', or 'info'
+ */
+function showMessageBox(title, message, type = 'info') {
+    if (!messageBoxModal) return;
+    
+    const modalLabel = document.getElementById('messageBoxModalLabel');
+    const modalBody = document.getElementById('messageBoxBody');
+    const modalHeader = messageBoxModal._element?.querySelector('.modal-header');
+    
+    if (modalLabel) modalLabel.textContent = title;
+    if (modalBody) modalBody.innerHTML = message;
+    
+    // Change header color based on type
+    if (modalHeader) {
+        modalHeader.className = 'modal-header';
+        switch (type) {
+            case 'success':
+                modalHeader.style.backgroundColor = '#27AE60';
+                break;
+            case 'error':
+                modalHeader.style.backgroundColor = '#E74C3C';
+                break;
+            default:
+                modalHeader.style.backgroundColor = 'var(--primary)';
+        }
+    }
+    
+    messageBoxModal.show();
+}
+
+/**
+ * Show loading state on button
+ * @param {HTMLButtonElement} button - Button element
+ * @param {boolean} loading - Loading state
+ */
+function setButtonLoading(button, loading) {
+    if (!button) return;
+    
+    if (loading) {
+        button.disabled = true;
+        button.dataset.originalText = button.textContent;
+        button.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span>Loading...';
+    } else {
+        button.disabled = false;
+        button.textContent = button.dataset.originalText || button.textContent;
+    }
+}
+
+/**
+ * Modal Management Functions
+ */
+
+function openSignupForm() {
+    if (loginModal) loginModal.hide();
+    if (signupModal) signupModal.show();
+}
+
+function closeSignupForm() {
+    if (signupModal) signupModal.hide();
+}
+
+function openLoginForm() {
+    if (signupModal) signupModal.hide();
+    if (loginModal) loginModal.show();
+}
+
+function closeLoginForm() {
+    if (loginModal) loginModal.hide();
+}
+
+function forgotPassword() {
+    showMessageBox(
+        'Forgot Password', 
+        'Password recovery functionality will be implemented soon. Please contact support at support@freightlink.com for assistance.',
+        'info'
+    );
+}
+
+/**
+ * Form Validation Functions
+ */
+
+/**
+ * Clears validation errors from a form.
+ * @param {HTMLFormElement} form - The form element.
+ */
+function clearFormErrors(form) {
+    if (!form) return;
+    
+    form.querySelectorAll('.text-danger').forEach(el => {
+        el.textContent = '';
+        el.style.display = 'none';
+    });
+    form.querySelectorAll('.form-control, .form-select').forEach(el => {
+        el.classList.remove('is-invalid');
+    });
+}
+
+/**
+ * Displays validation errors on a form field.
+ * @param {HTMLElement} inputElement - The input element with the error.
+ * @param {string} errorId - The ID of the error display div.
+ * @param {string} message - The error message.
+ */
+function displayFieldError(inputElement, errorId, message) {
+    if (inputElement) {
+        inputElement.classList.add('is-invalid');
+        inputElement.focus();
+    }
+    
+    const errorDiv = document.getElementById(errorId);
+    if (errorDiv) {
+        errorDiv.textContent = message;
+        errorDiv.style.display = 'block';
+    }
+}
+
+/**
+ * Validates email format
+ * @param {string} email - Email address to validate
+ * @returns {boolean} Valid email format
+ */
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+/**
+ * Validates phone number format (Kenya format)
+ * @param {string} phone - Phone number to validate
+ * @returns {boolean} Valid phone format
+ */
+function isValidPhone(phone) {
+    const phoneRegex = /^(\+254|0)[17]\d{8}$/; // Kenya phone number format
+    return phoneRegex.test(phone.replace(/\s/g, ''));
+}
+
+/**
+ * Validates password strength
+ * @param {string} password - Password to validate
+ * @returns {object} Validation result with isValid and message
+ */
+function validatePassword(password) {
+    if (password.length < 8) {
+        return { isValid: false, message: 'Password must be at least 8 characters long.' };
+    }
+    if (!/(?=.*[a-z])/.test(password)) {
+        return { isValid: false, message: 'Password must contain at least one lowercase letter.' };
+    }
+    if (!/(?=.*[A-Z])/.test(password)) {
+        return { isValid: false, message: 'Password must contain at least one uppercase letter.' };
+    }
+    if (!/(?=.*\d)/.test(password)) {
+        return { isValid: false, message: 'Password must contain at least one number.' };
+    }
+    return { isValid: true, message: '' };
+}
+
+/**
+ * Backend Error Handling
+ */
+
+/**
+ * Handles backend error responses for forms.
+ * @param {object|string} errors - The error object from the backend.
+ * @param {HTMLFormElement} form - The form to display errors on.
+ * @returns {string} General error message
+ */
+function handleBackendFormErrors(errors, form) {
+    let generalErrorMessage = 'Please correct the errors below.';
+    
+    if (typeof errors === 'string') {
+        generalErrorMessage = errors;
+    } else if (errors && typeof errors === 'object') {
+        // Handle field-specific errors
+        for (const field in errors) {
+            if (field === 'non_field_errors' || field === 'detail') continue;
+            
+            const inputElement = form.elements[field];
+            const errorDivId = getErrorDivId(form.id, field);
+            const message = Array.isArray(errors[field]) ? errors[field].join(' ') : errors[field];
+            
+            if (inputElement && document.getElementById(errorDivId)) {
+                displayFieldError(inputElement, errorDivId, message);
+            }
+        }
+        
+        // Handle general errors
+        if (errors.non_field_errors) {
+            generalErrorMessage = Array.isArray(errors.non_field_errors) 
+                ? errors.non_field_errors.join(' ') 
+                : errors.non_field_errors;
+        } else if (errors.detail) {
+            generalErrorMessage = errors.detail;
+        }
+    }
+    
+    return generalErrorMessage;
+}
+
+/**
+ * Generate error div ID from form ID and field name
+ * @param {string} formId - Form ID
+ * @param {string} fieldName - Field name
+ * @returns {string} Error div ID
+ */
+function getErrorDivId(formId, fieldName) {
+    const prefix = formId.replace('Form', '');
+    return `${prefix}${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)}Error`;
+}
+
+/**
+ * API Functions
+ */
+
+/**
+ * Make API request with proper error handling
+ * @param {string} endpoint - API endpoint
+ * @param {object} options - Fetch options
+ * @returns {Promise<object>} API response
+ */
+async function makeApiRequest(endpoint, options = {}) {
+    const url = `${API_BASE_URL}${endpoint}`;
+    const defaultOptions = {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    };
+
+    // Add CSRF token for non-GET requests
+    if (options.method && options.method !== 'GET') {
+        const csrfToken = getCookie('csrftoken');
+        if (csrfToken) {
+            defaultOptions.headers['X-CSRFToken'] = csrfToken;
+        }
+    }
+
+    // Add auth token if available
+    const authToken = getLocalStorage('authToken');
+    if (authToken) {
+        defaultOptions.headers['Authorization'] = `Token ${authToken}`;
+    }
+
+    const mergedOptions = {
+        ...defaultOptions,
+        ...options,
+        headers: { ...defaultOptions.headers, ...options.headers },
+    };
+
+    try {
+        const response = await fetch(url, mergedOptions);
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+            throw new Error(data.detail || data.message || `HTTP ${response.status}`);
+        }
+
+        return { success: true, data, status: response.status };
+    } catch (error) {
+        console.error('API Request failed:', error);
+        return { 
+            success: false, 
+            error: error.message || 'Network error occurred',
+            data: null 
+        };
+    }
+}
+
+/**
+ * Authentication Functions
+ */
+
+/**
+ * Check if user is authenticated
+ * @returns {boolean} Authentication status
+ */
+function checkAuthentication() {
+    const token = getLocalStorage('authToken');
+    isAuthenticated = !!token;
+    return isAuthenticated;
+}
+
+/**
+ * Logout user
+ */
+async function logout() {
+    const result = await makeApiRequest('auth/token/logout/', { method: 'POST' });
+    
+    // Clear local storage regardless of API response
+    removeLocalStorage('authToken');
+    removeLocalStorage('currentUser');
+    isAuthenticated = false;
+    currentUser = null;
+    
+    showMessageBox('Logged Out', 'You have been successfully logged out.', 'success');
+    
+    // Refresh page or redirect as needed
+    setTimeout(() => {
+        window.location.reload();
+    }, 1500);
+}
+
+/**
+ * Form Submission Handlers
+ */
+
+/**
+ * Handle signup form submission
+ * @param {Event} event - Form submit event
+ */
+async function handleSignupSubmit(event) {
+    event.preventDefault();
+    
+    const form = event.target;
+    const submitButton = form.querySelector('button[type="submit"]');
+    
+    clearFormErrors(form);
+    
+    // Get form data
+    const formData = {
+        full_name: form.elements.full_name?.value?.trim(),
+        email: form.elements.email?.value?.trim(),
+        password: form.elements.password?.value,
+        re_password: form.elements.re_password?.value,
+        phone_number: form.elements.phone_number?.value?.trim(),
+        user_type: form.elements.user_type?.value,
+    };
+
+    // Client-side validation
+    let isValid = true;
+    
+    if (!formData.full_name) {
+        displayFieldError(form.elements.full_name, 'signupNameError', 'Please enter your full name.');
+        isValid = false;
+    }
+    
+    if (!isValidEmail(formData.email)) {
+        displayFieldError(form.elements.email, 'signupEmailError', 'Please enter a valid email address.');
+        isValid = false;
+    }
+    
+    const passwordValidation = validatePassword(formData.password);
+    if (!passwordValidation.isValid) {
+        displayFieldError(form.elements.password, 'signupPasswordError', passwordValidation.message);
+        isValid = false;
+    }
+    
+    if (formData.password !== formData.re_password) {
+        displayFieldError(form.elements.re_password, 'signupRePasswordError', 'Passwords do not match.');
+        isValid = false;
+    }
+    
+    if (!isValidPhone(formData.phone_number)) {
+        displayFieldError(form.elements.phone_number, 'signupPhoneError', 'Please enter a valid Kenyan phone number (e.g., +254712345678 or 0712345678).');
+        isValid = false;
+    }
+    
+    if (!formData.user_type) {
+        displayFieldError(form.elements.user_type, 'signupUserTypeError', 'Please select a user type.');
+        isValid = false;
+    }
+    
+    if (!isValid) {
+        showMessageBox('Validation Error', 'Please correct the highlighted fields.', 'error');
+        return;
+    }
+
+    // Add username for Djoser compatibility
+    formData.username = formData.email;
+
+    // Show loading state
+    setButtonLoading(submitButton, true);
+
+    try {
+
+        // Log raw formData for debugging
+        console.log('Raw formData:', formData);
+
+        //Log the JsON stringified formData
+        console.log('Sending payload JSON:', JSON.stringify(formData));
+
+        // Make API request to create user
+        
+
+
+        const result = await makeApiRequest('auth/users/', {
+            method: 'POST',
+            body: JSON.stringify(formData),
+            headers:{
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (result.success) {
+            showMessageBox(
+                'Success', 
+                'Account created successfully! Please check your email for verification instructions, then log in.',
+                'success'
+            );
+            signupModal.hide();
+            form.reset();
+        } else {
+            const errorMessage = handleBackendFormErrors(result.data || result.error, form);
+            showMessageBox('Sign Up Failed', errorMessage, 'error');
+
+            // Log the error for debugging
+            console.log('Backend error response:', result.data || result.error);
+
+
+        }
+    } catch (error) {
+        showMessageBox('Network Error', 'Could not connect to the server. Please try again later.', 'error');
+    } finally {
+        setButtonLoading(submitButton, false);
+    }
+}
+
+/**
+ * Handle login form submission
+ * @param {Event} event - Form submit event
+ */
+async function handleLoginSubmit(event) {
+    event.preventDefault();
+    
+    const form = event.target;
+    const submitButton = form.querySelector('button[type="submit"]');
+    
+    clearFormErrors(form);
+    
+    // Get form data
+    const formData = {
+        email: form.elements.email?.value?.trim(),
+        password: form.elements.password?.value,
+    };
+
+    // Client-side validation
+    let isValid = true;
+    
+    if (!isValidEmail(formData.email)) {
+        displayFieldError(form.elements.email, 'loginEmailError', 'Please enter a valid email address.');
+        isValid = false;
+    }
+    
+    if (!formData.password) {
+        displayFieldError(form.elements.password, 'loginPasswordError', 'Please enter your password.');
+        isValid = false;
+    }
+
+    if (!isValid) {
+        showMessageBox('Validation Error', 'Please correct the highlighted fields.', 'error');
+        return;
+    }
+
+    // Show loading state
+    setButtonLoading(submitButton, true);
+
+    try {
+        const result = await makeApiRequest('auth/token/login/', {
+            method: 'POST',
+            body: JSON.stringify(formData),
+        });
+
+        if (result.success && result.data.auth_token) {
+            // Store authentication data
+            setLocalStorage('authToken', result.data.auth_token);
+            isAuthenticated = true;
+            
+            showMessageBox('Success', 'Login successful! Welcome back to FreightLink.', 'success');
+            loginModal.hide();
+            form.reset();
+            
+            // Fetch user profile
+            await fetchUserProfile();
+            
+            // Redirect or update UI as needed
+        
+                window.location.href = 'dashboard.html';
+                
+        } else {
+            const errorMessage = handleBackendFormErrors(result.data || result.error, form);
+            showMessageBox('Login Failed', errorMessage, 'error');
+        }
+    } catch (error) {
+        showMessageBox('Network Error', 'Could not connect to the server. Please try again later.', 'error');
+    } finally {
+        setButtonLoading(submitButton, false);
+    }
+}
+
+/**
+ * Fetch user profile after login
+ */
+async function fetchUserProfile() {
+    const result = await makeApiRequest('auth/users/me/');
+    
+    if (result.success) {
+        currentUser = result.data;
+        setLocalStorage('currentUser', JSON.stringify(currentUser));
+    }
+}
+
+/**
+ * Services Management
+ */
+
+/**
+ * Fetch services from backend with fallback to static content
+ */
+async function fetchServices() {
+    const servicesContainer = document.getElementById('services-container');
+    if (!servicesContainer) return;
+
+    try {
+        const result = await makeApiRequest('services/');
+        
+        if (result.success && result.data && result.data.length > 0) {
+            servicesContainer.innerHTML = '';
+            
+            result.data.forEach(service => {
+                const serviceCardHtml = createServiceCardHTML(service);
+                servicesContainer.insertAdjacentHTML('beforeend', serviceCardHtml);
+            });
+        }
+        // If no services or API fails, keep static content as fallback
+    } catch (error) {
+        console.error('Error fetching services:', error);
+        // Keep static content as fallback
+    }
+}
+
+/**
+ * Create service card HTML
+ * @param {object} service - Service object
+ * @returns {string} HTML string
+ */
+function createServiceCardHTML(service) {
+    const features = service.features && service.features.length > 0
+        ? service.features.map(feature => 
+            `<li><i class="bi bi-check-circle-fill"></i>${escapeHtml(feature)}</li>`
+          ).join('')
+        : '';
+    
+    return `
+        <div class="col-md-6 col-lg-4">
+            <div class="service-card">
+                <h3><i class="${escapeHtml(service.icon_class || 'bi bi-gear-fill')}"></i>${escapeHtml(service.title || 'Service Title')}</h3>
+                <p>${escapeHtml(service.description || 'Service description.')}</p>
+                ${features ? `<ul class="list-unstyled">${features}</ul>` : ''}
+            </div>
+        </div>
+    `;
+}
+
+/**
+ * Escape HTML to prevent XSS
+ * @param {string} text - Text to escape
+ * @returns {string} Escaped text
+ */
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+/**
+ * Navigation and Scrolling
+ */
+
+/**
+ * Setup smooth scrolling for navigation links
+ */
+function setupSmoothScrolling() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            const isModalTrigger = this.getAttribute('data-bs-toggle') === 'modal';
+            const hasCustomOnclick = this.getAttribute('onclick');
+
+            if (!isModalTrigger && !hasCustomOnclick) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    scrollToElement(targetElement);
+                    updateActiveNavLink(targetId);
+                }
+            }
+        });
+    });
+    
+    // Update active nav link on scroll
+    setupScrollSpy();
+}
+
+/**
+ * Scroll to element with header offset
+ * @param {HTMLElement} element - Target element
+ */
+function scrollToElement(element) {
+    const headerOffset = document.querySelector('.header.sticky-top')?.offsetHeight || 0;
+    const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+    const offsetPosition = elementPosition - headerOffset;
+
+    window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+    });
+}
+
+/**
+ * Update active navigation link
+ * @param {string} targetId - Target section ID
+ */
+function updateActiveNavLink(targetId) {
+    document.querySelectorAll('.nav-link').forEach(navLink => {
+        navLink.classList.remove('active');
+        if (navLink.getAttribute('href') === targetId) {
+            navLink.classList.add('active');
+        }
+    });
+}
+
+/**
+ * Setup scroll spy for navigation
+ */
+function setupScrollSpy() {
+    let ticking = false;
+    
+    function updateScrollSpy() {
+        const scrollPosition = window.scrollY;
+        const headerOffset = document.querySelector('.header.sticky-top')?.offsetHeight || 60;
+        
+        const sections = document.querySelectorAll('section[id]');
+        let activeSection = null;
+        
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop - headerOffset - 50;
+            const sectionHeight = section.offsetHeight;
+            
+            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                activeSection = section.getAttribute('id');
+            }
+        });
+        
+        // Special case for top of page
+        if (scrollPosition < 100) {
+            activeSection = 'home';
+        }
+        
+        if (activeSection) {
+            updateActiveNavLink(`#${activeSection}`);
+        }
+        
+        ticking = false;
+    }
+    
+    window.addEventListener('scroll', function() {
+        if (!ticking) {
+            requestAnimationFrame(updateScrollSpy);
+            ticking = true;
+        }
+    });
+}
+
+/**
+ * Initialization
+ */
+
+/**
+ * Setup form event listeners
+ */
+function setupFormHandlers() {
+    const signupForm = document.getElementById('signupForm');
+    const loginForm = document.getElementById('loginForm');
+    
+    if (signupForm) {
+        signupForm.addEventListener('submit', handleSignupSubmit);
+    }
+    
+    if (loginForm) {
+        loginForm.addEventListener('submit', handleLoginSubmit);
+    }
+}
+
+/**
+ * Initialize the application
+ */
+function initializeApp() {
+    // Initialize Bootstrap modals
+    const signupModalEl = document.getElementById('signupModal');
+    const loginModalEl = document.getElementById('loginModal');
+    const messageBoxModalEl = document.getElementById('messageBoxModal');
+    
+    if (signupModalEl) signupModal = new bootstrap.Modal(signupModalEl);
+    if (loginModalEl) loginModal = new bootstrap.Modal(loginModalEl);
+    if (messageBoxModalEl) messageBoxModal = new bootstrap.Modal(messageBoxModalEl);
+    
+    // Setup event handlers
+    setupFormHandlers();
+    setupSmoothScrolling();
+    
+    // Check authentication status
+    checkAuthentication();
+    
+    // Fetch dynamic content
+    fetchServices();
+    
+    // Load user data if authenticated
+    if (isAuthenticated) {
+        const userData = getLocalStorage('currentUser');
+        if (userData) {
+            try {
+                currentUser = JSON.parse(userData);
+            } catch (error) {
+                console.error('Error parsing user data:', error);
+            }
+        } else {
+            fetchUserProfile();
+        }
+    }
+}
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', initializeApp);
+
+// Handle page unload
+window.addEventListener('beforeunload', function() {
+    // Clean up any pending requests or save state if needed
+});
+
+// Export functions for global access (if needed)
+window.FreightLink = {
+    openSignupForm,
+    openLoginForm,
+    forgotPassword,
+    logout,
+    checkAuthentication
+};
+   </script>
+
+</body>
+</html>

@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreightLink - Manage Bids</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        :root {
+            --primary: #2C3E50;
+            --secondary: #34495E;
+            --accent: #F39C12;
+            --accent-hover: #E67E22;
+            --light: #ECF0F1;
+            --dark: #2C3E50;
+            --gray: #95A5A6;
+            --light-gray: #F8F9FA;
+            --success: #27AE60;
+            --info: #3498DB;
+            --warning: #F39C12;
+            --danger: #E74C3C;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .header { background-color: var(--primary); box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15); }
+        .header .logo { font-size: 1.75rem; font-weight: 700; color: #FFFFFF; }
+        .sidebar { width: 260px; background-color: var(--primary); padding: 2rem 1rem; overflow-y: auto; }
+        .sidebar .menu-item { display: flex; align-items: center; color: rgba(255, 255, 255, 0.8); padding: 0.75rem 1rem; margin: 0.25rem 0; border-radius: 0.5rem; text-decoration: none; transition: all 0.3s ease; }
+        .sidebar .menu-item i { margin-right: 12px; font-size: 1.2rem; }
+        .sidebar .menu-item:hover, .sidebar .menu-item.active { background-color: var(--accent); color: var(--primary); }
+        .sidebar .menu-item.active { font-weight: 600; }
+        .sidebar .divider { border-top: 1px solid rgba(255, 255, 255, 0.1); margin: 1rem 0; }
+        .dashboard-layout { display: flex; height: calc(100vh - 70px); }
+        .main-content { flex: 1; padding: 2rem; overflow-y: auto; }
+        .btn-primary { background-color: var(--accent); border-color: var(--accent); color: var(--dark); padding: 0.75rem 2rem; border-radius: 50px; font-weight: 600; }
+        .btn-primary:hover { background-color: var(--accent-hover); border-color: var(--accent-hover); }
+
+        .dashboard-header h1 { font-size: 1.8rem; font-weight: 700; color: var(--primary); }
+        .stats-card { background-color: #FFFFFF; border-radius: 1rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); padding: 1.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; }
+        .stats-card .icon { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 1.5rem; }
+        .stats-card .icon i { font-size: 1.8rem; }
+        .stats-card h4 { font-size: 1.6rem; font-weight: 700; margin-bottom: 0.25rem; color: var(--primary); }
+        .stats-card p { color: var(--gray); margin-bottom: 0; }
+        .stats-card .icon.bids-made { background-color: rgba(52, 152, 219, 0.1); color: var(--info); }
+        .stats-card .icon.bids-received { background-color: rgba(142, 68, 173, 0.1); color: #8e44ad; }
+        
+        .nav-tabs .nav-link { color: var(--gray); font-weight: 600; border: 0; border-bottom: 3px solid transparent; }
+        .nav-tabs .nav-link.active { color: var(--primary); border-bottom-color: var(--accent); background-color: transparent; }
+
+        .bid-card { background-color: #fff; border-radius: 1rem; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 1.5rem; transition: all 0.3s ease; overflow: hidden; }
+        .bid-card.bid-made { border-left: 4px solid var(--info); }
+        .bid-card.bid-received { border-left: 4px solid #8e44ad; }
+        .bid-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .bid-card .card-body { padding: 1.5rem; }
+        .bid-card .cargo-title { font-size: 1.2rem; font-weight: 600; color: var(--primary); }
+        .bid-card .bid-status-badge { font-size: 0.75rem; padding: 0.5em 1em; border-radius: 50px; font-weight: 600; color: #fff; }
+        .bid-card .bid-status-badge.bg-success { background-color: var(--success) !important; }
+        .bid-card .bid-status-badge.bg-danger { background-color: var(--danger) !important; }
+        .bid-card .bid-status-badge.bg-warning { background-color: var(--warning) !important; color: var(--primary); }
+        .bid-card .bid-status-badge.bg-secondary { background-color: var(--gray) !important; }
+        .bid-card .bid-status-badge.bg-info { background-color: var(--info) !important; }
+        .bid-card .bid-amount { font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+        .bid-card .card-footer { background-color: var(--light-gray); padding: 1rem 1.5rem; font-size: 0.85rem; border-top: 1px solid #e9ecef; }
+        .bid-card .bidder-info { font-weight: 600; color: var(--primary); }
+        .modal-header, .modal-footer { border-color: #e9ecef; }
+        .text-accent { color: var(--accent); }
+    </style>
+</head>
+<body>
+    <header class="header text-white py-3 shadow-sm sticky-top">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="logo d-flex align-items-center"><i class="bi bi-truck me-2"></i>FreightLink</div>
+                <div class="d-flex align-items-center">
+                    <div class="dropdown me-3 position-relative">
+                        <a href="#" class="text-white dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-bell"></i>
+                            <span class="badge bg-danger rounded-pill notification-count position-absolute" style="top: -5px; right: -8px;">0</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end notifications-dropdown p-2 shadow-lg">
+                            <li><a class="dropdown-item" href="#">Loading...</a></li>
+                        </ul>
+                    </div>
+                    <div class="dropdown">
+                        <a href="#" class="text-white dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="rounded-circle bg-accent text-dark d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;"><i class="bi bi-person-fill"></i></div>
+                            <span id="usernamePlaceholder">User Name</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="profile.html"><i class="bi bi-person me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="settings.html"><i class="bi bi-gear me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="logout-btn"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-layout">
+        <div class="sidebar">
+            <a href="dashboard.html" class="menu-item"><i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span></a>
+            <a href="mylisting.html" class="menu-item"><i class="bi bi-box-seam-fill"></i><span>My Listings</span></a>
+            <a href="bids.html" class="menu-item active"><i class="bi bi-hammer"></i><span>Manage Bids</span></a>
+            <a href="history.html" class="menu-item"><i class="bi bi-clock-history"></i><span>History</span></a>
+            <a href="messages.html" class="menu-item"><i class="bi bi-chat-left-text-fill"></i><span>Messages</span></a>
+            <div class="divider"></div>
+            <div class="menu-title">Account</div>
+            <a href="profile.html" class="menu-item"><i class="bi bi-person-fill"></i><span>Profile</span></a>
+            <a href="payments.html" class="menu-item"><i class="bi bi-wallet2"></i><span>Payments</span></a>
+            <a href="settings.html" class="menu-item"><i class="bi bi-gear-fill"></i><span>Settings</span></a>
+            <a href="help&support.html" class="menu-item"><i class="bi bi-question-circle-fill"></i><span>Help & Support</span></a>
+            <div class="divider"></div>
+            <a href="#" id="sidebar-logout-btn" class="menu-item"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+        </div>
+
+        <div class="main-content">
+            <div class="dashboard-header border-bottom pb-3 mb-3">
+                <h1>Manage Bids</h1>
+                <p class="text-secondary">Review bids you've made and bids you've received on your listings.</p>
+            </div>
+
+            <ul class="nav nav-tabs" id="bidTypeTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="my-bids-tab" data-bs-toggle="tab" data-bs-target="#my-bids-pane" type="button" role="tab" aria-controls="my-bids-pane" aria-selected="false">My Bids (Made)</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="received-bids-tab" data-bs-toggle="tab" data-bs-target="#received-bids-pane" type="button" role="tab" aria-controls="received-bids-pane" aria-selected="true">Bids on My Listings (Received)</button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="bidTypeTabContent">
+                <div class="tab-pane fade" id="my-bids-pane" role="tabpanel" aria-labelledby="my-bids-tab" tabindex="0">
+                    <div id="bids-made-container" class="pt-4">
+                         <div class="text-center p-5 bg-light rounded-md"><p class="h5 text-muted">This view is for bids you have made on other people's listings.</p></div>
+                    </div>
+                </div>
+                <div class="tab-pane fade show active" id="received-bids-pane" role="tabpanel" aria-labelledby="received-bids-tab" tabindex="0">
+                    <div id="bids-received-container" class="pt-4">
+                        <div class="text-center py-5"><div class="spinner-border text-primary"></div></div>
+                    </div>
+                </div>
+            </div>
+            
+            <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center" id="pagination-container"></ul>
+            </nav>
+        </div>
+    </div>
+
+    <div class="modal fade" id="successModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-body text-center p-4"><i class="bi bi-check-circle-fill text-success mb-3" style="font-size: 3rem;"></i><h5 id="success-modal-title">Success!</h5><p id="success-message" class="mb-4"></p><button type="button" class="btn btn-primary" data-bs-dismiss="modal">Continue</button></div></div></div></div>
+    <div class="modal fade" id="errorModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-body text-center p-4"><i class="bi bi-exclamation-triangle-fill text-danger mb-3" style="font-size: 3rem;"></i><h5 id="error-modal-title">Error!</h5><p id="error-message" class="mb-4"></p><button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button></div></div></div></div>
+
+    <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="paymentModalLabel">Complete Payment</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>You are about to pay for the following bid:</p>
+                    <div class="mb-3">
+                        <strong class="d-block text-muted">Listing Title</strong>
+                        <span id="payment-listing-title"></span>
+                    </div>
+                    <div class="mb-3">
+                        <strong class="d-block text-muted">Bidder</strong>
+                        <span id="payment-bidder-name"></span>
+                    </div>
+                    <div class="mb-3">
+                        <strong class="d-block text-muted">Bid Amount</strong>
+                        <h4 id="payment-bid-amount" class="text-accent"></h4>
+                    </div>
+                    <hr>
+                    <h6>Payment Instructions</h6>
+                    <p class="text-secondary">Please use the details below to complete your payment. Once payment is made, click "Confirm Payment" to update the bid status.</p>
+                    <div class="p-3 bg-light rounded">
+                        <p class="mb-1"><strong>PayBill Number:</strong> 123456</p>
+                        <p class="mb-0"><strong>Account Number:</strong> <span id="payment-account-number"></span></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="confirm-payment-btn">
+                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                        Confirm Payment
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <template id="bid-card-template">
+        <div class="bid-card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <small class="text-muted bid-context-label">BID ON</small>
+                                <h5 class="cargo-title mb-1">Cargo Listing Title</h5>
+                            </div>
+                            <span class="bid-status-badge">Status</span>
+                        </div>
+                        <div class="bid-details text-muted">
+                            <p class="mb-1 submitted-info"><i class="bi bi-person-circle"></i> Bidder: <span class="bidder-info"></span></p>
+                            <p class="mb-0 submitted-date-info"><i class="bi bi-calendar-event"></i> Submitted: <span class="submitted-date"></span></p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                        <small class="text-muted bid-amount-label">BID AMOUNT</small>
+                        <h4 class="bid-amount">KSh 0</h4>
+                        <div class="action-buttons mt-2"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer d-flex justify-content-between">
+                <span class="delivery-time-display"></span>
+            </div>
+        </div>
+    </template>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API_BASE_URL = 'http://localhost:8000/api/'; 
+        let currentUser = null;
+        
+        // Utility functions
+        const DOM = { get: (id) => document.getElementById(id) };
+        const getLocalStorage = (key) => localStorage.getItem(key);
+        const setLocalStorage = (key, value) => localStorage.setItem(key, value);
+        const removeLocalStorage = (key) => localStorage.removeItem(key);
+
+        function showModalNotification(type, title, message) {
+            const modalId = type === 'success' ? 'successModal' : 'errorModal';
+            DOM.get(`${type}-modal-title`).textContent = title;
+            DOM.get(`${type}-message`).textContent = message;
+            new bootstrap.Modal(DOM.get(modalId)).show();
+        }
+
+        /**
+         * Get CSRF token from cookie
+         */
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        /**
+         * Enhanced API request function with better error handling
+         */
+        async function makeApiRequest(endpoint, options = {}) {
+            const authToken = getLocalStorage('authToken');
+            const headers = { 
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                ...options.headers 
+            };
+            
+            if (authToken) {
+                headers['Authorization'] = `Token ${authToken}`;
+            }
+
+            // For unsafe methods, add CSRF token
+            const unsafeMethods = ['POST', 'PUT', 'PATCH', 'DELETE'];
+            if (unsafeMethods.includes((options.method || 'GET').toUpperCase())) {
+                const csrfToken = getCookie('csrftoken');
+                if (csrfToken) {
+                    headers['X-CSRFToken'] = csrfToken;
+                } else {
+                    console.warn('CSRF token not found in cookies');
+                }
+            }
+
+            const config = {
+                method: 'GET',
+                headers,
+                credentials: 'include',
+                ...options
+            };
+
+            // Handle request body
+            if (options.body && typeof options.body === 'object' && !(options.body instanceof FormData)) {
+                config.body = JSON.stringify(options.body);
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
+                
+                let data = null;
+                const contentType = response.headers.get('content-type');
+                
+                if (contentType && contentType.includes('application/json')) {
+                    data = await response.json();
+                }
+                
+                if (!response.ok) {
+                    if (response.status === 401 || response.status === 403) {
+                        if (data && data.detail && data.detail.includes("CSRF")) {
+                            console.error("CSRF Verification Failed");
+                            showModalNotification('error', 'Security Error', 'Could not verify your request. Please refresh the page and try again.');
+                        } else {
+                            handleUnauthorized();
+                        }
+                        return { success: false, error: { detail: 'Authentication failed' } };
+                    }
+                    
+                    const errorMessage = data?.detail || data?.message || `HTTP error! status: ${response.status}`;
+                    throw new Error(errorMessage);
+                }
+                
+                return { success: true, data };
+            } catch (error) {
+                console.error('API Request Error:', error);
+                return { 
+                    success: false, 
+                    error: { 
+                        detail: error.message || 'Network error occurred' 
+                    } 
+                };
+            }
+        }
+
+        function handleUnauthorized() {
+            removeLocalStorage('authToken');
+            removeLocalStorage('currentUser');
+            document.cookie = 'csrftoken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+            window.location.href = 'login.html';
+        }
+
+        async function fetchAndDisplayUserProfile() {
+            const result = await makeApiRequest('auth/users/me/');
+            if (result.success) {
+                currentUser = result.data;
+                setLocalStorage('currentUser', JSON.stringify(currentUser));
+                displayUserInfo();
+                return true;
+            } else {
+                console.error('Failed to fetch user profile:', result.error);
+                return false;
+            }
+        }
+
+        function displayUserInfo() {
+            if (!currentUser) return;
+            const displayName = currentUser.first_name || currentUser.username || 'User';
+            DOM.get('usernamePlaceholder').textContent = displayName;
+        }
+
+        function handleLogout(e) {
+            e.preventDefault();
+            handleUnauthorized();
+        }
+
+        async function fetchBids() {
+            const container = DOM.get('bids-received-container');
+            container.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>`;
+            
+            const result = await makeApiRequest('bids/bids/');
+            
+            if (result.success) {
+                container.innerHTML = '';
+                const bids = result.data?.results || result.data || [];
+                
+                if (Array.isArray(bids) && bids.length > 0) {
+                    bids.forEach(bid => {
+                        const bidCard = createBidCard(bid);
+                        if (bidCard) {
+                            container.appendChild(bidCard);
+                        }
+                    });
+                } else {
+                    container.innerHTML = `<div class="text-center p-5 bg-light rounded"><p class="h5 text-muted">You haven't received any bids on your listings.</p></div>`;
+                }
+            } else {
+                console.error('Failed to fetch bids:', result.error);
+                container.innerHTML = `<div class="alert alert-danger">Failed to load bids: ${result.error?.detail || 'Unknown error'}. Please refresh the page.</div>`;
+            }
+        }
+
+        function createBidCard(bid) {
+            if (!bid) return null;
+            
+            const template = DOM.get('bid-card-template');
+            if (!template) {
+                console.error('Bid card template not found');
+                return null;
+            }
+            
+            const card = template.content.cloneNode(true).querySelector('.bid-card');
+            
+            const setTextContent = (selector, value, fallback = 'N/A') => {
+                const element = card.querySelector(selector);
+                if (element) element.textContent = value || fallback;
+            };
+            
+            setTextContent('.cargo-title', bid.listing_title, 'Unknown Listing');
+            setTextContent('.bidder-info', bid.bidder_name, 'Unknown Bidder');
+            
+            let formattedDate = 'Unknown Date';
+            if (bid.submitted_at) {
+                try {
+                    formattedDate = new Date(bid.submitted_at).toLocaleDateString();
+                } catch (e) {
+                    console.warn('Invalid date format:', bid.submitted_at);
+                }
+            }
+            setTextContent('.submitted-date', formattedDate);
+            
+            let formattedAmount = 'KSh 0';
+            if (bid.bid_amount) {
+                try {
+                    const amount = parseFloat(bid.bid_amount);
+                    if (!isNaN(amount)) {
+                        formattedAmount = `KSh ${amount.toLocaleString()}`;
+                    }
+                } catch (e) {
+                    console.warn('Invalid bid amount:', bid.bid_amount);
+                }
+            }
+            setTextContent('.bid-amount', formattedAmount);
+            
+            const status = (bid.status || 'unknown').toLowerCase();
+            const statusBadge = card.querySelector('.bid-status-badge');
+            if (statusBadge) {
+                statusBadge.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+                const statusClasses = {
+                    'accepted': 'bg-success',
+                    'rejected': 'bg-danger',
+                    'pending': 'bg-warning',
+                    'paid': 'bg-info'
+                };
+                statusBadge.className = `bid-status-badge ${statusClasses[status] || 'bg-secondary'}`;
+                if (status === 'pending') {
+                    statusBadge.classList.add('text-primary');
+                }
+            }
+            
+            setTextContent('.delivery-time-display', `Delivery: ${bid.delivery_time_display || 'Not specified'}`);
+            
+            const actionButtonsContainer = card.querySelector('.action-buttons');
+            if (actionButtonsContainer) {
+                if (status === 'pending') {
+                    actionButtonsContainer.innerHTML = `
+                        <button class="btn btn-sm btn-success me-2 respond-bid-btn" data-bid-id="${bid.id}" data-action="accept">Accept</button>
+                        <button class="btn btn-sm btn-danger respond-bid-btn" data-bid-id="${bid.id}" data-action="reject">Reject</button>
+                    `;
+                } else if (status === 'accepted') {
+                    actionButtonsContainer.innerHTML = `
+                        <button class="btn btn-sm btn-info pay-btn" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#paymentModal"
+                                data-bid-id="${bid.id}"
+                                data-listing-title="${bid.listing_title}"
+                                data-bid-amount="${bid.bid_amount}"
+                                data-bidder-name="${bid.bidder_name}">
+                            <i class="bi bi-credit-card-fill me-1"></i> Pay
+                        </button>
+                    `;
+                }
+            }
+            
+            card.classList.add('bid-received');
+            
+            return card;
+        }
+
+        async function handleBidResponse(bidId, action) {
+            if (!bidId || !action) {
+                console.error('Invalid bid ID or action');
+                return;
+            }
+            
+            if (!confirm(`Are you sure you want to ${action} this bid?`)) {
+                return;
+            }
+            
+            const result = await makeApiRequest(`bids/bids/${bidId}/respond/`, {
+                method: 'POST',
+                body: { action }
+            });
+            
+            if (result.success) {
+                showModalNotification('success', `Bid ${action}ed`, `The bid has been successfully ${action}ed.`);
+                await fetchBids();
+            } else {
+                showModalNotification('error', 'Action Failed', result.error?.detail || 'An error occurred');
+            }
+        }
+
+        async function handleConfirmPayment() {
+            const confirmBtn = DOM.get('confirm-payment-btn');
+            const bidId = confirmBtn.dataset.bidId;
+            const spinner = confirmBtn.querySelector('.spinner-border');
+
+            if (!bidId) {
+                showModalNotification('error', 'Payment Error', 'Could not find the bid ID to process payment.');
+                return;
+            }
+
+            confirmBtn.disabled = true;
+            spinner.classList.remove('d-none');
+
+            // Simulate a 2-second payment process API call
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            // In a real app, you would make an API call here:
+            // const result = await makeApiRequest(`bids/bids/${bidId}/pay/`, { method: 'POST' });
+
+            confirmBtn.disabled = false;
+            spinner.classList.add('d-none');
+
+            const paymentModalInstance = bootstrap.Modal.getInstance(DOM.get('paymentModal'));
+            paymentModalInstance.hide();
+
+            showModalNotification('success', 'Payment Confirmed', 'The payment has been processed and the bid status will now be updated.');
+            
+            // To make the status change visible, we refetch the bids.
+            // A real backend would now return this bid with a "paid" status.
+            await fetchBids();
+        }
+
+        async function initializeApp() {
+            try {
+                const authToken = getLocalStorage('authToken');
+                if (!authToken) {
+                    handleUnauthorized();
+                    return;
+                }
+                
+                const profileFetched = await fetchAndDisplayUserProfile();
+                if (!profileFetched) {
+                    handleUnauthorized();
+                    return;
+                }
+                
+                await fetchBids();
+                
+                DOM.get('logout-btn')?.addEventListener('click', handleLogout);
+                DOM.get('sidebar-logout-btn')?.addEventListener('click', handleLogout);
+                DOM.get('confirm-payment-btn')?.addEventListener('click', handleConfirmPayment);
+
+                const paymentModal = DOM.get('paymentModal');
+                if (paymentModal) {
+                    paymentModal.addEventListener('show.bs.modal', function (event) {
+                        const button = event.relatedTarget;
+                        const bidId = button.dataset.bidId;
+                        const listingTitle = button.dataset.listingTitle;
+                        const bidAmount = button.dataset.bidAmount;
+                        const bidderName = button.dataset.bidderName;
+                        
+                        DOM.get('payment-listing-title').textContent = listingTitle;
+                        DOM.get('payment-bidder-name').textContent = bidderName;
+                        DOM.get('payment-account-number').textContent = `BID${bidId}`;
+                        
+                        let formattedAmount = 'KSh 0';
+                        if (bidAmount) {
+                            const amount = parseFloat(bidAmount);
+                            if (!isNaN(amount)) {
+                                formattedAmount = `KSh ${amount.toLocaleString()}`;
+                            }
+                        }
+                        DOM.get('payment-bid-amount').textContent = formattedAmount;
+                        DOM.get('confirm-payment-btn').dataset.bidId = bidId;
+                    });
+                }
+                
+                document.body.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('respond-bid-btn')) {
+                        const bidId = e.target.dataset.bidId;
+                        const action = e.target.dataset.action;
+                        handleBidResponse(bidId, action);
+                    }
+                });
+                
+            } catch (error) {
+                console.error('Error initializing app:', error);
+                showModalNotification('error', 'Initialization Error', 'Failed to initialize the application. Please refresh the page.');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', initializeApp);
+    </script>
+</body>
+</html>

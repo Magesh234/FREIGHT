@@ -1,0 +1,1856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreightLink - My Listings</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        :root {
+            --primary: #2C3E50;
+            --secondary: #34495E;
+            --accent: #F39C12;
+            --accent-hover: #E67E22;
+            --light: #ECF0F1;
+            --dark: #2C3E50;
+            --gray: #95A5A6;
+            --light-gray: #F8F9FA;
+            --success: #27AE60;
+            --danger: #E74C3C;
+            --warning: #F1C40F;
+            --info: #3498DB;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .rounded-md {
+            border-radius: 0.75rem;
+        }
+        
+        .shadow-custom {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--primary);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
+        }
+        .header .logo {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+        .header .nav-link {
+            color: #FFFFFF;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+            margin: 0 0.25rem;
+        }
+        .header .nav-link:hover, .header .nav-link.active {
+            color: var(--primary);
+            background-color: var(--accent);
+            border-radius: 2rem;
+        }
+        .header .nav-link.active {
+            font-weight: 600;
+        }
+
+        /* Dashboard Layout */
+        .dashboard-layout {
+            display: flex;
+            height: calc(100vh - 70px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background-color: var(--primary);
+            padding: 2rem 1rem;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+        }
+        .sidebar .menu-item {
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.75rem 1rem;
+            margin: 0.25rem 0;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .sidebar .menu-item i {
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+        .sidebar .menu-item:hover, .sidebar .menu-item.active {
+            background-color: var(--accent);
+            color: var(--primary);
+        }
+        .sidebar .menu-item.active {
+            font-weight: 600;
+        }
+        .sidebar .divider {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 1rem 0;
+        }
+        .sidebar .menu-title {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin: 1.5rem 0 0.5rem 1rem;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+        .page-subtitle {
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+
+        /* Toggle Tabs */
+        .toggle-tabs {
+            display: flex;
+            background-color: var(--light-gray);
+            border-radius: 50px;
+            padding: 0.3rem;
+            margin-bottom: 2rem;
+            max-width: 400px;
+        }
+        .toggle-tab {
+            flex: 1;
+            text-align: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            color: var(--gray);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .toggle-tab.active {
+            background-color: var(--accent);
+            color: var(--dark);
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+        }
+
+        /* Buttons */
+        .btn-primary, .btn-primary:focus {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            color: var(--dark);
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+        }
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+            border-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(230, 126, 34, 0.4);
+        }
+        .btn-secondary, .btn-secondary:focus {
+            background-color: var(--light-gray);
+            border-color: #DDE2E5;
+            color: var(--gray);
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background-color: #e9ecef;
+            border-color: #c1c7cc;
+            color: var(--dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn-sm {
+            padding: 0.5rem 1.25rem;
+            font-size: 0.875rem;
+        }
+        
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        /* Card for Listings */
+        .listing-card {
+            background-color: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--accent);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .listing-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .listing-card .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding-bottom: 1rem;
+        }
+        .listing-card .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0;
+        }
+        .listing-card .badge {
+            font-size: 0.7rem;
+            padding: 0.5em 0.8em;
+            border-radius: 50px;
+        }
+        .listing-card .badge-active { /* Changed from badge-available for consistency */
+            background-color: rgba(39, 174, 96, 0.1);
+            color: var(--success);
+        }
+        .listing-card .badge-urgent {
+            background-color: rgba(231, 76, 60, 0.1);
+            color: var(--danger);
+        }
+        .listing-card .badge-pending {
+            background-color: rgba(241, 196, 15, 0.1);
+            color: var(--warning);
+        }
+        .listing-card .badge-completed {
+            background-color: rgba(52, 152, 219, 0.1);
+            color: var(--info);
+        }
+        .listing-card .badge-expired {
+            background-color: rgba(149, 165, 166, 0.1);
+            color: var(--gray);
+        }
+        .listing-card .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            padding-top: 1rem;
+        }
+        .listing-card .price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        .listing-card .location {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        .listing-card .location i {
+            color: var(--accent);
+            margin-right: 0.5rem;
+        }
+        .listing-card .detail-row {
+            display: flex;
+            margin-bottom: 0.75rem;
+        }
+        .listing-card .detail-label {
+            flex: 1;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        .listing-card .detail-value {
+            flex: 2;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        /* Action buttons for listing cards */
+        .listing-actions {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .action-button {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--light-gray);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            color: var(--gray);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .action-button:hover {
+            background-color: var(--accent);
+            color: var(--dark);
+            transform: translateY(-2px);
+        }
+        
+        /* Status indicators */
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        
+        .status-dot.active {
+            background-color: var(--success);
+        }
+        
+        .status-dot.pending {
+            background-color: var(--warning);
+        }
+        
+        .status-dot.expired {
+            background-color: var(--gray);
+        }
+        
+        .status-dot.completed {
+            background-color: var(--info);
+        }
+        
+        .status-label {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        /* Analytics */
+        .analytics-card {
+            background-color: #FFFFFF;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .analytics-card .icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: rgba(243, 156, 18, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1.5rem;
+        }
+        
+        .analytics-card .icon i {
+            font-size: 1.8rem;
+            color: var(--accent);
+        }
+        
+        .analytics-card h4 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            color: var(--primary);
+        }
+        
+        .analytics-card p {
+            color: var(--gray);
+            margin-bottom: 0;
+        }
+        
+        /* Filter and Search */
+        .filter-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .search-container {
+            position: relative;
+            max-width: 300px;
+            width: 100%;
+        }
+        
+        .search-container input {
+            padding-left: 40px;
+            padding-right: 15px;
+            height: 45px;
+            border-radius: 50px;
+            border: 1px solid #DDE2E5;
+            background-color: #FFFFFF;
+            width: 100%;
+        }
+        
+        .search-container i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+        
+        /* No Results */
+        .no-listings {
+            background-color: #FFFFFF;
+            border-radius: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 3rem 2rem;
+            text-align: center;
+            margin: 2rem 0;
+        }
+        
+        .no-listings i {
+            font-size: 4rem;
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            opacity: 0.5;
+        }
+        
+        .no-listings h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .no-listings p {
+            color: var(--gray);
+            max-width: 500px;
+            margin: 0 auto 1.5rem;
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 991.98px) {
+            .sidebar {
+                width: 80px;
+                padding: 2rem 0.5rem;
+            }
+            .sidebar .menu-item span, .sidebar .menu-title {
+                display: none;
+            }
+            .sidebar .menu-item i {
+                margin-right: 0;
+                font-size: 1.5rem;
+            }
+            .main-content {
+                padding: 1.5rem;
+            }
+            .filter-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .filter-group {
+                width: 100%;
+            }
+            .search-container {
+                max-width: 100%;
+            }
+        }
+        
+        @media (max-width: 767.98px) {
+            .dashboard-layout {
+                flex-direction: column;
+                height: auto;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                padding: 1rem;
+                display: flex;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            .sidebar .menu-item {
+                margin: 0 0.25rem;
+                padding: 0.5rem 1rem;
+            }
+            .sidebar .menu-item span {
+                display: none;
+            }
+            .sidebar .divider, .sidebar .menu-title {
+                display: none;
+            }
+            .main-content {
+                padding: 1.5rem 1rem;
+            }
+            .analytics-card {
+                margin-bottom: 1rem;
+            }
+            .filter-row {
+                margin-bottom: 1.5rem;
+            }
+        }
+        
+        /* Tab panes */
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Response Card Styling */
+        .response-card {
+            background-color: #f8f9fa;
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            border: 1px solid #e0e0e0;
+        }
+
+        .response-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .responder-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .responder-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin-right: 0.75rem;
+        }
+
+        .responder-name {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .responder-rating i {
+            font-size: 0.9rem;
+        }
+
+        .response-date {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .response-details {
+            margin-bottom: 1rem;
+        }
+
+        .response-message p {
+            font-size: 0.95rem;
+            color: var(--dark);
+            margin-bottom: 0;
+        }
+
+        .response-actions {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: flex-end;
+            border-top: 1px solid #e9ecef;
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header text-white py-3 shadow-sm sticky-top">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="logo d-flex align-items-center">
+                    <i class="bi bi-truck me-2"></i>FreightLink
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="dropdown me-3">
+                        <a href="#" class="text-white dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-bell me-2"></i>
+                            <span class="badge bg-accent text-dark rounded-pill">3</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">New match found</a></li>
+                            <li><a class="dropdown-item" href="#">Cargo request accepted</a></li>
+                            <li><a class="dropdown-item" href="#">Payment received</a></li>
+                        </ul>
+                    </div>
+                    <div class="dropdown">
+                        <a href="#" class="text-white dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="rounded-circle bg-accent text-dark d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                                <i class="bi bi-person-fill"></i>
+                            </div>
+                            <span>John Doe</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="dashboard-layout">
+        <div class="sidebar">
+            <a href="dashboard.html" class="menu-item">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="mylisting.html" class="menu-item">
+                <i class="bi bi-box-seam-fill"></i>
+                <span>My Listings</span>
+            </a>
+            <a href="history.html" class="menu-item">
+                <i class="bi bi-clock-history"></i>
+                <span>History</span>
+            </a>
+            <a href="messages.html" class="menu-item">
+                <i class="bi bi-chat-left-text-fill"></i>
+                <span>Messages</span>
+            </a>
+            
+            <div class="divider"></div>
+            <div class="menu-title">Account</div>
+            
+            <a href="profile.html" class="menu-item active">
+                <i class="bi bi-person-fill"></i>
+                <span>Profile</span>
+            </a>
+            <a href="payments.html" class="menu-item">
+                <i class="bi bi-wallet2"></i>
+                <span>Payments</span>
+            </a>
+            <a href="settings (2).html" class="menu-item">
+                <i class="bi bi-gear-fill"></i>
+                <span>Settings</span>
+            </a>
+            <a href="help&support.html" class="menu-item">
+                <i class="bi bi-question-circle-fill"></i>
+                <span>Help & Support</span>
+            </a>
+            
+            <div class="divider"></div>
+            
+            <a href="#" class="menu-item">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+
+    
+
+        <div class="main-content">
+            <h1 class="page-title">My Listings</h1>
+            <p class="page-subtitle">Manage your active cargo and truck listings</p>
+            
+            <div class="toggle-tabs">
+                <div class="toggle-tab active" id="all-listings-tab">All</div>
+                <div class="toggle-tab" id="cargo-listings-tab">Cargo</div>
+                <div class="toggle-tab" id="truck-listings-tab">Trucks</div>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="analytics-card">
+                        <div class="icon">
+                            <i class="bi bi-box-seam"></i>
+                        </div>
+                        <div>
+                            <h4 id="activeListingsCount">0</h4>
+                            <p>Active Listings</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="analytics-card">
+                        <div class="icon">
+                            <i class="bi bi-eye"></i>
+                        </div>
+                        <div>
+                            <h4 id="totalViewsCount">0</h4>
+                            <p>Total Views</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="analytics-card">
+                        <div class="icon">
+                            <i class="bi bi-chat-dots"></i>
+                        </div>
+                        <div>
+                            <h4 id="newResponsesCount">0</h4>
+                            <p>New Responses</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="analytics-card">
+                        <div class="icon">
+                            <i class="bi bi-check2-circle"></i>
+                        </div>
+                        <div>
+                            <h4 id="completedDealsCount">0</h4>
+                            <p>Completed Deals</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="filter-row">
+                <div class="filter-group">
+                    <select class="form-select" id="statusFilter" style="width: auto;">
+                        <option value="all">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="pending">Pending</option>
+                        <option value="completed">Completed</option>
+                        <option value="expired">Expired</option>
+                    </select>
+                    <select class="form-select" id="sortOrder" style="width: auto;">
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="price-low">Price: Low to High</option>
+                    </select>
+                </div>
+                <div class="search-container">
+                    <i class="bi bi-search"></i>
+                    <input type="text" class="form-control" id="searchListings" placeholder="Search listings...">
+                </div>
+            </div>
+            
+            <div class="tab-content active" id="all-listings-content">
+                <div id="allListingsContainer">
+                    <div class="no-listings" id="noAllListingsMessage" style="display: none;">
+                        <i class="bi bi-box-seam"></i>
+                        <h3>No Listings Found</h3>
+                        <p>It looks like you haven't created any listings yet. Start by creating a new cargo or truck listing!</p>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newListingModal">
+                            <i class="bi bi-plus-circle me-2"></i>Create New Listing
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="cargo-listings-content">
+                <div id="cargoListingsContainer">
+                    <div class="no-listings" id="noCargoListingsMessage" style="display: none;">
+                        <i class="bi bi-box-seam"></i>
+                        <h3>No Cargo Listings Found</h3>
+                        <p>You haven't created any cargo listings yet. Click below to add one!</p>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newListingModal">
+                            <i class="bi bi-plus-circle me-2"></i>Create New Cargo Listing
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="truck-listings-content">
+                <div id="truckListingsContainer">
+                    <div class="no-listings" id="noTruckListingsMessage" style="display: none;">
+                        <i class="bi bi-truck"></i>
+                        <h3>No Truck Listings Found</h3>
+                        <p>You haven't created any truck listings yet. Click below to add one!</p>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newListingModal">
+                            <i class="bi bi-plus-circle me-2"></i>Create New Truck Listing
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newListingModal">
+                    <i class="bi bi-plus-circle me-2"></i>Create New Listing
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="newListingModal" tabindex="-1" aria-labelledby="newListingModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="newListingModalLabel">Create New Listing</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="toggle-tabs mb-4">
+                        <div class="toggle-tab active" id="create-cargo-tab">Cargo</div>
+                        <div class="toggle-tab" id="create-truck-tab">Truck</div>
+                    </div>
+                    
+                    <div class="tab-content active" id="create-cargo-content">
+                        <form id="createCargoForm">
+                            <div class="mb-3">
+                                <label for="cargoTitle" class="form-label">Listing Title</label>
+                                <input type="text" class="form-control" id="cargoTitle" placeholder="e.g. Furniture Transport" required>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="cargoPickupLocation" class="form-label">Pickup Location</label>
+                                    <input type="text" class="form-control" id="cargoPickupLocation" placeholder="City or town" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="cargoDeliveryLocation" class="form-label">Delivery Location</label>
+                                    <input type="text" class="form-control" id="cargoDeliveryLocation" placeholder="City or town" required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="cargoPickupDate" class="form-label">Pickup Date</label>
+                                    <input type="text" class="form-control" id="cargoPickupDate" placeholder="Select date" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="cargoDeliveryDate" class="form-label">Delivery Date (Optional)</label>
+                                    <input type="text" class="form-control" id="cargoDeliveryDate" placeholder="Select date">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label for="cargoWeight" class="form-label">Weight (tons)</label>
+                                    <input type="number" class="form-control" id="cargoWeight" placeholder="e.g. 2.5" step="0.1" required>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="cargoVolume" class="form-label">Volume (m³) Optional</label>
+                                    <input type="number" class="form-control" id="cargoVolume" placeholder="e.g. 10" step="0.1">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="cargoPrice" class="form-label">Budget (KSh)</label>
+                                    <input type="number" class="form-control" id="cargoPrice" placeholder="e.g. 25000" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="cargoDescription" class="form-label">Description</label>
+                                <textarea class="form-control" id="cargoDescription" rows="4" placeholder="Describe your cargo, special requirements, etc."></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Cargo Type</label>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="cargoTypeGeneral" value="General">
+                                        <label class="form-check-label" for="cargoTypeGeneral">General</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="cargoTypeFragile" value="Fragile">
+                                        <label class="form-check-label" for="cargoTypeFragile">Fragile</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="cargoTypePerishable" value="Perishable">
+                                        <label class="form-check-label" for="cargoTypePerishable">Perishable</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="cargoTypeBulk" value="Bulk">
+                                        <label class="form-check-label" for="cargoTypeBulk">Bulk</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="cargoTypeMachinery" value="Machinery">
+                                        <label class="form-check-label" for="cargoTypeMachinery">Machinery</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="cargoUrgent">
+                                <label class="form-check-label" for="cargoUrgent">Mark as Urgent</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Create Cargo Listing</button>
+                        </form>
+                    </div>
+                    
+                    <div class="tab-content" id="create-truck-content">
+                        <form id="createTruckForm">
+                            <div class="mb-3">
+                                <label for="truckTitle" class="form-label">Listing Title</label>
+                                <input type="text" class="form-control" id="truckTitle" placeholder="e.g. 10-Ton Closed Truck" required>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="truckBaseLocation" class="form-label">Base Location</label>
+                                    <input type="text" class="form-control" id="truckBaseLocation" placeholder="City or town" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="truckType" class="form-label">Truck Type</label>
+                                    <select class="form-select" id="truckType" required>
+                                        <option value="" selected disabled>Select type</option>
+                                        <option value="Closed Body">Closed Body</option>
+                                        <option value="Open Flatbed">Open Flatbed</option>
+                                        <option value="Refrigerated">Refrigerated</option>
+                                        <option value="Tanker">Tanker</option>
+                                        <option value="Container Carrier">Container Carrier</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="truckAvailableFrom" class="form-label">Available From</label>
+                                    <input type="text" class="form-control" id="truckAvailableFrom" placeholder="Select date" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="truckAvailableUntil" class="form-label">Available Until</label>
+                                    <input type="text" class="form-control" id="truckAvailableUntil" placeholder="Select date">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label for="truckCapacity" class="form-label">Capacity (tons)</label>
+                                    <input type="number" class="form-control" id="truckCapacity" placeholder="e.g. 10" step="0.1" required>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="truckVolume" class="form-label">Volume (m³) Optional</label>
+                                    <input type="number" class="form-control" id="truckVolume" placeholder="e.g. 48" step="0.1">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="truckRate" class="form-label">Rate (KSh per km)</label>
+                                    <input type="number" class="form-control" id="truckRate" placeholder="e.g. 85" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="truckDescription" class="form-label">Description</label>
+                                <textarea class="form-control" id="truckDescription" rows="4" placeholder="Describe your truck, special features, etc."></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Preferred Routes</label>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="routeAny" value="Any Route">
+                                        <label class="form-check-label" for="routeAny">Any Route</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="routeNairobiMombasa" value="Nairobi-Mombasa">
+                                        <label class="form-check-label" for="routeNairobiMombasa">Nairobi-Mombasa</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="routeNairobiNakuru" value="Nairobi-Nakuru">
+                                        <label class="form-check-label" for="routeNairobiNakuru">Nairobi-Nakuru</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="routeNairobiKisumu" value="Nairobi-Kisumu">
+                                        <label class="form-check-label" for="routeNairobiKisumu">Nairobi-Kisumu</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="truckDocuments" required>
+                                <label class="form-check-label" for="truckDocuments">I have all required documents (insurance, vehicle registration)</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Create Truck Listing</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="viewResponsesModal" tabindex="-1" aria-labelledby="viewResponsesModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewResponsesModalLabel">Responses for: <span id="responseListingTitle"></span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="responsesListContainer">
+                    <div class="no-listings" id="noResponsesMessage" style="display: none;">
+                        <i class="bi bi-chat-dots"></i>
+                        <h3>No Responses Yet</h3>
+                        <p>No one has responded to this listing yet. Share your listing to get more offers!</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editListingModal" tabindex="-1" aria-labelledby="editListingModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editListingModalLabel">Edit Listing: <span id="editListingTitleSpan"></span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editListingForm">
+                        <input type="hidden" id="editListingId">
+                        <input type="hidden" id="editListingType">
+                        <div class="mb-3">
+                            <label for="editTitle" class="form-label">Listing Title</label>
+                            <input type="text" class="form-control" id="editTitle" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editPickupLocation" class="form-label">Pickup Location</label>
+                                <input type="text" class="form-control" id="editPickupLocation">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editDeliveryLocation" class="form-label">Delivery Location</label>
+                                <input type="text" class="form-control" id="editDeliveryLocation">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editPickupDate" class="form-label">Pickup Date</label>
+                                <input type="text" class="form-control" id="editPickupDate">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editDeliveryDate" class="form-label">Delivery Date (Optional)</label>
+                                <input type="text" class="form-control" id="editDeliveryDate">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="editWeightCapacity" class="form-label">Weight/Capacity (tons)</label>
+                                <input type="number" class="form-control" id="editWeightCapacity" step="0.1">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="editVolume" class="form-label">Volume (m³) Optional</label>
+                                <input type="number" class="form-control" id="editVolume" step="0.1">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="editPriceRate" class="form-label">Budget/Rate (KSh)</label>
+                                <input type="number" class="form-control" id="editPriceRate">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="editDescription" rows="4"></textarea>
+                        </div>
+                        <div class="mb-3" id="editCargoTypeContainer" style="display: none;">
+                            <label class="form-label">Cargo Type</label>
+                            <div class="d-flex flex-wrap gap-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="editCargoTypeGeneral" value="General">
+                                    <label class="form-check-label" for="editCargoTypeGeneral">General</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="editCargoTypeFragile" value="Fragile">
+                                    <label class="form-check-label" for="editCargoTypeFragile">Fragile</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="editCargoTypePerishable" value="Perishable">
+                                    <label class="form-check-label" for="editCargoTypePerishable">Perishable</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="editCargoTypeBulk" value="Bulk">
+                                    <label class="form-check-label" for="editCargoTypeBulk">Bulk</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="editCargoTypeMachinery" value="Machinery">
+                                    <label class="form-check-label" for="editCargoTypeMachinery">Machinery</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3" id="editTruckTypeContainer" style="display: none;">
+                            <label for="editTruckType" class="form-label">Truck Type</label>
+                            <select class="form-select" id="editTruckType">
+                                <option value="" selected disabled>Select type</option>
+                                <option value="Closed Body">Closed Body</option>
+                                <option value="Open Flatbed">Open Flatbed</option>
+                                <option value="Refrigerated">Refrigerated</option>
+                                <option value="Tanker">Tanker</option>
+                                <option value="Container Carrier">Container Carrier</option>
+                            </select>
+                        </div>
+                        <div class="mb-3" id="editPreferredRoutesContainer" style="display: none;">
+                            <label class="form-label">Preferred Routes</label>
+                            <div class="d-flex flex-wrap gap-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="editRouteAny" value="Any Route">
+                                    <label class="form-check-label" for="editRouteAny">Any Route</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="editRouteNairobiMombasa" value="Nairobi-Mombasa">
+                                    <label class="form-check-label" for="editRouteNairobiMombasa">Nairobi-Mombasa</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="editRouteNairobiNakuru" value="Nairobi-Nakuru">
+                                    <label class="form-check-label" for="editRouteNairobiNakuru">Nairobi-Nakuru</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="editRouteNairobiKisumu" value="Nairobi-Kisumu">
+                                    <label class="form-check-label" for="editRouteNairobiKisumu">Nairobi-Kisumu</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-check mb-3" id="editUrgentContainer">
+                            <input class="form-check-input" type="checkbox" id="editUrgent">
+                            <label class="form-check-label" for="editUrgent">Mark as Urgent</label>
+                        </div>
+                        <div class="form-check mb-3" id="editDocumentsContainer" style="display: none;">
+                            <input class="form-check-input" type="checkbox" id="editDocuments">
+                            <label class="form-check-label" for="editDocuments">I have all required documents (insurance, vehicle registration)</label>
+                        </div>
+                        <div class="form-check mb-3">
+                            <label for="editStatus" class="form-label">Status</label>
+                            <select class="form-select" id="editStatus">
+                                <option value="active">Active</option>
+                                <option value="pending">Pending</option>
+                                <option value="completed">Completed</option>
+                                <option value="expired">Expired</option>
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger me-auto" id="deleteListingBtn">Delete Listing</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        // Base URL for your Django API
+        const API_BASE_URL = 'http://localhost:8000/api/'; // IMPORTANT: Change this to your actual Django backend URL
+
+        // --- Helper Functions for API Calls ---
+        async function fetchData(endpoint) {
+            try {
+                const response = await fetch(`${API_BASE_URL}${endpoint}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                // In a real app, you'd show a user-friendly error message
+                return [];
+            }
+        }
+
+        async function postData(endpoint, data) {
+            try {
+                const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // Add CSRF token if your Django setup requires it
+                        // 'X-CSRFToken': getCookie('csrftoken'), 
+                    },
+                    body: JSON.stringify(data),
+                });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`HTTP error! status: ${response.status}, Details: ${JSON.stringify(errorData)}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error('Error posting data:', error);
+                // In a real app, you'd show a user-friendly error message
+                return null;
+            }
+        }
+
+        async function updateData(endpoint, data) {
+            try {
+                const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+                    method: 'PUT', // Or PATCH depending on your DRF setup
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // Add CSRF token if your Django setup requires it
+                        // 'X-CSRFToken': getCookie('csrftoken'),
+                    },
+                    body: JSON.stringify(data),
+                });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`HTTP error! status: ${response.status}, Details: ${JSON.stringify(errorData)}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error('Error updating data:', error);
+                return null;
+            }
+        }
+
+        async function deleteData(endpoint) {
+            try {
+                const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+                    method: 'DELETE',
+                    headers: {
+                        // Add CSRF token if your Django setup requires it
+                        // 'X-CSRFToken': getCookie('csrftoken'),
+                    },
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return true; // Indicate success
+            } catch (error) {
+                console.error('Error deleting data:', error);
+                return false;
+            }
+        }
+
+        // Function to get CSRF token from cookies (if needed for Django)
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // --- Rendering Functions ---
+
+        // Helper to format date
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
+
+        // Helper to get status dot class
+        function getStatusDotClass(status) {
+            switch (status.toLowerCase()) {
+                case 'active': return 'active';
+                case 'pending': return 'pending';
+                case 'completed': return 'completed';
+                case 'expired': return 'expired';
+                default: return '';
+            }
+        }
+
+        function getBadgeClass(status) {
+            switch (status.toLowerCase()) {
+                case 'active': return 'badge-active';
+                case 'pending': return 'badge-pending';
+                case 'completed': return 'badge-completed';
+                case 'expired': return 'badge-expired';
+                case 'urgent': return 'badge-urgent';
+                default: return '';
+            }
+        }
+
+        function renderListingCard(listing, type) {
+            const isCargo = type === 'cargo';
+            const statusClass = getBadgeClass(listing.status);
+            const statusDotClass = getStatusDotClass(listing.status);
+            const priceOrRate = isCargo ? `KSh ${listing.price}` : `KSh ${listing.rate} per km`;
+            const weightOrCapacity = isCargo ? `${listing.weight} tons` : `${listing.capacity} tons`;
+            const pickupOrBase = isCargo ? listing.pickup_location : listing.base_location;
+            const deliveryOrRoutes = isCargo ? listing.delivery_location : (listing.preferred_routes ? listing.preferred_routes.join(', ') : 'Any Route');
+            const pickupAvailableFrom = isCargo ? formatDate(listing.pickup_date) : formatDate(listing.available_from);
+            const deliveryAvailableUntil = isCargo ? formatDate(listing.delivery_date) : formatDate(listing.available_until);
+            const listingTypeDisplay = isCargo ? 'Cargo' : 'Truck';
+            const expiresOrUntil = isCargo ? `Expires: ${formatDate(listing.expires_on)}` : `Available Until: ${formatDate(listing.available_until)}`;
+            const carrierInfo = listing.carrier_name ? `<div class="detail-row"><div class="detail-label">Carrier:</div><div class="detail-value">${listing.carrier_name}</div></div>` : '';
+
+
+            return `
+                <div class="listing-card" data-id="${listing.id}" data-type="${type}">
+                    <div class="card-header">
+                        <h5 class="card-title">${listing.title}</h5>
+                        <span class="badge ${statusClass}">${listing.status}</span>
+                    </div>
+                    <div class="status-indicator">
+                        <span class="status-dot ${statusDotClass}"></span>
+                        <span class="status-label">${listing.status} since ${formatDate(listing.created_at)}</span>
+                    </div>
+                    <div class="location">
+                        <i class="bi bi-geo-alt-fill"></i>
+                        <span>${pickupOrBase} ${isCargo ? 'to ' + deliveryOrRoutes : ''}</span>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <div class="detail-row">
+                                <div class="detail-label">Listing Type:</div>
+                                <div class="detail-value">${listingTypeDisplay}</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">${isCargo ? 'Weight:' : 'Capacity:'}</div>
+                                <div class="detail-value">${weightOrCapacity}</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">${isCargo ? 'Pickup Date:' : 'Available From:'}</div>
+                                <div class="detail-value">${pickupAvailableFrom}</div>
+                            </div>
+                            ${isCargo ? `
+                            <div class="detail-row">
+                                <div class="detail-label">Cargo Type:</div>
+                                <div class="detail-value">${listing.cargo_type ? listing.cargo_type.join(', ') : 'N/A'}</div>
+                            </div>
+                            ` : `
+                            <div class="detail-row">
+                                <div class="detail-label">Truck Type:</div>
+                                <div class="detail-value">${listing.truck_type || 'N/A'}</div>
+                            </div>
+                            `}
+                        </div>
+                        <div class="col-md-6">
+                            <div class="detail-row">
+                                <div class="detail-label">Views:</div>
+                                <div class="detail-value">${listing.views || 0}</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Responses:</div>
+                                <div class="detail-value">${listing.responses_count || 0}</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">${isCargo ? 'Expires:' : 'Available Until:'}</div>
+                                <div class="detail-value">${deliveryAvailableUntil}</div>
+                            </div>
+                            ${carrierInfo}
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="price">${priceOrRate}</div>
+                        <div>
+                            <button class="btn btn-secondary btn-sm me-2 view-responses-btn" data-id="${listing.id}" data-title="${listing.title}" ${listing.responses_count === 0 ? 'disabled' : ''}>View Responses</button>
+                            <button class="btn btn-primary btn-sm edit-listing-btn" data-id="${listing.id}" data-type="${type}">Edit Listing</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderResponseCard(response) {
+            return `
+                <div class="response-card">
+                    <div class="response-header">
+                        <div class="responder-info">
+                            <div class="responder-avatar">
+                                <i class="bi bi-person-fill"></i>
+                            </div>
+                            <div>
+                                <h6 class="responder-name">${response.responder_name}</h6>
+                                <div class="responder-rating">
+                                    ${Array(Math.floor(response.responder_rating)).fill('<i class="bi bi-star-fill text-warning"></i>').join('')}
+                                    ${response.responder_rating % 1 !== 0 ? '<i class="bi bi-star-half text-warning"></i>' : ''}
+                                    ${Array(5 - Math.ceil(response.responder_rating)).fill('<i class="bi bi-star text-warning"></i>').join('')}
+                                    <span>(${response.responder_rating.toFixed(1)})</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="response-date">${formatDate(response.created_at)}</div>
+                    </div>
+                    <div class="response-details">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="detail-row">
+                                    <div class="detail-label">Offered Price:</div>
+                                    <div class="detail-value">KSh ${response.offered_price}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="detail-row">
+                                    <div class="detail-label">Available Date:</div>
+                                    <div class="detail-value">${formatDate(response.available_date)}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="detail-row">
+                                    <div class="detail-label">Vehicle Type:</div>
+                                    <div class="detail-value">${response.vehicle_type}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="response-message">
+                            <p>${response.message}</p>
+                        </div>
+                    </div>
+                    <div class="response-actions">
+                        <button class="btn btn-outline-primary btn-sm">View Profile</button>
+                        <button class="btn btn-outline-secondary btn-sm">Message</button>
+                        <button class="btn btn-primary btn-sm">Accept Offer</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function loadListings(type = 'all', status = 'all', sort = 'newest', searchTerm = '') {
+            let cargoListings = [];
+            let truckListings = [];
+
+            try {
+                // Fetch cargo listings
+                cargoListings = await fetchData('cargo-listings/');
+                // Fetch truck listings
+                truckListings = await fetchData('truck-listings/');
+            } catch (error) {
+                console.error("Failed to load listings:", error);
+            }
+
+            let allListings = [
+                ...cargoListings.map(l => ({ ...l, listing_type: 'cargo' })),
+                ...truckListings.map(l => ({ ...l, listing_type: 'truck' }))
+            ];
+
+            // Apply status filter
+            if (status !== 'all') {
+                allListings = allListings.filter(listing => listing.status.toLowerCase() === status.toLowerCase());
+            }
+
+            // Apply search term filter
+            if (searchTerm) {
+                const lowerCaseSearchTerm = searchTerm.toLowerCase();
+                allListings = allListings.filter(listing =>
+                    listing.title.toLowerCase().includes(lowerCaseSearchTerm) ||
+                    (listing.pickup_location && listing.pickup_location.toLowerCase().includes(lowerCaseSearchTerm)) ||
+                    (listing.delivery_location && listing.delivery_location.toLowerCase().includes(lowerCaseSearchTerm)) ||
+                    (listing.base_location && listing.base_location.toLowerCase().includes(lowerCaseSearchTerm)) ||
+                    (listing.description && listing.description.toLowerCase().includes(lowerCaseSearchTerm))
+                );
+            }
+
+            // Apply sorting
+            allListings.sort((a, b) => {
+                const dateA = new Date(a.created_at);
+                const dateB = new Date(b.created_at);
+                if (sort === 'newest') {
+                    return dateB - dateA;
+                } else if (sort === 'oldest') {
+                    return dateA - dateB;
+                } else if (sort === 'price-high') {
+                    const priceA = a.price || a.rate || 0;
+                    const priceB = b.price || b.rate || 0;
+                    return priceB - priceA;
+                } else if (sort === 'price-low') {
+                    const priceA = a.price || a.rate || 0;
+                    const priceB = b.price || b.rate || 0;
+                    return priceA - priceB;
+                }
+                return 0;
+            });
+
+            // Update analytics counts
+            document.getElementById('activeListingsCount').textContent = allListings.filter(l => l.status === 'active').length;
+            document.getElementById('totalViewsCount').textContent = allListings.reduce((sum, l) => sum + (l.views || 0), 0);
+            document.getElementById('newResponsesCount').textContent = allListings.reduce((sum, l) => sum + (l.responses_count || 0), 0); // This is a placeholder, needs actual logic for 'new' responses
+            document.getElementById('completedDealsCount').textContent = allListings.filter(l => l.status === 'completed').length;
+
+            const allListingsContainer = document.getElementById('allListingsContainer');
+            const cargoListingsContainer = document.getElementById('cargoListingsContainer');
+            const truckListingsContainer = document.getElementById('truckListingsContainer');
+
+            allListingsContainer.innerHTML = '';
+            cargoListingsContainer.innerHTML = '';
+            truckListingsContainer.innerHTML = '';
+
+            const noAllListingsMessage = document.getElementById('noAllListingsMessage');
+            const noCargoListingsMessage = document.getElementById('noCargoListingsMessage');
+            const noTruckListingsMessage = document.getElementById('noTruckListingsMessage');
+
+            noAllListingsMessage.style.display = 'none';
+            noCargoListingsMessage.style.display = 'none';
+            noTruckListingsMessage.style.display = 'none';
+
+            if (allListings.length === 0 && type === 'all') {
+                noAllListingsMessage.style.display = 'block';
+            }
+            
+            let hasCargo = false;
+            let hasTruck = false;
+
+            allListings.forEach(listing => {
+                const cardHtml = renderListingCard(listing, listing.listing_type);
+                allListingsContainer.insertAdjacentHTML('beforeend', cardHtml);
+
+                if (listing.listing_type === 'cargo') {
+                    cargoListingsContainer.insertAdjacentHTML('beforeend', cardHtml);
+                    hasCargo = true;
+                } else if (listing.listing_type === 'truck') {
+                    truckListingsContainer.insertAdjacentHTML('beforeend', cardHtml);
+                    hasTruck = true;
+                }
+            });
+
+            if (!hasCargo && type === 'cargo') {
+                noCargoListingsMessage.style.display = 'block';
+            }
+            if (!hasTruck && type === 'truck') {
+                noTruckListingsMessage.style.display = 'block';
+            }
+
+            // Re-attach event listeners after rendering new cards
+            attachListingCardEventListeners();
+        }
+
+        async function loadResponsesForListing(listingId, listingTitle) {
+            document.getElementById('responseListingTitle').textContent = listingTitle;
+            const responsesListContainer = document.getElementById('responsesListContainer');
+            responsesListContainer.innerHTML = ''; // Clear previous responses
+            document.getElementById('noResponsesMessage').style.display = 'none';
+
+            try {
+                // Assuming an endpoint like /api/listings/<id>/responses/
+                const responses = await fetchData(`listings/${listingId}/responses/`); 
+                
+                if (responses && responses.length > 0) {
+                    responses.forEach(response => {
+                        responsesListContainer.insertAdjacentHTML('beforeend', renderResponseCard(response));
+                    });
+                } else {
+                    document.getElementById('noResponsesMessage').style.display = 'block';
+                }
+            } catch (error) {
+                console.error(`Failed to load responses for listing ${listingId}:`, error);
+                document.getElementById('noResponsesMessage').style.display = 'block';
+            }
+        }
+
+        function populateEditModal(listing) {
+            document.getElementById('editListingId').value = listing.id;
+            document.getElementById('editListingType').value = listing.listing_type;
+            document.getElementById('editListingTitleSpan').textContent = listing.title;
+            document.getElementById('editTitle').value = listing.title;
+            document.getElementById('editDescription').value = listing.description || '';
+            document.getElementById('editWeightCapacity').value = listing.weight || listing.capacity || '';
+            document.getElementById('editVolume').value = listing.volume || '';
+            document.getElementById('editPriceRate').value = listing.price || listing.rate || '';
+            document.getElementById('editStatus').value = listing.status.toLowerCase();
+
+            // Hide/show relevant fields based on listing type
+            const isCargo = listing.listing_type === 'cargo';
+            document.getElementById('editCargoTypeContainer').style.display = isCargo ? 'block' : 'none';
+            document.getElementById('editTruckTypeContainer').style.display = isCargo ? 'none' : 'block';
+            document.getElementById('editPreferredRoutesContainer').style.display = isCargo ? 'none' : 'block';
+            document.getElementById('editUrgentContainer').style.display = isCargo ? 'block' : 'none';
+            document.getElementById('editDocumentsContainer').style.display = isCargo ? 'none' : 'block';
+
+            // Populate common fields that might have different labels
+            if (isCargo) {
+                document.getElementById('editPickupLocation').value = listing.pickup_location || '';
+                document.getElementById('editDeliveryLocation').value = listing.delivery_location || '';
+                document.getElementById('editPickupDate').value = formatDate(listing.pickup_date);
+                document.getElementById('editDeliveryDate').value = formatDate(listing.delivery_date);
+                document.querySelector('label[for="editWeightCapacity"]').textContent = 'Weight (tons)';
+                document.querySelector('label[for="editPriceRate"]').textContent = 'Budget (KSh)';
+
+                // Populate cargo types
+                document.querySelectorAll('#editCargoTypeContainer input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.checked = listing.cargo_type && listing.cargo_type.includes(checkbox.value);
+                });
+                document.getElementById('editUrgent').checked = listing.is_urgent || false;
+
+            } else { // Truck
+                document.getElementById('editPickupLocation').value = listing.base_location || '';
+                document.getElementById('editDeliveryLocation').value = ''; // Trucks don't have a specific delivery location
+                document.getElementById('editPickupDate').value = formatDate(listing.available_from);
+                document.getElementById('editDeliveryDate').value = formatDate(listing.available_until);
+                document.querySelector('label[for="editWeightCapacity"]').textContent = 'Capacity (tons)';
+                document.querySelector('label[for="editPriceRate"]').textContent = 'Rate (KSh per km)';
+
+                document.getElementById('editTruckType').value = listing.truck_type || '';
+                // Populate preferred routes
+                document.querySelectorAll('#editPreferredRoutesContainer input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.checked = listing.preferred_routes && listing.preferred_routes.includes(checkbox.value);
+                });
+                document.getElementById('editDocuments').checked = listing.has_documents || false;
+            }
+
+            // Re-initialize flatpickr for the edit modal's date fields
+            flatpickr("#editPickupDate, #editDeliveryDate", {
+                minDate: "today",
+                dateFormat: "M d, Y"
+            });
+        }
+
+        // --- Event Listeners ---
+
+        function attachListingCardEventListeners() {
+            document.querySelectorAll('.listing-card .view-responses-btn').forEach(button => {
+                button.onclick = function() { // Use onclick to overwrite previous listeners
+                    const listingId = this.dataset.id;
+                    const listingTitle = this.dataset.title;
+                    loadResponsesForListing(listingId, listingTitle);
+                    const modal = new bootstrap.Modal(document.getElementById('viewResponsesModal'));
+                    modal.show();
+                };
+            });
+
+            document.querySelectorAll('.listing-card .edit-listing-btn').forEach(button => {
+                button.onclick = async function() { // Use onclick to overwrite previous listeners
+                    const listingId = this.dataset.id;
+                    const listingType = this.dataset.type;
+                    let listingData = null;
+                    try {
+                        listingData = await fetchData(`${listingType}-listings/${listingId}/`);
+                        if (listingData) {
+                            listingData.listing_type = listingType; // Add type for easier handling
+                            populateEditModal(listingData);
+                            const modal = new bootstrap.Modal(document.getElementById('editListingModal'));
+                            modal.show();
+                        }
+                    } catch (error) {
+                        console.error(`Failed to fetch ${listingType} listing ${listingId} for editing:`, error);
+                        // Show error to user
+                    }
+                };
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize date pickers
+            flatpickr("#cargoPickupDate, #cargoDeliveryDate, #truckAvailableFrom, #truckAvailableUntil", {
+                minDate: "today",
+                dateFormat: "Y-m-d" // Use Y-m-d for easier Django parsing
+            });
+            
+            // Initial load of all listings
+            loadListings('all');
+
+            // Tab toggling functionality
+            document.querySelectorAll('.toggle-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs in the same toggle group
+                    this.parentNode.querySelectorAll('.toggle-tab').forEach(t => {
+                        t.classList.remove('active');
+                    });
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Handle specific tab content toggling
+                    const allContent = document.getElementById('all-listings-content');
+                    const cargoContent = document.getElementById('cargo-listings-content');
+                    const truckContent = document.getElementById('truck-listings-content');
+                    const createCargoContent = document.getElementById('create-cargo-content');
+                    const createTruckContent = document.getElementById('create-truck-content');
+
+                    if (this.id === 'all-listings-tab') {
+                        allContent.classList.add('active');
+                        cargoContent.classList.remove('active');
+                        truckContent.classList.remove('active');
+                        loadListings('all', document.getElementById('statusFilter').value, document.getElementById('sortOrder').value, document.getElementById('searchListings').value);
+                    } else if (this.id === 'cargo-listings-tab') {
+                        cargoContent.classList.add('active');
+                        allContent.classList.remove('active');
+                        truckContent.classList.remove('active');
+                        loadListings('cargo', document.getElementById('statusFilter').value, document.getElementById('sortOrder').value, document.getElementById('searchListings').value);
+                    } else if (this.id === 'truck-listings-tab') {
+                        truckContent.classList.add('active');
+                        allContent.classList.remove('active');
+                        cargoContent.classList.remove('active');
+                        loadListings('truck', document.getElementById('statusFilter').value, document.getElementById('sortOrder').value, document.getElementById('searchListings').value);
+                    } else if (this.id === 'create-cargo-tab') {
+                        createCargoContent.classList.add('active');
+                        createTruckContent.classList.remove('active');
+                    } else if (this.id === 'create-truck-tab') {
+                        createCargoContent.classList.remove('active');
+                        createTruckContent.classList.add('active');
+                    }
+                });
+            });
+
+            // Filter and Sort event listeners
+            document.getElementById('statusFilter').addEventListener('change', () => {
+                const currentTab = document.querySelector('.toggle-tabs .toggle-tab.active').id;
+                let listingType = 'all';
+                if (currentTab === 'cargo-listings-tab') listingType = 'cargo';
+                if (currentTab === 'truck-listings-tab') listingType = 'truck';
+                loadListings(listingType, document.getElementById('statusFilter').value, document.getElementById('sortOrder').value, document.getElementById('searchListings').value);
+            });
+
+            document.getElementById('sortOrder').addEventListener('change', () => {
+                const currentTab = document.querySelector('.toggle-tabs .toggle-tab.active').id;
+                let listingType = 'all';
+                if (currentTab === 'cargo-listings-tab') listingType = 'cargo';
+                if (currentTab === 'truck-listings-tab') listingType = 'truck';
+                loadListings(listingType, document.getElementById('statusFilter').value, document.getElementById('sortOrder').value, document.getElementById('searchListings').value);
+            });
+
+            document.getElementById('searchListings').addEventListener('input', () => {
+                const currentTab = document.querySelector('.toggle-tabs .toggle-tab.active').id;
+                let listingType = 'all';
+                if (currentTab === 'cargo-listings-tab') listingType = 'cargo';
+                if (currentTab === 'truck-listings-tab') listingType = 'truck';
+                loadListings(listingType, document.getElementById('statusFilter').value, document.getElementById('sortOrder').value, document.getElementById('searchListings').value);
+            });
+
+            // --- Form Submission Handlers ---
+
+            document.getElementById('createCargoForm').addEventListener('submit', async function(event) {
+                event.preventDefault();
+                const formData = {
+                    title: document.getElementById('cargoTitle').value,
+                    pickup_location: document.getElementById('cargoPickupLocation').value,
+                    delivery_location: document.getElementById('cargoDeliveryLocation').value,
+                    pickup_date: document.getElementById('cargoPickupDate').value,
+                    delivery_date: document.getElementById('cargoDeliveryDate').value || null,
+                    weight: parseFloat(document.getElementById('cargoWeight').value),
+                    volume: parseFloat(document.getElementById('cargoVolume').value) || null,
+                    price: parseFloat(document.getElementById('cargoPrice').value),
+                    description: document.getElementById('cargoDescription').value,
+                    cargo_type: Array.from(document.querySelectorAll('#create-cargo-content input[type="checkbox"]:checked'))
+                                    .filter(cb => cb.id.startsWith('cargoType'))
+                                    .map(cb => cb.value),
+                    is_urgent: document.getElementById('cargoUrgent').checked,
+                    status: 'active' // Default status for new listings
+                };
+
+                const newListing = await postData('cargo-listings/', formData);
+                if (newListing) {
+                    alert('Cargo listing created successfully!'); // Replace with a custom modal
+                    const newListingModal = bootstrap.Modal.getInstance(document.getElementById('newListingModal'));
+                    newListingModal.hide();
+                    this.reset(); // Clear form
+                    loadListings('all'); // Reload listings
+                } else {
+                    alert('Failed to create cargo listing. Please check console for details.'); // Replace with a custom modal
+                }
+            });
+
+            document.getElementById('createTruckForm').addEventListener('submit', async function(event) {
+                event.preventDefault();
+                const formData = {
+                    title: document.getElementById('truckTitle').value,
+                    base_location: document.getElementById('truckBaseLocation').value,
+                    truck_type: document.getElementById('truckType').value,
+                    available_from: document.getElementById('truckAvailableFrom').value,
+                    available_until: document.getElementById('truckAvailableUntil').value || null,
+                    capacity: parseFloat(document.getElementById('truckCapacity').value),
+                    volume: parseFloat(document.getElementById('truckVolume').value) || null,
+                    rate: parseFloat(document.getElementById('truckRate').value),
+                    description: document.getElementById('truckDescription').value,
+                    preferred_routes: Array.from(document.querySelectorAll('#create-truck-content input[type="checkbox"]:checked'))
+                                        .filter(cb => cb.id.startsWith('route'))
+                                        .map(cb => cb.value),
+                    has_documents: document.getElementById('truckDocuments').checked,
+                    status: 'pending' // Default status for new truck listings
+                };
+
+                const newListing = await postData('truck-listings/', formData);
+                if (newListing) {
+                    alert('Truck listing created successfully!'); // Replace with a custom modal
+                    const newListingModal = bootstrap.Modal.getInstance(document.getElementById('newListingModal'));
+                    newListingModal.hide();
+                    this.reset(); // Clear form
+                    loadListings('all'); // Reload listings
+                } else {
+                    alert('Failed to create truck listing. Please check console for details.'); // Replace with a custom modal
+                }
+            });
+
+            document.getElementById('editListingForm').addEventListener('submit', async function(event) {
+                event.preventDefault();
+                const listingId = document.getElementById('editListingId').value;
+                const listingType = document.getElementById('editListingType').value;
+                let formData = {
+                    title: document.getElementById('editTitle').value,
+                    description: document.getElementById('editDescription').value,
+                    status: document.getElementById('editStatus').value,
+                };
+
+                if (listingType === 'cargo') {
+                    formData.pickup_location = document.getElementById('editPickupLocation').value;
+                    formData.delivery_location = document.getElementById('editDeliveryLocation').value;
+                    formData.pickup_date = document.getElementById('editPickupDate').value;
+                    formData.delivery_date = document.getElementById('editDeliveryDate').value || null;
+                    formData.weight = parseFloat(document.getElementById('editWeightCapacity').value);
+                    formData.volume = parseFloat(document.getElementById('editVolume').value) || null;
+                    formData.price = parseFloat(document.getElementById('editPriceRate').value);
+                    formData.cargo_type = Array.from(document.querySelectorAll('#editCargoTypeContainer input[type="checkbox"]:checked'))
+                                            .filter(cb => cb.id.startsWith('editCargoType'))
+                                            .map(cb => cb.value);
+                    formData.is_urgent = document.getElementById('editUrgent').checked;
+                } else { // truck
+                    formData.base_location = document.getElementById('editPickupLocation').value;
+                    formData.truck_type = document.getElementById('editTruckType').value;
+                    formData.available_from = document.getElementById('editPickupDate').value;
+                    formData.available_until = document.getElementById('editDeliveryDate').value || null;
+                    formData.capacity = parseFloat(document.getElementById('editWeightCapacity').value);
+                    formData.volume = parseFloat(document.getElementById('editVolume').value) || null;
+                    formData.rate = parseFloat(document.getElementById('editPriceRate').value);
+                    formData.preferred_routes = Array.from(document.querySelectorAll('#editPreferredRoutesContainer input[type="checkbox"]:checked'))
+                                                .filter(cb => cb.id.startsWith('editRoute'))
+                                                .map(cb => cb.value);
+                    formData.has_documents = document.getElementById('editDocuments').checked;
+                }
+
+                const updatedListing = await updateData(`${listingType}-listings/${listingId}/`, formData);
+                if (updatedListing) {
+                    alert('Listing updated successfully!'); // Replace with a custom modal
+                    const editListingModal = bootstrap.Modal.getInstance(document.getElementById('editListingModal'));
+                    editListingModal.hide();
+                    loadListings('all'); // Reload listings
+                } else {
+                    alert('Failed to update listing. Please check console for details.'); // Replace with a custom modal
+                }
+            });
+
+            document.getElementById('deleteListingBtn').addEventListener('click', async function() {
+                const listingId = document.getElementById('editListingId').value;
+                const listingType = document.getElementById('editListingType').value;
+                if (confirm('Are you sure you want to delete this listing?')) { // Replace with custom modal
+                    const success = await deleteData(`${listingType}-listings/${listingId}/`);
+                    if (success) {
+                        alert('Listing deleted successfully!'); // Replace with custom modal
+                        const editListingModal = bootstrap.Modal.getInstance(document.getElementById('editListingModal'));
+                        editListingModal.hide();
+                        loadListings('all'); // Reload listings
+                    } else {
+                        alert('Failed to delete listing. Please check console for details.'); // Replace with custom modal
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

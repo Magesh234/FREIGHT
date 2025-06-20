@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreightLink - My Bookings</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        :root {
+            --primary: #2C3E50;
+            --secondary: #34495E;
+            --accent: #F39C12;
+            --accent-hover: #E67E22;
+            --light: #ECF0F1;
+            --dark: #2C3E50;
+            --gray: #95A5A6;
+            --light-gray: #F8F9FA;
+            --success: #27AE60;
+            --info: #3498DB;
+            --warning: #F39C12;
+            --danger: #E74C3C;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+        }
+
+        .header {
+            background-color: var(--primary);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .sidebar {
+            width: 260px;
+            background-color: var(--primary);
+            padding: 2rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar .menu-item {
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.75rem 1rem;
+            margin: 0.25rem 0;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar .menu-item i {
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+
+        .sidebar .menu-item:hover,
+        .sidebar .menu-item.active {
+            background-color: var(--accent);
+            color: var(--primary);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .dashboard-layout {
+            display: flex;
+            height: calc(100vh - 70px);
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .booking-card {
+            background-color: #FFFFFF;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+            border-left: 5px solid var(--accent);
+            transition: all 0.3s ease;
+        }
+
+        .booking-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1);
+        }
+        
+        .booking-card .card-body {
+             padding: 1.5rem;
+        }
+
+        .booking-card .booking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .booking-card .booking-ref {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .booking-card .booking-status {
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.35rem 0.8rem;
+            border-radius: 50px;
+            text-transform: capitalize;
+        }
+
+        .booking-status.pending { background-color: rgba(243, 156, 18, 0.1); color: var(--warning); }
+        .booking-status.confirmed { background-color: rgba(52, 152, 219, 0.1); color: var(--info); }
+        .booking-status.in_progress { background-color: rgba(52, 152, 219, 0.15); color: var(--info); }
+        .booking-status.completed { background-color: rgba(39, 174, 96, 0.1); color: var(--success); }
+        .booking-status.cancelled { background-color: rgba(231, 76, 60, 0.1); color: var(--danger); }
+        
+        .booking-card .booking-details {
+            padding-top: 1rem;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            font-size: 0.95rem;
+            color: var(--secondary);
+        }
+
+        .detail-item i {
+            color: var(--accent);
+            margin-right: 0.75rem;
+            font-size: 1.2rem;
+        }
+        
+        .booking-card .booking-actions {
+            padding-top: 1.5rem;
+            margin-top: 1.5rem;
+            border-top: 1px solid #e9ecef;
+            text-align: right;
+        }
+        
+        .filter-card {
+            background-color: #fff;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+
+        /* Modal styling */
+        .modal-header {
+            background-color: var(--primary);
+            color: white;
+        }
+        .modal-header .btn-close {
+            filter: invert(1) grayscale(100%) brightness(200%);
+        }
+        .modal-body .detail-group {
+            margin-bottom: 1.5rem;
+        }
+        .modal-body .detail-group h5 {
+            color: var(--primary);
+            font-weight: 600;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .price-display {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--success);
+        }
+
+    </style>
+</head>
+
+<body>
+    <header class="header text-white py-3 shadow-sm sticky-top">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="logo d-flex align-items-center">
+                    <i class="bi bi-truck me-2"></i>FreightLink
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="dropdown">
+                        <a href="#" class="text-white dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="rounded-circle bg-accent text-dark d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                                <i class="bi bi-person-fill"></i>
+                            </div>
+                            <span id="usernamePlaceholder">User</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="profile.html"><i class="bi bi-person me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#" id="logout-btn"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-layout">
+        <div class="sidebar">
+            <a href="dashboard.html" class="menu-item">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="bookings.html" class="menu-item active">
+                <i class="bi bi-journal-check"></i>
+                <span>My Bookings</span>
+            </a>
+            <a href="Bids.html" class="menu-item">
+                <i class="bi bi-truck-front-fill"></i>
+                <span>My Bids</span>
+            </a>
+             <a href="mylisting.html" class="menu-item">
+                <i class="bi bi-box-seam-fill"></i>
+                <span>My Listings</span>
+            </a>
+        </div>
+
+        <main class="main-content">
+            <h1 class="page-title">My Bookings</h1>
+            
+            <div class="filter-card">
+                <form id="filterForm">
+                    <div class="row g-3 align-items-center">
+                        <div class="col-md-5">
+                            <input type="text" id="searchInput" class="form-control" placeholder="Search by reference, pickup, delivery...">
+                        </div>
+                        <div class="col-md-3">
+                            <select id="statusFilter" class="form-select">
+                                <option value="">All Statuses</option>
+                                <option value="pending">Pending</option>
+                                <option value="confirmed">Confirmed</option>
+                                <option value="in_progress">In Progress</option>
+                                <option value="completed">Completed</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                             <button type="button" id="filterBtn" class="btn btn-primary w-100" style="background-color: var(--accent); border-color: var(--accent);">Filter</button>
+                        </div>
+                         <div class="col-md-2">
+                            <button type="button" id="clearBtn" class="btn btn-secondary w-100">Clear</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div id="bookings-container">
+                </div>
+             <div id="no-bookings-message" class="text-center p-5" style="display: none;">
+                <i class="bi bi-journal-x" style="font-size: 4rem; color: var(--gray);"></i>
+                <h4 class="mt-3">No Bookings Found</h4>
+                <p class="text-muted">You have not made any bookings yet.</p>
+            </div>
+             <div id="loading-spinner" class="text-center p-5">
+                <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2 text-muted">Loading your bookings...</p>
+            </div>
+
+        </main>
+    </div>
+    
+    <template id="booking-card-template">
+        <div class="booking-card">
+            <div class="card-body">
+                <div class="booking-header">
+                    <span class="booking-ref"></span>
+                    <span class="booking-status"></span>
+                </div>
+                <div class="booking-details">
+                    <div class="row g-3 mt-1">
+                        <div class="col-lg-6 detail-item">
+                           <i class="bi bi-person-circle"></i> <strong class="me-2">Customer:</strong> <span class="customer-name"></span>
+                        </div>
+                        <div class="col-lg-6 detail-item">
+                            <i class="bi bi-truck"></i> <strong class="me-2">Truck:</strong> <span class="truck-info"></span>
+                        </div>
+                         <div class="col-lg-6 detail-item">
+                           <i class="bi bi-calendar-event"></i> <strong class="me-2">Pickup:</strong> <span class="pickup-date"></span>
+                        </div>
+                        <div class="col-lg-6 detail-item">
+                           <i class="bi bi-calendar-check"></i> <strong class="me-2">Delivery:</strong> <span class="delivery-date"></span>
+                        </div>
+                         <div class="col-lg-6 detail-item">
+                           <i class="bi bi-geo-alt-fill"></i> <strong class="me-2">From:</strong> <span class="pickup-address"></span>
+                        </div>
+                        <div class="col-lg-6 detail-item">
+                           <i class="bi bi-geo-alt"></i> <strong class="me-2">To:</strong> <span class="delivery-address"></span>
+                        </div>
+                    </div>
+                </div>
+                 <div class="booking-actions">
+                    <button class="btn btn-sm btn-outline-success accept-booking-btn me-2">Accept</button>
+                    <button class="btn btn-sm btn-outline-primary view-details-btn">View Details</button>
+                    <button class="btn btn-sm btn-outline-danger cancel-booking-btn">Cancel Booking</button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <div class="modal fade" id="bookingDetailModal" tabindex="-1" aria-labelledby="bookingDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="bookingDetailModalLabel">Booking Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="bookingDetailContent">
+                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" id="payNowBtn"><i class="bi bi-credit-card-fill me-2"></i>Pay Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="acceptBookingModal" tabindex="-1" aria-labelledby="acceptBookingModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="acceptBookingModalLabel">Confirm Acceptance</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to accept this booking?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" id="confirmAcceptBtn">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="cancelBookingModal" tabindex="-1" aria-labelledby="cancelBookingModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cancelBookingModalLabel">Confirm Cancellation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to cancel this booking?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Back</button>
+                    <button type="button" class="btn btn-danger" id="confirmCancelBtn">Yes, Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="paymentModalLabel">Payment Processing</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center p-4" id="paymentModalBody">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="notificationModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center p-4">
+                    <i id="notificationModalIcon" class="mb-3" style="font-size: 3rem;"></i>
+                    <h5 id="notificationModalTitle"></h5>
+                    <p id="notificationModalMessage" class="mb-4"></p>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        const API_BASE_URL = 'http://localhost:8000/api/';
+        let currentUser = null;
+        let bookingDetailModal, acceptBookingModal, cancelBookingModal, notificationModal, paymentModal;
+
+        // --- Utility functions ---
+        function getLocalStorage(key) {
+            return localStorage.getItem(key);
+        }
+        
+        function setLocalStorage(key, value) {
+            localStorage.setItem(key, value);
+        }
+
+        function removeLocalStorage(key) {
+            localStorage.removeItem(key);
+        }
+
+        async function makeApiRequest(endpoint, options = {}) {
+            const authToken = getLocalStorage('authToken');
+            const headers = {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                ...options.headers,
+            };
+
+            if (authToken) {
+                headers['Authorization'] = `Token ${authToken}`;
+            }
+
+            const config = { ...options, headers };
+
+            try {
+                const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
+                if (response.status === 401 || response.status === 403) {
+                    handleUnauthorized();
+                    return { success: false, status: response.status };
+                }
+                 if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({ detail: `Request failed with status ${response.status}` }));
+                    console.error('API Error:', errorData);
+                    return { success: false, error: errorData, status: response.status };
+                }
+                if (response.status === 204) { // No Content
+                    return { success: true, data: null };
+                }
+                const data = await response.json();
+                return { success: true, data };
+            } catch (error) {
+                console.error('Fetch API request error:', error);
+                return { success: false, error: { detail: error.message || "Network error" } };
+            }
+        }
+        
+        function handleUnauthorized() {
+            removeLocalStorage('authToken');
+            removeLocalStorage('currentUser');
+            window.location.href = 'login.html';
+        }
+
+        function displayUserInfo() {
+            if (!currentUser) return;
+            const displayName = currentUser.first_name || currentUser.username || 'User';
+            document.getElementById('usernamePlaceholder').textContent = displayName;
+        }
+        
+        async function fetchUserProfile() {
+            const result = await makeApiRequest('auth/users/me/');
+            if (result.success) {
+                currentUser = result.data;
+                setLocalStorage('currentUser', JSON.stringify(currentUser));
+                displayUserInfo();
+            } else {
+                const storedUser = getLocalStorage('currentUser');
+                if (storedUser) {
+                    currentUser = JSON.parse(storedUser);
+                    displayUserInfo();
+                } else {
+                    console.error("Could not fetch or load user profile.");
+                }
+            }
+        }
+        
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            return new Date(dateString).toLocaleString(undefined, options);
+        }
+
+        function renderBookings(bookings) {
+            const container = document.getElementById('bookings-container');
+            const template = document.getElementById('booking-card-template');
+            const noBookingsMessage = document.getElementById('no-bookings-message');
+            
+            container.innerHTML = '';
+
+            if (!bookings || bookings.length === 0) {
+                 noBookingsMessage.style.display = 'block';
+                return;
+            }
+            
+            noBookingsMessage.style.display = 'none';
+
+            bookings.forEach(booking => {
+                const card = template.content.cloneNode(true);
+                
+                card.querySelector('.booking-ref').textContent = `Ref: ${booking.booking_reference}`;
+                
+                const statusEl = card.querySelector('.booking-status');
+                statusEl.textContent = booking.status.replace('_', ' ');
+                statusEl.classList.add(booking.status.toLowerCase());
+                
+                card.querySelector('.customer-name').textContent = booking.customer_name;
+                card.querySelector('.truck-info').textContent = booking.truck_info;
+                card.querySelector('.pickup-date').textContent = formatDate(booking.pickup_date);
+                card.querySelector('.delivery-date').textContent = formatDate(booking.expected_delivery_date);
+                card.querySelector('.pickup-address').textContent = booking.pickup_address;
+                card.querySelector('.delivery-address').textContent = booking.delivery_address;
+                
+                const cancelBtn = card.querySelector('.cancel-booking-btn');
+                const acceptBtn = card.querySelector('.accept-booking-btn');
+
+                if (booking.status === 'completed' || booking.status === 'cancelled') {
+                    cancelBtn.style.display = 'none';
+                    acceptBtn.style.display = 'none';
+                } else if (booking.status === 'pending') {
+                    acceptBtn.style.display = 'inline-block';
+                    acceptBtn.dataset.bookingId = booking.id;
+                    cancelBtn.dataset.bookingId = booking.id;
+                } else {
+                    acceptBtn.style.display = 'none';
+                    cancelBtn.dataset.bookingId = booking.id;
+                }
+                
+                 const viewBtn = card.querySelector('.view-details-btn');
+                 viewBtn.dataset.bookingId = booking.id;
+
+
+                container.appendChild(card);
+            });
+        }
+        
+        async function fetchBookings(params = {}) {
+            document.getElementById('loading-spinner').style.display = 'block';
+            document.getElementById('bookings-container').innerHTML = '';
+            document.getElementById('no-bookings-message').style.display = 'none';
+
+            const query = new URLSearchParams(params).toString();
+            const result = await makeApiRequest(`bookings/?${query}`);
+
+            document.getElementById('loading-spinner').style.display = 'none';
+            if (result.success) {
+                renderBookings(result.data.results);
+            } else {
+                console.error('Failed to load bookings:', result.error);
+                document.getElementById('bookings-container').innerHTML = `<p class="text-center text-danger">Failed to load bookings.</p>`;
+            }
+        }
+        
+        function showNotificationModal(type, title, message) {
+            const icon = document.getElementById('notificationModalIcon');
+            const titleEl = document.getElementById('notificationModalTitle');
+            const messageEl = document.getElementById('notificationModalMessage');
+
+            icon.className = ''; // Clear existing classes
+            if (type === 'success') {
+                icon.classList.add('bi', 'bi-check-circle-fill', 'text-success');
+            } else {
+                icon.classList.add('bi', 'bi-exclamation-triangle-fill', 'text-danger');
+            }
+            titleEl.textContent = title;
+            messageEl.textContent = message;
+            notificationModal.show();
+        }
+
+        function cancelBooking(bookingId) {
+            const confirmBtn = document.getElementById('confirmCancelBtn');
+            confirmBtn.dataset.bookingId = bookingId;
+            cancelBookingModal.show();
+        }
+
+        async function executeCancelBooking(bookingId) {
+            const result = await makeApiRequest(`bookings/${bookingId}/`, {
+                method: 'DELETE',
+            });
+            cancelBookingModal.hide();
+
+            if (result.success) {
+                showNotificationModal('success', 'Booking Cancelled', 'The booking has been successfully cancelled.');
+                fetchBookings(); // Refresh the list
+            } else {
+                const errorMessage = result.error?.error || result.error?.detail || "Failed to cancel booking.";
+                showNotificationModal('error', 'Cancellation Failed', errorMessage);
+            }
+        }
+        
+        function acceptBooking(bookingId) {
+            const confirmBtn = document.getElementById('confirmAcceptBtn');
+            confirmBtn.dataset.bookingId = bookingId;
+            acceptBookingModal.show();
+        }
+
+        async function executeAcceptBooking(bookingId) {
+            const result = await makeApiRequest(`bookings/${bookingId}/`, {
+                method: 'PATCH',
+                body: JSON.stringify({ status: 'confirmed' })
+            });
+            acceptBookingModal.hide();
+
+            if (result.success) {
+                showNotificationModal('success', 'Booking Accepted', 'The booking has been successfully confirmed.');
+                fetchBookings(); // Refresh the list
+            } else {
+                const errorMessage = result.error?.error || result.error?.detail || "Failed to accept booking.";
+                showNotificationModal('error', 'Acceptance Failed', errorMessage);
+            }
+        }
+        
+        async function startPaymentProcess(bookingId) {
+            bookingDetailModal.hide();
+            paymentModal.show();
+            
+            const paymentBody = document.getElementById('paymentModalBody');
+            paymentBody.innerHTML = `
+                <div class="spinner-border text-success" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <h5 class="mt-3">Processing Payment...</h5>
+                <p class="text-muted">Please wait while we confirm your payment.</p>
+            `;
+
+            // Simulate network delay
+            setTimeout(async () => {
+                const result = await makeApiRequest(`bookings/${bookingId}/`, {
+                    method: 'PATCH',
+                    body: JSON.stringify({ status: 'completed' })
+                });
+
+                if (result.success) {
+                    paymentBody.innerHTML = `
+                        <i class="bi bi-check-circle-fill text-success mb-3" style="font-size: 3rem;"></i>
+                        <h5>Payment Successful</h5>
+                        <p>Your booking has been paid and is now marked as completed.</p>
+                        <button type="button" class="btn btn-primary" id="closePaymentModalBtn">Done</button>
+                    `;
+                    document.getElementById('closePaymentModalBtn').addEventListener('click', () => {
+                        paymentModal.hide();
+                        fetchBookings();
+                    });
+                } else {
+                     paymentBody.innerHTML = `
+                        <i class="bi bi-exclamation-triangle-fill text-danger mb-3" style="font-size: 3rem;"></i>
+                        <h5>Payment Failed</h5>
+                        <p>${result.error?.detail || "An unexpected error occurred."}</p>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    `;
+                }
+            }, 2500); // 2.5 second delay
+        }
+
+        function renderBookingDetailsInModal(booking) {
+            const contentContainer = document.getElementById('bookingDetailContent');
+            const payNowBtn = document.getElementById('payNowBtn');
+            const finalPrice = booking.final_price || booking.quoted_price;
+
+            let statusClass = booking.status.toLowerCase();
+            let statusText = booking.status.replace('_', ' ');
+
+            let documentsHtml = '<p>No documents uploaded.</p>';
+            if(booking.documents && booking.documents.length > 0) {
+                documentsHtml = booking.documents.map(doc => 
+                   `<li class="list-group-item">
+                        <a href="${doc.document_url}" target="_blank">${doc.document_type || 'Document'}</a> 
+                        <small class="text-muted">- Uploaded on ${formatDate(doc.uploaded_at)}</small>
+                    </li>`
+                ).join('');
+                documentsHtml = `<ul class="list-group list-group-flush">${documentsHtml}</ul>`
+            }
+
+            contentContainer.innerHTML = `
+                <div class="row">
+                    <div class="col-md-8">
+                         <div class="detail-group">
+                            <h5><i class="bi bi-info-circle-fill me-2"></i>Booking Information</h5>
+                            <p><strong>Reference:</strong> ${booking.booking_reference}</p>
+                            <p><strong>Status:</strong> <span class="booking-status ${statusClass}">${statusText}</span></p>
+                            <p><strong>Booked On:</strong> ${formatDate(booking.created_at)}</p>
+                         </div>
+                         <div class="detail-group">
+                            <h5><i class="bi bi-truck me-2"></i>Shipment Details</h5>
+                            <p><strong>Truck:</strong> ${booking.truck_info}</p>
+                            <p><strong>Pickup:</strong> ${booking.pickup_address} on ${formatDate(booking.pickup_date)}</p>
+                            <p><strong>Delivery:</strong> ${booking.delivery_address} by ${formatDate(booking.expected_delivery_date)}</p>
+                         </div>
+                          <div class="detail-group">
+                            <h5><i class="bi bi-file-earmark-text-fill me-2"></i>Documents</h5>
+                            ${documentsHtml}
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-center bg-light-gray p-3 rounded">
+                        <h5>Total Price</h5>
+                        <p class="price-display">${finalPrice ? `KSh ${parseFloat(finalPrice).toLocaleString()}` : 'Not Quoted'}</p>
+                        <small class="text-muted">This is the final amount to be paid for this service.</small>
+                    </div>
+                </div>
+            `;
+            
+            // Show pay button for any booking that is not completed or cancelled
+            if (booking.status !== 'completed' && booking.status !== 'cancelled') {
+                 payNowBtn.style.display = 'block';
+                 payNowBtn.onclick = () => startPaymentProcess(booking.id);
+            } else {
+                payNowBtn.style.display = 'none';
+            }
+
+            bookingDetailModal.show();
+        }
+
+        async function viewBookingDetails(bookingId) {
+            const contentContainer = document.getElementById('bookingDetailContent');
+            contentContainer.innerHTML = '<div class="text-center"><div class="spinner-border"></div></div>';
+            bookingDetailModal.show();
+
+            const result = await makeApiRequest(`bookings/${bookingId}/`);
+
+            if (result.success) {
+                renderBookingDetailsInModal(result.data);
+            } else {
+                contentContainer.innerHTML = '<p class="text-danger text-center">Could not load booking details.</p>';
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!getLocalStorage('authToken')) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            bookingDetailModal = new bootstrap.Modal(document.getElementById('bookingDetailModal'));
+            acceptBookingModal = new bootstrap.Modal(document.getElementById('acceptBookingModal'));
+            cancelBookingModal = new bootstrap.Modal(document.getElementById('cancelBookingModal'));
+            notificationModal = new bootstrap.Modal(document.getElementById('notificationModal'));
+            paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
+
+
+            fetchUserProfile();
+            fetchBookings();
+            
+            document.getElementById('logout-btn').addEventListener('click', (e) => {
+                e.preventDefault();
+                removeLocalStorage('authToken');
+                removeLocalStorage('currentUser');
+                window.location.href = 'login.html';
+            });
+            
+            document.getElementById('filterBtn').addEventListener('click', () => {
+                const params = {};
+                const searchTerm = document.getElementById('searchInput').value;
+                const status = document.getElementById('statusFilter').value;
+                if (searchTerm) params.search = searchTerm;
+                if (status) params.status = status;
+                fetchBookings(params);
+            });
+            
+            document.getElementById('clearBtn').addEventListener('click', () => {
+                document.getElementById('searchInput').value = '';
+                document.getElementById('statusFilter').value = '';
+                fetchBookings();
+            });
+
+            document.getElementById('confirmAcceptBtn').addEventListener('click', (e) => {
+                const bookingId = e.target.dataset.bookingId;
+                if (bookingId) {
+                    executeAcceptBooking(bookingId);
+                }
+            });
+            
+            document.getElementById('confirmCancelBtn').addEventListener('click', (e) => {
+                const bookingId = e.target.dataset.bookingId;
+                if(bookingId) {
+                    executeCancelBooking(bookingId);
+                }
+            });
+
+            document.getElementById('bookings-container').addEventListener('click', (e) => {
+                const target = e.target;
+                const bookingId = target.dataset.bookingId || target.closest('[data-booking-id]')?.dataset.bookingId;
+
+                if (!bookingId) return;
+
+                if (target.classList.contains('cancel-booking-btn') || target.closest('.cancel-booking-btn')) {
+                    cancelBooking(bookingId);
+                } else if (target.classList.contains('view-details-btn') || target.closest('.view-details-btn')) {
+                    viewBookingDetails(bookingId);
+                } else if (target.classList.contains('accept-booking-btn') || target.closest('.accept-booking-btn')) {
+                    acceptBooking(bookingId);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

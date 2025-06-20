@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreightLink - My Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        /* Replicating styles from test7settings.html for consistency */
+        :root {
+            --primary: #2C3E50;
+            --secondary: #34495E;
+            --accent: #F39C12;
+            --accent-hover: #E67E22;
+            --light: #ECF0F1;
+            --dark: #2C3E50;
+            --gray: #95A5A6;
+            --light-gray: #F8F9FA;
+            --success: #27AE60;
+            --danger: #E74C3C;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .rounded-md {
+            border-radius: 0.75rem;
+        }
+        
+        .shadow-custom {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--primary);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
+        }
+        .header .logo {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+        .header .nav-link {
+            color: #FFFFFF;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+            margin: 0 0.25rem;
+        }
+        .header .nav-link:hover, .header .nav-link.active {
+            color: var(--primary);
+            background-color: var(--accent);
+            border-radius: 2rem;
+        }
+        .header .nav-link.active {
+            font-weight: 600;
+        }
+
+        /* Dashboard Layout */
+        .dashboard-layout {
+            display: flex;
+            height: calc(100vh - 70px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background-color: var(--primary);
+            padding: 2rem 1rem;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+        }
+        .sidebar .menu-item {
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.75rem 1rem;
+            margin: 0.25rem 0;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .sidebar .menu-item i {
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+        .sidebar .menu-item:hover, .sidebar .menu-item.active {
+            background-color: var(--accent);
+            color: var(--primary);
+        }
+        .sidebar .menu-item.active {
+            font-weight: 600;
+        }
+        .sidebar .divider {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 1rem 0;
+        }
+        .sidebar .menu-title {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin: 1.5rem 0 0.5rem 1rem;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+        .page-subtitle {
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+
+        /* Form Components (reused for profile display) */
+        .form-card {
+            background-color: #FFFFFF;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .form-card h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        .form-label {
+            font-weight: 500;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        .form-control, .form-select {
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            border: 1px solid #DDE2E5;
+            transition: all 0.3s ease;
+            background-color: var(--light-gray);
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 0.25rem rgba(243, 156, 18, 0.25);
+            background-color: #FFFFFF;
+        }
+        /* Make form controls read-only appear flat */
+        .form-control[readonly] {
+            background-color: var(--light-gray);
+            border-color: #DDE2E5;
+            cursor: default;
+        }
+        
+        /* Buttons */
+        .btn-primary, .btn-primary:focus {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            color: var(--dark);
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+        }
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+            border-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(230, 126, 34, 0.4);
+        }
+        .btn-secondary, .btn-secondary:focus {
+            background-color: var(--light-gray);
+            border-color: #DDE2E5;
+            color: var(--gray);
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background-color: #e9ecef;
+            border-color: #c1c7cc;
+            color: var(--dark);
+            transform: translateY(-2px);
+        }
+        
+        /* Profile specific styles */
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background-color: var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 1rem;
+            border: 3px solid var(--accent); /* Accent border for profile pic */
+        }
+        
+        .profile-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .profile-pic .edit-icon {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background-color: var(--accent);
+            color: var(--dark);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .profile-pic .edit-icon:hover {
+            background-color: var(--accent-hover);
+            transform: scale(1.1);
+        }
+
+        .profile-info-display .row {
+            margin-bottom: 1rem;
+        }
+        .profile-info-display .col-md-6 strong {
+            color: var(--primary);
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+        .profile-info-display .col-md-6 span {
+            color: var(--dark);
+        }
+        .profile-info-display .col-md-12 strong {
+            margin-top: 1rem;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 991.98px) {
+            .sidebar {
+                width: 80px;
+                padding: 2rem 0.5rem;
+            }
+            .sidebar .menu-item span, .sidebar .menu-title {
+                display: none;
+            }
+            .sidebar .menu-item i {
+                margin-right: 0;
+                font-size: 1.5rem;
+            }
+            .main-content {
+                padding: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 767.98px) {
+            .dashboard-layout {
+                flex-direction: column;
+                height: auto;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                padding: 1rem;
+                display: flex;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            .sidebar .menu-item {
+                margin: 0 0.25rem;
+                padding: 0.5rem 1rem;
+            }
+            .sidebar .menu-item span {
+                display: none;
+            }
+            .sidebar .divider, .sidebar .menu-title {
+                display: none;
+            }
+            .main-content {
+                padding: 1.5rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header text-white py-3 shadow-sm sticky-top">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="logo d-flex align-items-center">
+                    <i class="bi bi-truck me-2"></i>FreightLink
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="dropdown me-3">
+                        <a href="#" class="text-white dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-bell me-2"></i>
+                            <span class="badge bg-accent text-dark rounded-pill">3</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">New match found</a></li>
+                            <li><a class="dropdown-item" href="#">Cargo request accepted</a></li>
+                            <li><a class="dropdown-item" href="#">Payment received</a></li>
+                        </ul>
+                    </div>
+                    <div class="dropdown">
+                        <a href="#" class="text-white dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="rounded-circle bg-accent text-dark d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                                <i class="bi bi-person-fill"></i>
+                            </div>
+                            <span>John Doe</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-layout">
+        <div class="sidebar">
+            <a href="dashboard.html" class="menu-item">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="mylisting.html" class="menu-item">
+                <i class="bi bi-box-seam-fill"></i>
+                <span>My Listings</span>
+            </a>
+            <a href="history.html" class="menu-item">
+                <i class="bi bi-clock-history"></i>
+                <span>History</span>
+            </a>
+            <a href="messages.html" class="menu-item">
+                <i class="bi bi-chat-left-text-fill"></i>
+                <span>Messages</span>
+            </a>
+            
+            <div class="divider"></div>
+            <div class="menu-title">Account</div>
+            
+            <a href="profile.html" class="menu-item active">
+                <i class="bi bi-person-fill"></i>
+                <span>Profile</span>
+            </a>
+            <a href="payments.html" class="menu-item">
+                <i class="bi bi-wallet2"></i>
+                <span>Payments</span>
+            </a>
+            <a href="settings (2).html" class="menu-item">
+                <i class="bi bi-gear-fill"></i>
+                <span>Settings</span>
+            </a>
+            <a href="help&support.html" class="menu-item">
+                <i class="bi bi-question-circle-fill"></i>
+                <span>Help & Support</span>
+            </a>
+            
+            <div class="divider"></div>
+            
+            <a href="#" class="menu-item">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+
+        <div class="main-content">
+            <h1 class="page-title">My Profile</h1>
+            <p class="page-subtitle">View and manage your personal and business profile information</p>
+
+            <div class="form-card">
+                <h3>Personal Information</h3>
+                <div class="row align-items-center mb-4">
+                    <div class="col-md-3 text-center">
+                        <div class="profile-pic mx-auto">
+                            <img src="https://placehold.co/150x150/E0E0E0/333333?text=Profile" alt="User Profile" id="profilePic">
+                            <div class="edit-icon" id="editProfilePicBtn">
+                                <i class="bi bi-pencil"></i>
+                            </div>
+                            <input type="file" id="profilePicInput" accept="image/*" style="display: none;">
+                        </div>
+                        <h5 class="mt-2" id="profileFullName">John Doe</h5>
+                        <p class="text-muted" id="profileEmail">john.doe@example.com</p>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row g-3 profile-info-display">
+                            <div class="col-md-6">
+                                <strong>First Name:</strong> <span id="displayFirstName"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Last Name:</strong> <span id="displayLastName"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Email:</strong> <span id="displayEmail"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Phone:</strong> <span id="displayPhone"></span>
+                            </div>
+                            <div class="col-md-12">
+                                <strong>Address:</strong> <span id="displayAddress"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <strong>City:</strong> <span id="displayCity"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <strong>Region:</strong> <span id="displayRegion"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <strong>Postal Code:</strong> <span id="displayPostalCode"></span>
+                            </div>
+                            <div class="col-md-12">
+                                <strong>Country:</strong> <span id="displayCountry"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-primary" id="editProfileBtn">Edit Profile</button>
+                </div>
+            </div>
+
+            <div class="form-card mt-4" id="businessInfoCard">
+                <h3>Business Information</h3>
+                <div class="row g-3 profile-info-display">
+                    <div class="col-md-6">
+                        <strong>Company Name:</strong> <span id="displayCompanyName"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Business Type:</strong> <span id="displayBusinessType"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Business Reg. No.:</strong> <span id="displayBusinessReg"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>KRA PIN:</strong> <span id="displayTaxId"></span>
+                    </div>
+                    <div class="col-md-12">
+                        <strong>Bio:</strong> <span id="displayBio"></span>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end mt-4">
+                    <button class="btn btn-primary" id="editBusinessInfoBtn">Edit Business Info</button>
+                </div>
+            </div>
+
+            <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editProfileModalLabel">Edit Profile Information</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="modalFirstName" class="form-label">First Name</label>
+                                    <input type="text" class="form-control" id="modalFirstName">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="modalLastName" class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" id="modalLastName">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="modalEmail" class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" id="modalEmail">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="modalPhone" class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" id="modalPhone">
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="modalAddress" class="form-label">Address</label>
+                                    <input type="text" class="form-control" id="modalAddress">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="modalCity" class="form-label">City</label>
+                                    <input type="text" class="form-control" id="modalCity">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="modalRegion" class="form-label">Region/State</label>
+                                    <input type="text" class="form-control" id="modalRegion">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="modalPostalCode" class="form-label">Postal Code</label>
+                                    <input type="text" class="form-control" id="modalPostalCode">
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="modalCountry" class="form-label">Country</label>
+                                    <select class="form-select" id="modalCountry">
+                                        <option value="kenya">Kenya</option>
+                                        <option value="uganda">Uganda</option>
+                                        <option value="tanzania">Tanzania</option>
+                                        <option value="rwanda">Rwanda</option>
+                                        <option value="ethiopia">Ethiopia</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="saveProfileChangesModalBtn">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="editBusinessInfoModal" tabindex="-1" aria-labelledby="editBusinessInfoModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editBusinessInfoModalLabel">Edit Business Information</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="modalCompanyName" class="form-label">Company Name</label>
+                                    <input type="text" class="form-control" id="modalCompanyName">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="modalBusinessType" class="form-label">Business Type</label>
+                                    <select class="form-select" id="modalBusinessType">
+                                        <option value="trucking">Trucking Company</option>
+                                        <option value="individual">Individual Truck Owner</option>
+                                        <option value="broker">Freight Broker</option>
+                                        <option value="shipper">Shipper</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="modalBusinessReg" class="form-label">Business Registration Number</label>
+                                    <input type="text" class="form-control" id="modalBusinessReg">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="modalTaxId" class="form-label">KRA PIN</label>
+                                    <input type="text" class="form-control" id="modalTaxId">
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="modalBio" class="form-label">Bio</label>
+                                    <textarea class="form-control" id="modalBio" rows="4"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="saveBusinessInfoChangesModalBtn">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Base URL for your Django API. IMPORTANT: Replace with your actual Django backend URL.
+            const API_BASE_URL = 'http://127.0.0.1:8000/api/'; // Example: 'http://localhost:8000/api/' or your deployed URL
+
+            // Function to get CSRF token from cookies
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            const csrftoken = getCookie('csrftoken');
+
+            // --- Profile Data Display Elements ---
+            const profilePicImg = document.getElementById('profilePic');
+            const profileFullName = document.getElementById('profileFullName');
+            const profileEmail = document.getElementById('profileEmail');
+            const displayFirstName = document.getElementById('displayFirstName');
+            const displayLastName = document.getElementById('displayLastName');
+            const displayEmail = document.getElementById('displayEmail');
+            const displayPhone = document.getElementById('displayPhone');
+            const displayAddress = document.getElementById('displayAddress');
+            const displayCity = document.getElementById('displayCity');
+            const displayRegion = document.getElementById('displayRegion');
+            const displayPostalCode = document.getElementById('displayPostalCode');
+            const displayCountry = document.getElementById('displayCountry');
+            const displayCompanyName = document.getElementById('displayCompanyName');
+            const displayBusinessType = document.getElementById('displayBusinessType');
+            const displayBusinessReg = document.getElementById('displayBusinessReg');
+            const displayTaxId = document.getElementById('displayTaxId');
+            const displayBio = document.getElementById('displayBio');
+
+            // --- Edit Profile Modal Elements ---
+            const editProfileModal = new bootstrap.Modal(document.getElementById('editProfileModal'));
+            const modalFirstName = document.getElementById('modalFirstName');
+            const modalLastName = document.getElementById('modalLastName');
+            const modalEmail = document.getElementById('modalEmail');
+            const modalPhone = document.getElementById('modalPhone');
+            const modalAddress = document.getElementById('modalAddress');
+            const modalCity = document.getElementById('modalCity');
+            const modalRegion = document.getElementById('modalRegion');
+            const modalPostalCode = document.getElementById('modalPostalCode');
+            const modalCountry = document.getElementById('modalCountry');
+            const saveProfileChangesModalBtn = document.getElementById('saveProfileChangesModalBtn');
+
+            // --- Edit Business Info Modal Elements ---
+            const editBusinessInfoModal = new bootstrap.Modal(document.getElementById('editBusinessInfoModal'));
+            const modalCompanyName = document.getElementById('modalCompanyName');
+            const modalBusinessType = document.getElementById('modalBusinessType');
+            const modalBusinessReg = document.getElementById('modalBusinessReg');
+            const modalTaxId = document.getElementById('modalTaxId');
+            const modalBio = document.getElementById('modalBio');
+            const saveBusinessInfoChangesModalBtn = document.getElementById('saveBusinessInfoChangesModalBtn');
+
+            // --- Buttons ---
+            const editProfileBtn = document.getElementById('editProfileBtn');
+            const editBusinessInfoBtn = document.getElementById('editBusinessInfoBtn');
+            const editProfilePicBtn = document.getElementById('editProfilePicBtn');
+            const profilePicInput = document.getElementById('profilePicInput');
+
+            let originalProfileData = {}; // To store data fetched from the backend for cancellation/comparison
+
+            // Function to fetch profile data from Django backend
+            async function fetchProfileData() {
+                try {
+                    const response = await fetch(`${API_BASE_URL}profile/`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            // 'Authorization': 'Bearer YOUR_AUTH_TOKEN' // If you have authentication
+                        }
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        console.error('Error fetching profile data:', errorData);
+                        // Display a user-friendly message on the page
+                        document.querySelector('.page-subtitle').textContent = 'Failed to load profile data. Please try again.';
+                        return;
+                    }
+
+                    const data = await response.json();
+                    originalProfileData = { ...data }; // Store a copy for cancellation
+
+                    // Populate display fields
+                    profileFullName.textContent = `${data.first_name || ''} ${data.last_name || ''}`;
+                    profileEmail.textContent = data.email || '';
+                    displayFirstName.textContent = data.first_name || 'N/A';
+                    displayLastName.textContent = data.last_name || 'N/A';
+                    displayEmail.textContent = data.email || 'N/A';
+                    displayPhone.textContent = data.phone || 'N/A';
+                    displayAddress.textContent = data.address || 'N/A';
+                    displayCity.textContent = data.city || 'N/A';
+                    displayRegion.textContent = data.region || 'N/A';
+                    displayPostalCode.textContent = data.postal_code || 'N/A';
+                    displayCountry.textContent = data.country ? data.country.charAt(0).toUpperCase() + data.country.slice(1) : 'N/A'; // Capitalize country
+
+                    displayCompanyName.textContent = data.company_name || 'N/A';
+                    displayBusinessType.textContent = data.business_type ? data.business_type.charAt(0).toUpperCase() + data.business_type.slice(1) : 'N/A';
+                    displayBusinessReg.textContent = data.business_registration_number || 'N/A';
+                    displayTaxId.textContent = data.tax_id || 'N/A';
+                    displayBio.textContent = data.bio || 'No bio provided.';
+
+                    if (data.profile_picture) {
+                        profilePicImg.src = data.profile_picture; // Assuming this is a full URL
+                    } else {
+                        profilePicImg.src = "https://placehold.co/150x150/E0E0E0/333333?text=Profile";
+                    }
+
+                } catch (error) {
+                    console.error('Network error or unexpected issue fetching profile data:', error);
+                    document.querySelector('.page-subtitle').textContent = 'An error occurred while connecting to the server to fetch profile data.';
+                }
+            }
+
+            // Function to save profile data to Django backend
+            async function saveProfileData(updatedData) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}profile/update/`, { // Or PATCH if you prefer partial updates
+                        method: 'PUT', // Or 'PATCH'
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrftoken, // Important for Django
+                            // 'Authorization': 'Bearer YOUR_AUTH_TOKEN' // If you have authentication
+                        },
+                        body: JSON.stringify(updatedData)
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        console.error('Error saving profile data:', errorData);
+                        alert(`Failed to save profile data: ${errorData.detail || 'Unknown error'}`); // Use custom modal
+                        return;
+                    }
+
+                    const result = await response.json();
+                    console.log('Profile saved successfully:', result);
+                    alert('Profile updated successfully!'); // Use custom modal
+                    fetchProfileData(); // Refresh displayed data
+                    editProfileModal.hide(); // Close the modal
+                    editBusinessInfoModal.hide(); // Close the modal if it was open
+                } catch (error) {
+                    console.error('Network error or unexpected issue saving profile data:', error);
+                    alert('An error occurred while connecting to the server to save profile data.'); // Use custom modal
+                }
+            }
+
+            // Function to upload profile picture
+            async function uploadProfilePicture(file) {
+                const formData = new FormData();
+                formData.append('profile_picture', file);
+
+                try {
+                    const response = await fetch(`${API_BASE_URL}profile/upload_picture/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': csrftoken,
+                            // 'Authorization': 'Bearer YOUR_AUTH_TOKEN'
+                        },
+                        body: formData
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        console.error('Error uploading profile picture:', errorData);
+                        alert(`Failed to upload profile picture: ${errorData.detail || 'Unknown error'}`);
+                        return;
+                    }
+
+                    const result = await response.json();
+                    console.log('Profile picture uploaded successfully:', result);
+                    alert('Profile picture updated successfully!');
+                    fetchProfileData(); // Refresh displayed data
+                } catch (error) {
+                    console.error('Network error uploading profile picture:', error);
+                    alert('An error occurred while uploading profile picture.');
+                }
+            }
+
+            // --- Event Listeners ---
+
+            // Edit Profile Button (opens modal)
+            editProfileBtn.addEventListener('click', () => {
+                // Populate modal fields with current displayed data
+                modalFirstName.value = originalProfileData.first_name || '';
+                modalLastName.value = originalProfileData.last_name || '';
+                modalEmail.value = originalProfileData.email || '';
+                modalPhone.value = originalProfileData.phone || '';
+                modalAddress.value = originalProfileData.address || '';
+                modalCity.value = originalProfileData.city || '';
+                modalRegion.value = originalProfileData.region || '';
+                modalPostalCode.value = originalProfileData.postal_code || '';
+                modalCountry.value = originalProfileData.country || 'kenya';
+                editProfileModal.show();
+            });
+
+            // Save Profile Changes in Modal
+            saveProfileChangesModalBtn.addEventListener('click', () => {
+                const updatedData = {
+                    first_name: modalFirstName.value,
+                    last_name: modalLastName.value,
+                    email: modalEmail.value,
+                    phone: modalPhone.value,
+                    address: modalAddress.value,
+                    city: modalCity.value,
+                    region: modalRegion.value,
+                    postal_code: modalPostalCode.value,
+                    country: modalCountry.value,
+                    // Preserve existing business info if not editing it
+                    company_name: originalProfileData.company_name,
+                    business_type: originalProfileData.business_type,
+                    business_registration_number: originalProfileData.business_registration_number,
+                    tax_id: originalProfileData.tax_id,
+                    bio: originalProfileData.bio,
+                };
+                saveProfileData(updatedData);
+            });
+
+            // Edit Business Info Button (opens modal)
+            editBusinessInfoBtn.addEventListener('click', () => {
+                // Populate modal fields with current displayed data
+                modalCompanyName.value = originalProfileData.company_name || '';
+                modalBusinessType.value = originalProfileData.business_type || 'trucking';
+                modalBusinessReg.value = originalProfileData.business_registration_number || '';
+                modalTaxId.value = originalProfileData.tax_id || '';
+                modalBio.value = originalProfileData.bio || '';
+                editBusinessInfoModal.show();
+            });
+
+            // Save Business Info Changes in Modal
+            saveBusinessInfoChangesModalBtn.addEventListener('click', () => {
+                const updatedData = {
+                    // Preserve existing personal info if not editing it
+                    first_name: originalProfileData.first_name,
+                    last_name: originalProfileData.last_name,
+                    email: originalProfileData.email,
+                    phone: originalProfileData.phone,
+                    address: originalProfileData.address,
+                    city: originalProfileData.city,
+                    region: originalProfileData.region,
+                    postal_code: originalProfileData.postal_code,
+                    country: originalProfileData.country,
+                    
+                    company_name: modalCompanyName.value,
+                    business_type: modalBusinessType.value,
+                    business_registration_number: modalBusinessReg.value,
+                    tax_id: modalTaxId.value,
+                    bio: modalBio.value,
+                };
+                saveProfileData(updatedData);
+            });
+
+            // Profile Picture Upload
+            editProfilePicBtn.addEventListener('click', () => {
+                profilePicInput.click(); // Trigger the hidden file input
+            });
+
+            profilePicInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    // Display selected image immediately
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        profilePicImg.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+
+                    // Upload to backend
+                    uploadProfilePicture(file);
+                }
+            });
+
+            // Initial fetch of profile data when the page loads
+            fetchProfileData();
+        });
+    </script>
+</body>
+</html>

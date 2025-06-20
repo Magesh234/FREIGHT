@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreightLink - Log In</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        :root {
+            --primary: #2C3E50;
+            --secondary: #34495E;
+            --accent: #F39C12;
+            --accent-hover: #E67E22;
+            --light: #ECF0F1;
+            --dark: #2C3E50;
+            --gray: #95A5A6;
+            --light-gray: #F8F9FA;
+            --success: #27AE60;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-gray); /* Fallback background color */
+            background-image: url('b290ef71-462a-452e-8ff3-33b5de7407d8.jpeg'); /* Add your image URL here */
+            background-size: cover; /* This makes sure the image covers the entire background */
+            background-position: center; /* Centers the background image */
+            background-repeat: no-repeat; /* Prevents the image from repeating */
+            background-attachment: fixed; /* Keeps the background image fixed when scrolling */
+            color: var(--dark);
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .rounded-md {
+            border-radius: 0.75rem;
+        }
+        
+        .shadow-custom {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Modal Styling (adapted for standalone form) */
+        .login-container {
+            background-color: #FFFFFF;
+            border-radius: 1rem;
+            border: none;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            width: 100%;
+            max-width: 500px; /* Limit width for better appearance */
+        }
+        .login-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: #FFFFFF;
+            border-bottom: none;
+            padding: 1.75rem;
+            text-align: center;
+            position: relative;
+        }
+        .login-header h2 {
+            color: #FFFFFF;
+            font-size: 1.8rem; /* Slightly larger for main page */
+            font-weight: 600;
+            margin-bottom: 0;
+            width: 100%;
+            text-align: center;
+        }
+        .login-body {
+            padding: 2.5rem;
+            background-color: #FFFFFF;
+        }
+        .login-body label {
+            font-weight: 500;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .form-control, .form-select {
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            border: 1px solid #DDE2E5;
+            transition: all 0.3s ease;
+            background-color: var(--light-gray);
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 0.25rem rgba(243, 156, 18, 0.25);
+            background-color: #FFFFFF;
+        }
+        .login-footer {
+            justify-content: center;
+            padding: 1.5rem 2rem 2rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            background-color: #FFFFFF;
+            text-align: center;
+        }
+
+        /* Text color error classes */
+        .text-danger {
+            color: #E74C3C !important;
+        }
+        .is-invalid {
+            border-color: #E74C3C !important;
+        }
+        .is-invalid:focus {
+            box-shadow: 0 0 0 0.25rem rgba(231, 76, 60, 0.25) !important;
+        }
+
+        .btn-primary, .btn-primary:focus {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            color: var(--dark);
+            padding: 0.75rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+        }
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+            border-color: var(--accent-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(230, 126, 34, 0.4);
+        }
+        .text-accent {
+            color: var(--accent) !important;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .text-accent:hover {
+            color: var(--accent-hover) !important;
+            text-decoration: none;
+        }
+
+        /* Message Box Styling (for alerts) */
+        #messageBoxModal .modal-content {
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        #messageBoxModal .modal-header {
+            background-color: var(--primary);
+            color: white;
+            border-bottom: none;
+            padding: 1.25rem;
+        }
+        #messageBoxModal .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        #messageBoxModal .modal-body {
+            padding: 1.5rem;
+            font-size: 1rem;
+            color: var(--dark);
+        }
+        #messageBoxModal .modal-footer {
+            border-top: none;
+            padding: 1rem 1.5rem;
+            justify-content: flex-end;
+        }
+        #messageBoxModal .btn-primary {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            color: var(--dark);
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+        }
+        #messageBoxModal .btn-primary:hover {
+            background-color: var(--accent-hover);
+            border-color: var(--accent-hover);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 767.98px) {
+            .login-container {
+                margin: 1rem;
+            }
+            .login-header h2 {
+                font-size: 1.5rem;
+            }
+            .login-body {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h2>Log In to Your Account</h2>
+        </div>
+        <div class="login-body">
+            <form id="loginForm" class="space-y-4">
+                <div class="mb-3">
+                    <label for="loginEmail" class="form-label">Email Address:</label>
+                    <input type="email" id="loginEmail" name="email" class="form-control" placeholder="Enter your email" required>
+                    <div id="loginEmailError" class="text-danger text-xs mt-1" style="display: none;"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="loginPassword" class="form-label">Password:</label>
+                    <input type="password" id="loginPassword" name="password" class="form-control" placeholder="Enter your password" required>
+                    <div id="loginPasswordError" class="text-danger text-xs mt-1" style="display: none;"></div>
+                </div>
+                <div class="mb-3 form-check">
+                    <input type="checkbox" id="rememberMe" name="rememberMe" class="form-check-input">
+                    <label for="rememberMe" class="form-check-label">Remember me</label>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 mt-4">Log In</button>
+            </form>
+        </div>
+        <div class="login-footer">
+            <p class="mb-2"><a href="#" class="text-accent" onclick="forgotPassword(); return false;">Forgot Password?</a></p>
+            <p class="mb-0">Don't have an account? <a href="register.html" class="text-accent">Sign Up</a></p>
+        </div>
+    </div>
+
+    <div class="modal fade" id="messageBoxModal" tabindex="-1" aria-labelledby="messageBoxModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="messageBoxModalLabel">Message</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="messageBoxBody">
+                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script>
+        // IMPORTANT: Replace with your actual Django backend URL when deploying
+        const API_BASE_URL = 'http://127.0.0.1:8000/api/';
+
+        let messageBoxModal; // Declare messageBoxModal globally
+
+        /**
+         * Utility Functions
+         */
+
+        /**
+         * Retrieves a cookie value by its name.
+         * @param {string} name - The name of the cookie.
+         * @returns {string|null} The cookie value or null if not found.
+         */
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        /**
+         * Safely store data in localStorage with error handling
+         * @param {string} key - Storage key
+         * @param {string} value - Value to store
+         */
+        function setLocalStorage(key, value) {
+            try {
+                localStorage.setItem(key, value);
+            } catch (error) {
+                console.warn('LocalStorage not available:', error);
+                // Fallback to sessionStorage or cookies if needed
+            }
+        }
+
+        /**
+         * Safely retrieve data from localStorage
+         * @param {string} key - Storage key
+         * @returns {string|null} Stored value or null
+         */
+        function getLocalStorage(key) {
+            try {
+                return localStorage.getItem(key);
+            } catch (error) {
+                console.warn('LocalStorage not available:', error);
+                return null;
+            }
+        }
+
+        /**
+         * Remove item from localStorage
+         * @param {string} key - Storage key
+         */
+        function removeLocalStorage(key) {
+            try {
+                localStorage.removeItem(key);
+            } catch (error) {
+                console.warn('LocalStorage not available:', error);
+            }
+        }
+
+        /**
+         * UI Helper Functions
+         */
+
+        /**
+         * Displays a custom message box to the user.
+         * @param {string} title - The title of the message box.
+         * @param {string} message - The message content.
+         * @param {string} type - 'success', 'error', or 'info'
+         */
+        function showMessageBox(title, message, type = 'info') {
+            if (!messageBoxModal) {
+                const messageBoxModalEl = document.getElementById('messageBoxModal');
+                if (messageBoxModalEl) {
+                    messageBoxModal = new bootstrap.Modal(messageBoxModalEl);
+                } else {
+                    console.error('MessageBox modal element not found!');
+                    alert(`${title}: ${message}`); // Fallback to alert
+                    return;
+                }
+            }
+            
+            const modalLabel = document.getElementById('messageBoxModalLabel');
+            const modalBody = document.getElementById('messageBoxBody');
+            const modalHeader = messageBoxModal._element?.querySelector('.modal-header');
+            
+            if (modalLabel) modalLabel.textContent = title;
+            if (modalBody) modalBody.innerHTML = message;
+            
+            // Change header color based on type
+            if (modalHeader) {
+                modalHeader.className = 'modal-header'; // Reset class
+                switch (type) {
+                    case 'success':
+                        modalHeader.style.backgroundColor = '#27AE60';
+                        break;
+                    case 'error':
+                        modalHeader.style.backgroundColor = '#E74C3C';
+                        break;
+                    default:
+                        modalHeader.style.backgroundColor = 'var(--primary)';
+                }
+            }
+            
+            messageBoxModal.show();
+        }
+
+        /**
+         * Show loading state on button
+         * @param {HTMLButtonElement} button - Button element
+         * @param {boolean} loading - Loading state
+         */
+        function setButtonLoading(button, loading) {
+            if (!button) return;
+            
+            if (loading) {
+                button.disabled = true;
+                button.dataset.originalText = button.textContent;
+                button.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span>Loading...';
+            } else {
+                button.disabled = false;
+                button.textContent = button.dataset.originalText || button.textContent;
+            }
+        }
+
+        /**
+         * Form Validation Functions
+         */
+
+        /**
+         * Clears validation errors from a form.
+         * @param {HTMLFormElement} form - The form element.
+         */
+        function clearFormErrors(form) {
+            if (!form) return;
+            
+            form.querySelectorAll('.text-danger').forEach(el => {
+                el.textContent = '';
+                el.style.display = 'none';
+            });
+            form.querySelectorAll('.form-control, .form-select').forEach(el => {
+                el.classList.remove('is-invalid');
+            });
+        }
+
+        /**
+         * Displays validation errors on a form field.
+         * @param {HTMLElement} inputElement - The input element with the error.
+         * @param {string} errorId - The ID of the error display div.
+         * @param {string} message - The error message.
+         */
+        function displayFieldError(inputElement, errorId, message) {
+            if (inputElement) {
+                inputElement.classList.add('is-invalid');
+                inputElement.focus();
+            }
+            
+            const errorDiv = document.getElementById(errorId);
+            if (errorDiv) {
+                errorDiv.textContent = message;
+                errorDiv.style.display = 'block';
+            }
+        }
+
+        /**
+         * Validates email format
+         * @param {string} email - Email address to validate
+         * @returns {boolean} Valid email format
+         */
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        /**
+         * Backend Error Handling
+         */
+
+        /**
+         * Handles backend error responses for forms.
+         * @param {object|string} errors - The error object from the backend.
+         * @param {HTMLFormElement} form - The form to display errors on.
+         * @returns {string} General error message
+         */
+        function handleBackendFormErrors(errors, form) {
+            let generalErrorMessage = 'Please correct the errors below.';
+            
+            if (typeof errors === 'string') {
+                generalErrorMessage = errors;
+            } else if (errors && typeof errors === 'object') {
+                // Handle field-specific errors
+                for (const field in errors) {
+                    if (field === 'non_field_errors' || field === 'detail') continue;
+                    
+                    const inputElement = form.elements[field];
+                    const errorDivId = getErrorDivId(form.id, field);
+                    const message = Array.isArray(errors[field]) ? errors[field].join(' ') : errors[field];
+                    
+                    if (inputElement && document.getElementById(errorDivId)) {
+                        displayFieldError(inputElement, errorDivId, message);
+                    }
+                }
+                
+                // Handle general errors
+                if (errors.non_field_errors) {
+                    generalErrorMessage = Array.isArray(errors.non_field_errors) 
+                        ? errors.non_field_errors.join(' ') 
+                        : errors.non_field_errors;
+                } else if (errors.detail) {
+                    generalErrorMessage = errors.detail;
+                }
+            }
+            
+            return generalErrorMessage;
+        }
+
+        /**
+         * Generate error div ID from form ID and field name
+         * @param {string} formId - Form ID
+         * @param {string} fieldName - Field name
+         * @returns {string} Error div ID
+         */
+        function getErrorDivId(formId, fieldName) {
+            const prefix = formId.replace('Form', '');
+            return `${prefix}${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)}Error`;
+        }
+
+        /**
+         * API Functions
+         */
+
+        /**
+         * Make API request with proper error handling
+         * @param {string} endpoint - API endpoint
+         * @param {object} options - Fetch options
+         * @returns {Promise<object>} API response
+         */
+        async function makeApiRequest(endpoint, options = {}) {
+            const url = `${API_BASE_URL}${endpoint}`;
+            const defaultOptions = {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            };
+
+            // Add CSRF token for non-GET requests
+            if (options.method && options.method !== 'GET') {
+                const csrfToken = getCookie('csrftoken');
+                if (csrfToken) {
+                    defaultOptions.headers['X-CSRFToken'] = csrfToken;
+                }
+            }
+
+            // Add auth token if available
+            const authToken = getLocalStorage('authToken');
+            if (authToken) {
+                defaultOptions.headers['Authorization'] = `Token ${authToken}`;
+            }
+
+            const mergedOptions = {
+                ...defaultOptions,
+                ...options,
+                headers: { ...defaultOptions.headers, ...options.headers },
+            };
+
+            try {
+                const response = await fetch(url, mergedOptions);
+                const data = await response.json().catch(() => ({}));
+
+                if (!response.ok) {
+                    throw new Error(data.detail || data.message || `HTTP ${response.status}`);
+                }
+
+                return { success: true, data, status: response.status };
+            } catch (error) {
+                console.error('API Request failed:', error);
+                return { 
+                    success: false, 
+                    error: error.message || 'Network error occurred',
+                    data: null 
+                };
+            }
+        }
+
+        /**
+         * Authentication Functions
+         */
+
+        /**
+         * Fetch user profile after login
+         */
+        async function fetchUserProfile() {
+            const result = await makeApiRequest('auth/users/me/');
+            
+            if (result.success) {
+                setLocalStorage('currentUser', JSON.stringify(result.data));
+            }
+        }
+
+        /**
+         * Form Submission Handlers
+         */
+
+        /**
+         * Handle login form submission
+         * @param {Event} event - Form submit event
+         */
+        async function handleLoginSubmit(event) {
+            event.preventDefault();
+            
+            const form = event.target;
+            const submitButton = form.querySelector('button[type="submit"]');
+            
+            clearFormErrors(form);
+            
+            // Get form data
+            const formData = {
+                email: form.elements.email?.value?.trim(),
+                password: form.elements.password?.value,
+            };
+
+            // Client-side validation
+            let isValid = true;
+            
+            if (!isValidEmail(formData.email)) {
+                displayFieldError(form.elements.email, 'loginEmailError', 'Please enter a valid email address.');
+                isValid = false;
+            }
+            
+            if (!formData.password) {
+                displayFieldError(form.elements.password, 'loginPasswordError', 'Please enter your password.');
+                isValid = false;
+            }
+
+            if (!isValid) {
+                showMessageBox('Validation Error', 'Please correct the highlighted fields.', 'error');
+                return;
+            }
+
+            // Show loading state
+            setButtonLoading(submitButton, true);
+
+            try {
+                const result = await makeApiRequest('auth/token/login/', {
+                    method: 'POST',
+                    body: JSON.stringify(formData),
+                });
+
+                if (result.success && result.data.auth_token) {
+                    // Store authentication data
+                    setLocalStorage('authToken', result.data.auth_token);
+                    
+                    showMessageBox('Success', 'Login successful! Welcome back to FreightLink.', 'success');
+                    form.reset();
+                    
+                    // Fetch user profile
+                    await fetchUserProfile();
+                    
+                    // Redirect to dashboard.html after a short delay
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1500);
+                        
+                } else {
+                    const errorMessage = handleBackendFormErrors(result.data || result.error, form);
+                    showMessageBox('Login Failed', errorMessage, 'error');
+                }
+            } catch (error) {
+                showMessageBox('Network Error', 'Could not connect to the server. Please try again later.', 'error');
+            } finally {
+                setButtonLoading(submitButton, false);
+            }
+        }
+
+        /**
+         * Other helper functions
+         */
+        function forgotPassword() {
+            showMessageBox(
+                'Forgot Password', 
+                'Password recovery functionality will be implemented soon. Please contact support at support@freightlink.com for assistance.',
+                'info'
+            );
+        }
+        
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginForm = document.getElementById('loginForm');
+            if (loginForm) {
+                loginForm.addEventListener('submit', handleLoginSubmit);
+            }
+
+            // Initialize the messageBoxModal
+            const messageBoxModalEl = document.getElementById('messageBoxModal');
+            if (messageBoxModalEl) {
+                messageBoxModal = new bootstrap.Modal(messageBoxModalEl);
+            }
+        });
+    </script>
+</body>
+</html>

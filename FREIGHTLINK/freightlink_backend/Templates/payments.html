@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreightLink - Payments</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        /* Replicating styles from test7settings.html */
+        :root {
+            --primary: #2C3E50;
+            --secondary: #34495E;
+            --accent: #F39C12;
+            --accent-hover: #E67E22;
+            --light: #ECF0F1;
+            --dark: #2C3E50;
+            --gray: #95A5A6;
+            --light-gray: #F8F9FA;
+            --success: #27AE60;
+            --danger: #E74C3C;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .rounded-md {
+            border-radius: 0.75rem;
+        }
+        
+        .shadow-custom {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--primary);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
+        }
+        .header .logo {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+        .header .nav-link {
+            color: #FFFFFF;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+            margin: 0 0.25rem;
+        }
+        .header .nav-link:hover, .header .nav-link.active {
+            color: var(--primary);
+            background-color: var(--accent);
+            border-radius: 2rem;
+        }
+        .header .nav-link.active {
+            font-weight: 600;
+        }
+
+        /* Dashboard Layout */
+        .dashboard-layout {
+            display: flex;
+            height: calc(100vh - 70px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background-color: var(--primary);
+            padding: 2rem 1rem;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+        }
+        .sidebar .menu-item {
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.75rem 1rem;
+            margin: 0.25rem 0;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .sidebar .menu-item i {
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+        .sidebar .menu-item:hover, .sidebar .menu-item.active {
+            background-color: var(--accent);
+            color: var(--primary);
+        }
+        .sidebar .menu-item.active {
+            font-weight: 600;
+        }
+        .sidebar .divider {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 1rem 0;
+        }
+        .sidebar .menu-title {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin: 1.5rem 0 0.5rem 1rem;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+        .page-subtitle {
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+
+        /* Form Components */
+        .form-card {
+            background-color: #FFFFFF;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .form-card h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        .form-label {
+            font-weight: 500;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        .form-control, .form-select {
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            border: 1px solid #DDE2E5;
+            transition: all 0.3s ease;
+            background-color: var(--light-gray);
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 0.25rem rgba(243, 156, 18, 0.25);
+            background-color: #FFFFFF;
+        }
+        
+        /* Buttons */
+        .btn-primary, .btn-primary:focus {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            color: var(--dark);
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+        }
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+            border-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(230, 126, 34, 0.4);
+        }
+        .btn-secondary, .btn-secondary:focus {
+            background-color: var(--light-gray);
+            border-color: #DDE2E5;
+            color: var(--gray);
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background-color: #e9ecef;
+            border-color: #c1c7cc;
+            color: var(--dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn-danger, .btn-danger:focus {
+            background-color: var(--danger);
+            border-color: var(--danger);
+            color: #FFFFFF;
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+        .btn-danger:hover {
+            background-color: #c0392b;
+            border-color: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(192, 57, 43, 0.4);
+        }
+
+        /* Settings specific styles (reused for general content cards) */
+        .settings-nav {
+            background-color: #FFFFFF;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+        
+        .settings-nav .nav-link {
+            color: var(--dark);
+            font-weight: 500;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .settings-nav .nav-link.active {
+            background-color: rgba(243, 156, 18, 0.1);
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        .settings-nav .nav-link:hover:not(.active) {
+            background-color: var(--light-gray);
+        }
+        
+        .settings-nav .nav-link i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .settings-content { /* Used for main content cards */
+            background-color: #FFFFFF;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+        }
+        
+        .settings-content h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .form-section {
+            margin-bottom: 2.5rem;
+        }
+        
+        .form-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .form-section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Table specific styles for payments */
+        .table-responsive {
+            margin-top: 1.5rem;
+        }
+        .table {
+            width: 100%;
+            margin-bottom: 1rem;
+            color: var(--dark);
+            border-collapse: separate;
+            border-spacing: 0 0.8rem; /* Space between rows */
+        }
+        .table th, .table td {
+            padding: 1rem;
+            vertical-align: middle;
+            border: none; /* Remove default borders */
+        }
+        .table thead th {
+            border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+            font-weight: 600;
+            color: var(--primary);
+            background-color: var(--light-gray);
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+        .table tbody tr {
+            background-color: #FFFFFF;
+            border-radius: 0.75rem; /* Rounded corners for rows */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+            transition: all 0.2s ease-in-out;
+        }
+        .table tbody tr:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
+        .table tbody tr td:first-child {
+            border-top-left-radius: 0.75rem;
+            border-bottom-left-radius: 0.75rem;
+        }
+        .table tbody tr td:last-child {
+            border-top-right-radius: 0.75rem;
+            border-bottom-right-radius: 0.75rem;
+        }
+
+        .status-badge {
+            padding: 0.4rem 0.8rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+        .status-pending {
+            background-color: rgba(243, 156, 18, 0.15); /* Accent color with transparency */
+            color: var(--accent);
+        }
+        .status-completed {
+            background-color: rgba(39, 174, 96, 0.15); /* Success color with transparency */
+            color: var(--success);
+        }
+        .status-failed {
+            background-color: rgba(231, 76, 60, 0.15); /* Danger color with transparency */
+            color: var(--danger);
+        }
+        .status-refunded {
+            background-color: rgba(52, 152, 219, 0.15); /* A blue color for refunded */
+            color: #3498DB;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 991.98px) {
+            .sidebar {
+                width: 80px;
+                padding: 2rem 0.5rem;
+            }
+            .sidebar .menu-item span, .sidebar .menu-title {
+                display: none;
+            }
+            .sidebar .menu-item i {
+                margin-right: 0;
+                font-size: 1.5rem;
+            }
+            .main-content {
+                padding: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 767.98px) {
+            .dashboard-layout {
+                flex-direction: column;
+                height: auto;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                padding: 1rem;
+                display: flex;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            .sidebar .menu-item {
+                margin: 0 0.25rem;
+                padding: 0.5rem 1rem;
+            }
+            .sidebar .menu-item span {
+                display: none;
+            }
+            .sidebar .divider, .sidebar .menu-title {
+                display: none;
+            }
+            .main-content {
+                padding: 1.5rem 1rem;
+            }
+            .settings-nav {
+                margin-bottom: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header text-white py-3 shadow-sm sticky-top">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="logo d-flex align-items-center">
+                    <i class="bi bi-truck me-2"></i>FreightLink
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="dropdown me-3">
+                        <a href="#" class="text-white dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-bell me-2"></i>
+                            <span class="badge bg-accent text-dark rounded-pill">3</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">New match found</a></li>
+                            <li><a class="dropdown-item" href="#">Cargo request accepted</a></li>
+                            <li><a class="dropdown-item" href="#">Payment received</a></li>
+                        </ul>
+                    </div>
+                    <div class="dropdown">
+                        <a href="#" class="text-white dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="rounded-circle bg-accent text-dark d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                                <i class="bi bi-person-fill"></i>
+                            </div>
+                            <span>John Doe</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+        <div class="dashboard-layout">
+        <div class="sidebar">
+            <a href="dashboard.html" class="menu-item">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="mylisting.html" class="menu-item">
+                <i class="bi bi-box-seam-fill"></i>
+                <span>My Listings</span>
+            </a>
+            <a href="history.html" class="menu-item">
+                <i class="bi bi-clock-history"></i>
+                <span>History</span>
+            </a>
+            <a href="messages.html" class="menu-item">
+                <i class="bi bi-chat-left-text-fill"></i>
+                <span>Messages</span>
+            </a>
+            
+            <div class="divider"></div>
+            <div class="menu-title">Account</div>
+            
+            <a href="profile.html" class="menu-item active">
+                <i class="bi bi-person-fill"></i>
+                <span>Profile</span>
+            </a>
+            <a href="payments.html" class="menu-item">
+                <i class="bi bi-wallet2"></i>
+                <span>Payments</span>
+            </a>
+            <a href="settings (2).html" class="menu-item">
+                <i class="bi bi-gear-fill"></i>
+                <span>Settings</span>
+            </a>
+            <a href="help&support.html" class="menu-item">
+                <i class="bi bi-question-circle-fill"></i>
+                <span>Help & Support</span>
+            </a>
+            
+            <div class="divider"></div>
+            
+            <a href="#" class="menu-item">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+
+        <div class="main-content">
+            <h1 class="page-title">Payments</h1>
+            <p class="page-subtitle">Manage your payment methods and view transaction history</p>
+
+            <div class="row">
+                <div class="col-lg-3 col-md-4">
+                    <div class="settings-nav">
+                        <div class="nav flex-column" id="payment-tabs" role="tablist">
+                            <a class="nav-link active" id="pending-tab" data-bs-toggle="tab" href="#pending-payments" role="tab">
+                                <i class="bi bi-hourglass-split"></i> Pending Payments
+                            </a>
+                            <a class="nav-link" id="completed-tab" data-bs-toggle="tab" href="#completed-payments" role="tab">
+                                <i class="bi bi-check-circle"></i> Completed Payments
+                            </a>
+                            <a class="nav-link" id="history-tab" data-bs-toggle="tab" href="#payment-history" role="tab">
+                                <i class="bi bi-journal-text"></i> Payment History
+                            </a>
+                            <a class="nav-link" id="methods-tab" data-bs-toggle="tab" href="#payment-methods" role="tab">
+                                <i class="bi bi-credit-card"></i> Payment Methods
+                            </a>
+                            <a class="nav-link" id="billing-tab" data-bs-toggle="tab" href="#billing-information" role="tab">
+                                <i class="bi bi-receipt"></i> Billing Information
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-9 col-md-8">
+                    <div class="settings-content">
+                        <div class="tab-content active" id="pending-payments">
+                            <h3>Pending Payments</h3>
+                            <p class="text-muted mb-4">Payments that are awaiting processing or action from your side.</p>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Invoice ID</th>
+                                            <th>Amount</th>
+                                            <th>Due Date</th>
+                                            <th>Description</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="pendingPaymentsTableBody">
+                                        <tr>
+                                            <td>INV-2024-001</td>
+                                            <td>KSh 5,000</td>
+                                            <td>2024-06-01</td>
+                                            <td>Cargo delivery fee</td>
+                                            <td><span class="status-badge status-pending">Pending</span></td>
+                                            <td><button class="btn btn-sm btn-primary">Pay Now</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>INV-2024-003</td>
+                                            <td>KSh 2,500</td>
+                                            <td>2024-05-28</td>
+                                            <td>Subscription renewal</td>
+                                            <td><span class="status-badge status-pending">Pending</span></td>
+                                            <td><button class="btn btn-sm btn-primary">Pay Now</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="pendingPaymentsMessage" class="alert alert-info mt-3" style="display: none;">No pending payments found.</div>
+                        </div>
+
+                        <div class="tab-content" id="completed-payments">
+                            <h3>Completed Payments</h3>
+                            <p class="text-muted mb-4">A record of all payments that have been successfully processed.</p>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Invoice ID</th>
+                                            <th>Amount</th>
+                                            <th>Payment Date</th>
+                                            <th>Description</th>
+                                            <th>Status</th>
+                                            <th>Receipt</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="completedPaymentsTableBody">
+                                        <tr>
+                                            <td>INV-2024-002</td>
+                                            <td>KSh 12,000</td>
+                                            <td>2024-05-15</td>
+                                            <td>Logistics service</td>
+                                            <td><span class="status-badge status-completed">Completed</span></td>
+                                            <td><a href="#" class="btn btn-sm btn-outline-primary"><i class="bi bi-download me-1"></i>PDF</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>INV-2024-004</td>
+                                            <td>KSh 8,000</td>
+                                            <td>2024-05-10</td>
+                                            <td>Fuel top-up</td>
+                                            <td><span class="status-badge status-completed">Completed</span></td>
+                                            <td><a href="#" class="btn btn-sm btn-outline-primary"><i class="bi bi-download me-1"></i>PDF</a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="completedPaymentsMessage" class="alert alert-info mt-3" style="display: none;">No completed payments found.</div>
+                        </div>
+
+                        <div class="tab-content" id="payment-history">
+                            <h3>Payment History</h3>
+                            <p class="text-muted mb-4">A comprehensive list of all your transactions.</p>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Transaction ID</th>
+                                            <th>Amount</th>
+                                            <th>Date</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="paymentHistoryTableBody">
+                                        <tr>
+                                            <td>TRX-2024-0001</td>
+                                            <td>KSh 5,000</td>
+                                            <td>2024-06-01</td>
+                                            <td>Invoice</td>
+                                            <td>Cargo delivery fee</td>
+                                            <td><span class="status-badge status-pending">Pending</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>TRX-2024-0002</td>
+                                            <td>KSh 12,000</td>
+                                            <td>2024-05-15</td>
+                                            <td>Service</td>
+                                            <td>Logistics service</td>
+                                            <td><span class="status-badge status-completed">Completed</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>TRX-2024-0003</td>
+                                            <td>KSh 2,500</td>
+                                            <td>2024-05-28</td>
+                                            <td>Subscription</td>
+                                            <td>Subscription renewal</td>
+                                            <td><span class="status-badge status-pending">Pending</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>TRX-2024-0004</td>
+                                            <td>KSh 8,000</td>
+                                            <td>2024-05-10</td>
+                                            <td>Expense</td>
+                                            <td>Fuel top-up</td>
+                                            <td><span class="status-badge status-completed">Completed</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>TRX-2024-0005</td>
+                                            <td>KSh 1,500</td>
+                                            <td>2024-05-01</td>
+                                            <td>Refund</td>
+                                            <td>Overcharge refund</td>
+                                            <td><span class="status-badge status-refunded">Refunded</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="paymentHistoryMessage" class="alert alert-info mt-3" style="display: none;">No payment history found.</div>
+                        </div>
+
+                        <div class="tab-content" id="payment-methods">
+                            <h3>Payment Methods</h3>
+                            <p class="text-muted mb-4">Manage your saved payment methods for quick transactions.</p>
+                            
+                            <div class="form-section">
+                                <h4 class="form-section-title">Saved Payment Methods</h4>
+                                
+                                <div class="list-group mb-4" id="savedPaymentMethodsList">
+                                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div class="d-flex align-items-center">
+                                            <div class="me-3">
+                                                <i class="bi bi-credit-card-2-front fs-3"></i>
+                                            </div>
+                                            <div>
+                                                <h6 class="mb-0">M-Pesa</h6>
+                                                <small class="text-muted">+254 712 345 678</small>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <span class="badge bg-success me-2">Default</span>
+                                            <button class="btn btn-sm btn-outline-primary">Edit</button>
+                                            <button class="btn btn-sm btn-outline-danger">Remove</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div class="d-flex align-items-center">
+                                            <div class="me-3">
+                                                <i class="bi bi-bank fs-3"></i>
+                                            </div>
+                                            <div>
+                                                <h6 class="mb-0">Bank Account</h6>
+                                                <small class="text-muted">Equity Bank ****3456</small>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-sm btn-outline-secondary me-2">Set Default</button>
+                                            <button class="btn btn-sm btn-outline-primary">Edit</button>
+                                            <button class="btn btn-sm btn-outline-danger">Remove</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div class="d-flex align-items-center">
+                                            <div class="me-3">
+                                                <i class="bi bi-credit-card fs-3"></i>
+                                            </div>
+                                            <div>
+                                                <h6 class="mb-0">Visa Card</h6>
+                                                <small class="text-muted">**** **** **** 5678</small>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-sm btn-outline-secondary me-2">Set Default</button>
+                                            <button class="btn btn-sm btn-outline-primary">Edit</button>
+                                            <button class="btn btn-sm btn-outline-danger">Remove</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button class="btn btn-primary" id="addPaymentMethodBtn">
+                                    <i class="bi bi-plus-circle me-2"></i>Add New Payment Method
+                                </button>
+
+                                <div id="addPaymentMethodForm" class="mt-4" style="display: none;">
+                                    <h5 class="form-section-title">Add New Payment Method</h5>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label for="methodType" class="form-label">Method Type</label>
+                                            <select class="form-select" id="methodType">
+                                                <option value="mpesa">M-Pesa</option>
+                                                <option value="bank">Bank Account</option>
+                                                <option value="card">Credit/Debit Card</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="methodName" class="form-label">Method Name (e.g., My M-Pesa)</label>
+                                            <input type="text" class="form-control" id="methodName" placeholder="e.g., My M-Pesa">
+                                        </div>
+                                        <div class="col-md-12" id="mpesaDetails" style="display: none;">
+                                            <label for="mpesaNumber" class="form-label">M-Pesa Number</label>
+                                            <input type="tel" class="form-control" id="mpesaNumber" placeholder="+254 7XX XXX XXX">
+                                        </div>
+                                        <div class="col-md-12" id="bankDetails" style="display: none;">
+                                            <label for="bankName" class="form-label">Bank Name</label>
+                                            <input type="text" class="form-control" id="bankName" placeholder="e.g., Equity Bank">
+                                            <label for="accountNumber" class="form-label mt-3">Account Number</label>
+                                            <input type="text" class="form-control" id="accountNumber" placeholder="e.g., 1234567890">
+                                        </div>
+                                        <div class="col-md-12" id="cardDetails" style="display: none;">
+                                            <label for="cardNumber" class="form-label">Card Number</label>
+                                            <input type="text" class="form-control" id="cardNumber" placeholder="**** **** **** ****">
+                                            <div class="row mt-3">
+                                                <div class="col-md-6">
+                                                    <label for="expiryDate" class="form-label">Expiry Date (MM/YY)</label>
+                                                    <input type="text" class="form-control" id="expiryDate" placeholder="MM/YY">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="cvv" class="form-label">CVV</label>
+                                                    <input type="text" class="form-control" id="cvv" placeholder="XXX">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-end mt-4">
+                                        <button class="btn btn-secondary me-2" id="cancelAddPaymentMethod">Cancel</button>
+                                        <button class="btn btn-primary" id="saveNewPaymentMethod">Save Method</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-content" id="billing-information">
+                            <h3>Billing Information</h3>
+                            <p class="text-muted mb-4">Update your billing address and company details.</p>
+                            
+                            <div class="form-section">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="billingName" class="form-label">Billing Name</label>
+                                        <input type="text" class="form-control" id="billingName" value="">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="billingCompany" class="form-label">Company Name</label>
+                                        <input type="text" class="form-control" id="billingCompany" value="">
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label for="billingAddress" class="form-label">Billing Address</label>
+                                        <input type="text" class="form-control" id="billingAddress" value="">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="billingCity" class="form-label">City</label>
+                                        <input type="text" class="form-control" id="billingCity" value="">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="billingRegion" class="form-label">Region/State</label>
+                                        <input type="text" class="form-control" id="billingRegion" value="">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="billingPostalCode" class="form-label">Postal Code</label>
+                                        <input type="text" class="form-control" id="billingPostalCode" value="">
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label for="billingCountry" class="form-label">Country</label>
+                                        <select class="form-select" id="billingCountry">
+                                            <option value="kenya">Kenya</option>
+                                            <option value="uganda">Uganda</option>
+                                            <option value="tanzania">Tanzania</option>
+                                            <option value="rwanda">Rwanda</option>
+                                            <option value="ethiopia">Ethiopia</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex justify-content-end mt-4">
+                                <button class="btn btn-secondary me-2" id="cancelBillingChanges">Cancel</button>
+                                <button class="btn btn-primary" id="saveBillingChanges">Save Changes</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Base URL for your Django API. IMPORTANT: Replace with your actual Django backend URL.
+            const API_BASE_URL = 'http://127.0.0.1:8000/api/'; // Example: 'http://localhost:8000/api/' or your deployed URL
+
+            // Function to get CSRF token from cookies
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            const csrftoken = getCookie('csrftoken');
+
+            // --- Tab navigation logic ---
+            const tabs = document.querySelectorAll('#payment-tabs .nav-link');
+            const tabContents = document.querySelectorAll('.settings-content > .tab-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                    const tabId = this.getAttribute('href').substring(1);
+                    const targetContent = document.getElementById(tabId);
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                    }
+                    // Trigger data load for the activated tab
+                    if (tabId === 'pending-payments') {
+                        fetchPendingPayments();
+                    } else if (tabId === 'completed-payments') {
+                        fetchCompletedPayments();
+                    } else if (tabId === 'payment-history') {
+                        fetchPaymentHistory();
+                    } else if (tabId === 'payment-methods') {
+                        fetchPaymentMethods();
+                    } else if (tabId === 'billing-information') {
+                        fetchBillingInformation();
+                    }
+                });
+            });
+
+            // Initialize flatpickr for any date inputs (though not explicitly used in this payments page yet)
+            const datePickers = document.querySelectorAll('.date-picker');
+            if (datePickers.length > 0) {
+                flatpickr(datePickers, {
+                    dateFormat: 'Y-m-d'
+                });
+            }
+
+            // --- Helper function for fetching data ---
+            async function fetchData(endpoint, tableBodyId, messageId) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            // 'Authorization': 'Bearer YOUR_AUTH_TOKEN' // Add if you have authentication
+                        }
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        console.error(`Error fetching ${endpoint} data:`, errorData);
+                        document.getElementById(messageId).textContent = `Failed to load data: ${errorData.detail || 'Unknown error'}`;
+                        document.getElementById(messageId).style.display = 'block';
+                        document.getElementById(tableBodyId).innerHTML = ''; // Clear table
+                        return [];
+                    }
+
+                    const data = await response.json();
+                    if (data.length === 0) {
+                        document.getElementById(messageId).style.display = 'block';
+                        document.getElementById(tableBodyId).innerHTML = ''; // Clear table
+                    } else {
+                        document.getElementById(messageId).style.display = 'none';
+                    }
+                    return data;
+
+                } catch (error) {
+                    console.error(`Network error or unexpected issue fetching ${endpoint}:`, error);
+                    document.getElementById(messageId).textContent = 'An error occurred while connecting to the server.';
+                    document.getElementById(messageId).style.display = 'block';
+                    document.getElementById(tableBodyId).innerHTML = ''; // Clear table
+                    return [];
+                }
+            }
+
+            // --- Render functions for tables ---
+            function renderPendingPayments(payments) {
+                const tableBody = document.getElementById('pendingPaymentsTableBody');
+                tableBody.innerHTML = ''; // Clear existing rows
+                if (payments.length === 0) {
+                    document.getElementById('pendingPaymentsMessage').style.display = 'block';
+                    return;
+                }
+                document.getElementById('pendingPaymentsMessage').style.display = 'none';
+
+                payments.forEach(payment => {
+                    const row = `
+                        <tr>
+                            <td>${payment.invoice_id}</td>
+                            <td>KSh ${payment.amount.toLocaleString()}</td>
+                            <td>${payment.due_date}</td>
+                            <td>${payment.description}</td>
+                            <td><span class="status-badge status-pending">Pending</span></td>
+                            <td><button class="btn btn-sm btn-primary pay-now-btn" data-id="${payment.id}">Pay Now</button></td>
+                        </tr>
+                    `;
+                    tableBody.insertAdjacentHTML('beforeend', row);
+                });
+
+                // Add event listeners to "Pay Now" buttons
+                tableBody.querySelectorAll('.pay-now-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const paymentId = this.dataset.id;
+                        handlePayNow(paymentId);
+                    });
+                });
+            }
+
+            function renderCompletedPayments(payments) {
+                const tableBody = document.getElementById('completedPaymentsTableBody');
+                tableBody.innerHTML = '';
+                if (payments.length === 0) {
+                    document.getElementById('completedPaymentsMessage').style.display = 'block';
+                    return;
+                }
+                document.getElementById('completedPaymentsMessage').style.display = 'none';
+
+                payments.forEach(payment => {
+                    const row = `
+                        <tr>
+                            <td>${payment.invoice_id}</td>
+                            <td>KSh ${payment.amount.toLocaleString()}</td>
+                            <td>${payment.payment_date}</td>
+                            <td>${payment.description}</td>
+                            <td><span class="status-badge status-completed">Completed</span></td>
+                            <td><a href="${payment.receipt_url || '#'}" class="btn btn-sm btn-outline-primary" ${payment.receipt_url ? 'target="_blank"' : 'disabled'}><i class="bi bi-download me-1"></i>PDF</a></td>
+                        </tr>
+                    `;
+                    tableBody.insertAdjacentHTML('beforeend', row);
+                });
+            }
+
+            function renderPaymentHistory(transactions) {
+                const tableBody = document.getElementById('paymentHistoryTableBody');
+                tableBody.innerHTML = '';
+                if (transactions.length === 0) {
+                    document.getElementById('paymentHistoryMessage').style.display = 'block';
+                    return;
+                }
+                document.getElementById('paymentHistoryMessage').style.display = 'none';
+
+                transactions.forEach(transaction => {
+                    const statusClass = `status-${transaction.status.toLowerCase()}`;
+                    const row = `
+                        <tr>
+                            <td>${transaction.transaction_id}</td>
+                            <td>KSh ${transaction.amount.toLocaleString()}</td>
+                            <td>${transaction.date}</td>
+                            <td>${transaction.type}</td>
+                            <td>${transaction.description}</td>
+                            <td><span class="status-badge ${statusClass}">${transaction.status}</span></td>
+                        </tr>
+                    `;
+                    tableBody.insertAdjacentHTML('beforeend', row);
+                });
+            }
+
+            function renderPaymentMethods(methods) {
+                const listGroup = document.getElementById('savedPaymentMethodsList');
+                listGroup.innerHTML = ''; // Clear existing methods
+
+                if (methods.length === 0) {
+                    listGroup.innerHTML = '<div class="alert alert-info">No saved payment methods found.</div>';
+                    return;
+                }
+
+                methods.forEach(method => {
+                    let iconClass = '';
+                    let details = '';
+                    let defaultBadge = method.is_default ? '<span class="badge bg-success me-2">Default</span>' : '';
+
+                    if (method.type === 'mpesa') {
+                        iconClass = 'bi bi-credit-card-2-front';
+                        details = method.mpesa_number;
+                    } else if (method.type === 'bank') {
+                        iconClass = 'bi bi-bank';
+                        details = `${method.bank_name} ****${method.account_number.slice(-4)}`;
+                    } else if (method.type === 'card') {
+                        iconClass = 'bi bi-credit-card';
+                        details = `**** **** **** ${method.card_last_four}`;
+                    }
+
+                    const item = `
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <div class="me-3">
+                                    <i class="${iconClass} fs-3"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0">${method.name}</h6>
+                                    <small class="text-muted">${details}</small>
+                                </div>
+                            </div>
+                            <div>
+                                ${defaultBadge}
+                                <button class="btn btn-sm btn-outline-primary edit-method-btn" data-id="${method.id}">Edit</button>
+                                <button class="btn btn-sm btn-outline-danger remove-method-btn" data-id="${method.id}">Remove</button>
+                            </div>
+                        </div>
+                    `;
+                    listGroup.insertAdjacentHTML('beforeend', item);
+                });
+
+                // Add event listeners for edit/remove buttons (implementation for these would involve modals/forms)
+                listGroup.querySelectorAll('.edit-method-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        console.log('Edit payment method:', this.dataset.id);
+                        // Implement edit logic (e.g., open a modal with method details)
+                    });
+                });
+                listGroup.querySelectorAll('.remove-method-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        if (confirm('Are you sure you want to remove this payment method?')) {
+                            console.log('Remove payment method:', this.dataset.id);
+                            removePaymentMethod(this.dataset.id);
+                        }
+                    });
+                });
+            }
+
+            // --- Fetching data functions ---
+            async function fetchPendingPayments() {
+                const payments = await fetchData('payments/pending/', 'pendingPaymentsTableBody', 'pendingPaymentsMessage');
+                renderPendingPayments(payments);
+            }
+
+            async function fetchCompletedPayments() {
+                const payments = await fetchData('payments/completed/', 'completedPaymentsTableBody', 'completedPaymentsMessage');
+                renderCompletedPayments(payments);
+            }
+
+            async function fetchPaymentHistory() {
+                const transactions = await fetchData('payments/history/', 'paymentHistoryTableBody', 'paymentHistoryMessage');
+                renderPaymentHistory(transactions);
+            }
+
+            let originalBillingInfo = {}; // To store data fetched from the backend for cancellation
+
+            async function fetchPaymentMethods() {
+                const methods = await fetchData('payment-methods/', 'savedPaymentMethodsList', 'noSavedMethodsMessage'); // Assuming a message element for this
+                renderPaymentMethods(methods);
+            }
+
+            async function fetchBillingInformation() {
+                try {
+                    const response = await fetch(`${API_BASE_URL}billing-information/`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            // 'Authorization': 'Bearer YOUR_AUTH_TOKEN'
+                        }
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        console.error('Error fetching billing information:', errorData);
+                        // Display error message to user
+                        return;
+                    }
+
+                    const data = await response.json();
+                    originalBillingInfo = { ...data }; // Store a copy for cancellation
+
+                    // Populate form fields
+                    document.getElementById('billingName').value = data.billing_name || '';
+                    document.getElementById('billingCompany').value = data.company_name || '';
+                    document.getElementById('billingAddress').value = data.address || '';
+                    document.getElementById('billingCity').value = data.city || '';
+                    document.getElementById('billingRegion').value = data.region || '';
+                    document.getElementById('billingPostalCode').value = data.postal_code || '';
+                    document.getElementById('billingCountry').value = data.country || 'kenya';
+
+                } catch (error) {
+                    console.error('Network error or unexpected issue fetching billing information:', error);
+                    // Display error message to user
+                }
+            }
+
+            // --- Action functions ---
+            async function handlePayNow(paymentId) {
+                console.log(`Attempting to pay for invoice ID: ${paymentId}`);
+                // In a real application, this would redirect to a payment gateway
+                // or initiate a payment process. For now, we'll simulate a success.
+                try {
+                    const response = await fetch(`${API_BASE_URL}payments/${paymentId}/pay/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrftoken,
+                            // 'Authorization': 'Bearer YOUR_AUTH_TOKEN'
+                        },
+                        body: JSON.stringify({ payment_id: paymentId }) // Send payment ID
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        console.error('Error processing payment:', errorData);
+                        alert(`Payment failed: ${errorData.detail || 'Unknown error'}`); // Use a custom modal in production
+                        return;
+                    }
+
+                    const result = await response.json();
+                    console.log('Payment successful:', result);
+                    alert('Payment processed successfully!'); // Use a custom modal in production
+                    fetchPendingPayments(); // Refresh pending payments
+                    fetchCompletedPayments(); // Refresh completed payments
+                    fetchPaymentHistory(); // Refresh history
+                } catch (error) {
+                    console.error('Network error during payment:', error);
+                    alert('An error occurred while trying to process payment.'); // Use a custom modal in production
+                }
+            }
+
+            async function addNewPaymentMethod(methodData) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}payment-methods/add/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrftoken,
+                            // 'Authorization': 'Bearer YOUR_AUTH_TOKEN'
+                        },
+                        body: JSON.stringify(methodData)
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        console.error('Error adding payment method:', errorData);
+                        alert(`Failed to add payment method: ${errorData.detail || 'Unknown error'}`);
+                        return;
+                    }
+
+                    const result = await response.json();
+                    console.log('Payment method added successfully:', result);
+                    alert('Payment method added successfully!');
+                    fetchPaymentMethods(); // Refresh the list
+                    document.getElementById('addPaymentMethodForm').style.display = 'none'; // Hide form
+                } catch (error) {
+                    console.error('Network error adding payment method:', error);
+                    alert('An error occurred while adding payment method.');
+                }
+            }
+
+            async function removePaymentMethod(methodId) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}payment-methods/${methodId}/remove/`, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRFToken': csrftoken,
+                            // 'Authorization': 'Bearer YOUR_AUTH_TOKEN'
+                        }
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        console.error('Error removing payment method:', errorData);
+                        alert(`Failed to remove payment method: ${errorData.detail || 'Unknown error'}`);
+                        return;
+                    }
+
+                    console.log('Payment method removed successfully.');
+                    alert('Payment method removed successfully!');
+                    fetchPaymentMethods(); // Refresh the list
+                } catch (error) {
+                    console.error('Network error removing payment method:', error);
+                    alert('An error occurred while removing payment method.');
+                }
+            }
+
+            async function saveBillingInformation() {
+                const updatedData = {
+                    billing_name: document.getElementById('billingName').value,
+                    company_name: document.getElementById('billingCompany').value,
+                    address: document.getElementById('billingAddress').value,
+                    city: document.getElementById('billingCity').value,
+                    region: document.getElementById('billingRegion').value,
+                    postal_code: document.getElementById('billingPostalCode').value,
+                    country: document.getElementById('billingCountry').value,
+                };
+
+                try {
+                    const response = await fetch(`${API_BASE_URL}billing-information/update/`, {
+                        method: 'PUT', // Or PATCH
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrftoken,
+                            // 'Authorization': 'Bearer YOUR_AUTH_TOKEN'
+                        },
+                        body: JSON.stringify(updatedData)
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        console.error('Error saving billing information:', errorData);
+                        alert(`Failed to save billing information: ${errorData.detail || 'Unknown error'}`);
+                        return;
+                    }
+
+                    const result = await response.json();
+                    console.log('Billing information saved successfully:', result);
+                    alert('Billing information updated successfully!');
+                    originalBillingInfo = { ...updatedData }; // Update original data after successful save
+                } catch (error) {
+                    console.error('Network error saving billing information:', error);
+                    alert('An error occurred while saving billing information.');
+                }
+            }
+
+
+            // --- Event Listeners ---
+
+            // Add Payment Method button
+            const addPaymentMethodBtn = document.getElementById('addPaymentMethodBtn');
+            const addPaymentMethodForm = document.getElementById('addPaymentMethodForm');
+            const cancelAddPaymentMethodBtn = document.getElementById('cancelAddPaymentMethod');
+            const saveNewPaymentMethodBtn = document.getElementById('saveNewPaymentMethod');
+            const methodTypeSelect = document.getElementById('methodType');
+            const mpesaDetails = document.getElementById('mpesaDetails');
+            const bankDetails = document.getElementById('bankDetails');
+            const cardDetails = document.getElementById('cardDetails');
+
+            addPaymentMethodBtn.addEventListener('click', () => {
+                addPaymentMethodForm.style.display = 'block';
+                methodTypeSelect.value = 'mpesa'; // Default to M-Pesa
+                mpesaDetails.style.display = 'block';
+                bankDetails.style.display = 'none';
+                cardDetails.style.display = 'none';
+            });
+
+            cancelAddPaymentMethodBtn.addEventListener('click', () => {
+                addPaymentMethodForm.style.display = 'none';
+                // Clear form fields
+                document.getElementById('methodName').value = '';
+                document.getElementById('mpesaNumber').value = '';
+                document.getElementById('bankName').value = '';
+                document.getElementById('accountNumber').value = '';
+                document.getElementById('cardNumber').value = '';
+                document.getElementById('expiryDate').value = '';
+                document.getElementById('cvv').value = '';
+            });
+
+            methodTypeSelect.addEventListener('change', function() {
+                mpesaDetails.style.display = 'none';
+                bankDetails.style.display = 'none';
+                cardDetails.style.display = 'none';
+                if (this.value === 'mpesa') {
+                    mpesaDetails.style.display = 'block';
+                } else if (this.value === 'bank') {
+                    bankDetails.style.display = 'block';
+                } else if (this.value === 'card') {
+                    cardDetails.style.display = 'block';
+                }
+            });
+
+            saveNewPaymentMethodBtn.addEventListener('click', () => {
+                const type = methodTypeSelect.value;
+                const name = document.getElementById('methodName').value;
+                let methodData = { type, name };
+
+                if (type === 'mpesa') {
+                    methodData.mpesa_number = document.getElementById('mpesaNumber').value;
+                } else if (type === 'bank') {
+                    methodData.bank_name = document.getElementById('bankName').value;
+                    methodData.account_number = document.getElementById('accountNumber').value;
+                } else if (type === 'card') {
+                    methodData.card_number = document.getElementById('cardNumber').value;
+                    methodData.expiry_date = document.getElementById('expiryDate').value;
+                    methodData.cvv = document.getElementById('cvv').value;
+                }
+                addNewPaymentMethod(methodData);
+            });
+
+            // Billing Information buttons
+            const saveBillingBtn = document.getElementById('saveBillingChanges');
+            const cancelBillingBtn = document.getElementById('cancelBillingChanges');
+
+            if (saveBillingBtn) {
+                saveBillingBtn.addEventListener('click', saveBillingInformation);
+            }
+
+            if (cancelBillingBtn) {
+                cancelBillingBtn.addEventListener('click', () => {
+                    // Revert form fields to original data
+                    document.getElementById('billingName').value = originalBillingInfo.billing_name || '';
+                    document.getElementById('billingCompany').value = originalBillingInfo.company_name || '';
+                    document.getElementById('billingAddress').value = originalBillingInfo.address || '';
+                    document.getElementById('billingCity').value = originalBillingInfo.city || '';
+                    document.getElementById('billingRegion').value = originalBillingInfo.region || '';
+                    document.getElementById('billingPostalCode').value = originalBillingInfo.postal_code || '';
+                    document.getElementById('billingCountry').value = originalBillingInfo.country || 'kenya';
+                    console.log('Billing changes cancelled.');
+                });
+            }
+
+            // Initial data load for the active tab (Pending Payments)
+            fetchPendingPayments();
+            fetchPaymentMethods(); // Also fetch payment methods initially
+            fetchBillingInformation(); // Also fetch billing information initially
+        });
+    </script>
+</body>
+</html>

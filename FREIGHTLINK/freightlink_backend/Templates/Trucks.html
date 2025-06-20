@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreightLink - Available Trucks</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        :root {
+            --primary: #2C3E50;
+            --secondary: #34495E;
+            --accent: #F39C12;
+            --accent-hover: #E67E22;
+            --light: #ECF0F1;
+            --dark: #2C3E50;
+            --gray: #95A5A6;
+            --light-gray: #F8F9FA;
+            --success: #27AE60;
+            --info: #3498DB;
+            --warning: #F39C12;
+            --danger: #E74C3C;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .rounded-md {
+            border-radius: 0.75rem;
+        }
+        
+        .shadow-custom {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--primary);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
+        }
+        .header .logo {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+        .header .nav-link {
+            color: #FFFFFF;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+            margin: 0 0.25rem;
+        }
+        .header .nav-link:hover, .header .nav-link.active {
+            color: var(--primary);
+            background-color: var(--accent);
+            border-radius: 2rem;
+        }
+        .header .nav-link.active {
+            font-weight: 600;
+        }
+
+        /* Dashboard Layout */
+        .dashboard-layout {
+            display: flex;
+            height: calc(100vh - 70px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background-color: var(--primary);
+            padding: 2rem 1rem;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+        }
+        .sidebar .menu-item {
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.75rem 1rem;
+            margin: 0.25rem 0;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .sidebar .menu-item i {
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+        .sidebar .menu-item:hover, .sidebar .menu-item.active {
+            background-color: var(--accent);
+            color: var(--primary);
+        }
+        .sidebar .menu-item.active {
+            font-weight: 600;
+        }
+        .sidebar .divider {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 1rem 0;
+        }
+        .sidebar .menu-title {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin: 1.5rem 0 0.5rem 1rem;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+        .page-subtitle {
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            background-color: #FFFFFF;
+            border-radius: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Form Components */
+        .form-card {
+            background-color: #FFFFFF;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .form-card h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        .form-label {
+            font-weight: 500;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        .form-control, .form-select {
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            border: 1px solid #DDE2E5;
+            transition: all 0.3s ease;
+            background-color: var(--light-gray);
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 0.25rem rgba(243, 156, 18, 0.25);
+            background-color: #FFFFFF;
+        }
+        
+        /* Buttons */
+        .btn-primary, .btn-primary:focus {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            color: var(--dark);
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+        }
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+            border-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(230, 126, 34, 0.4);
+        }
+        .btn-secondary, .btn-secondary:focus {
+            background-color: var(--light-gray);
+            border-color: #DDE2E5;
+            color: var(--gray);
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background-color: #e9ecef;
+            border-color: #c1c7cc;
+            color: var(--dark);
+            transform: translateY(-2px);
+        }
+
+        /* Loading states */
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem;
+        }
+
+        .skeleton-loader {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Truck Listing Card Styles */
+        .truck-card {
+            background-color: #FFFFFF;
+            border-radius: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--accent);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+        .truck-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .truck-card .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding-bottom: 1rem;
+        }
+        .truck-card .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0;
+        }
+        .truck-card .badge-available {
+            background-color: rgba(39, 174, 96, 0.1);
+            color: var(--success);
+            font-size: 0.7rem;
+            padding: 0.5em 0.8em;
+            border-radius: 50px;
+        }
+        .truck-card .badge-unavailable {
+            background-color: rgba(231, 76, 60, 0.1);
+            color: var(--danger);
+            font-size: 0.7rem;
+            padding: 0.5em 0.8em;
+            border-radius: 50px;
+        }
+        .truck-card .card-body {
+            flex-grow: 1;
+        }
+        .truck-card .detail-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+        .truck-card .detail-row i {
+            color: var(--accent);
+            margin-right: 0.75rem;
+            font-size: 1.1rem;
+        }
+        .truck-card .detail-label {
+            color: var(--gray);
+            flex-shrink: 0;
+            width: 90px;
+        }
+        .truck-card .detail-value {
+            font-weight: 500;
+            color: var(--dark);
+        }
+        .truck-card .card-footer {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            text-align: right;
+        }
+        .truck-card .btn-book {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            color: var(--primary);
+            font-weight: 600;
+            border-radius: 50px;
+            padding: 0.6rem 1.5rem;
+            transition: all 0.3s ease;
+        }
+        .truck-card .btn-book:hover {
+            background-color: var(--accent-hover);
+            border-color: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+        .truck-card .btn-book:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Alert styles */
+        .alert {
+            border-radius: 0.75rem;
+            border: none;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Modal specific styling */
+        .modal-content {
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        .modal-header {
+            background-color: var(--primary);
+            color: #FFFFFF;
+            border-top-left-radius: 1rem;
+            border-top-right-radius: 1rem;
+            border-bottom: none;
+            padding: 1.5rem;
+        }
+        .modal-header .btn-close {
+            filter: invert(1) grayscale(100%) brightness(200%);
+        }
+        .modal-title {
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+        .modal-body {
+            padding: 2rem;
+        }
+        .modal-footer {
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 1.5rem 2rem;
+            justify-content: space-between;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 991.98px) {
+            .sidebar {
+                width: 80px;
+                padding: 2rem 0.5rem;
+            }
+            .sidebar .menu-item span, .sidebar .menu-title {
+                display: none;
+            }
+            .sidebar .menu-item i {
+                margin-right: 0;
+                font-size: 1.5rem;
+            }
+            .main-content {
+                padding: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 767.98px) {
+            .dashboard-layout {
+                flex-direction: column;
+                height: auto;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                padding: 1rem;
+                display: flex;
+                overflow-x: auto;
+                white-space: nowrap;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                z-index: 1000;
+                box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            }
+            .sidebar.show {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+            .sidebar .menu-item {
+                margin: 0 0.25rem;
+                padding: 0.5rem 1rem;
+            }
+            .sidebar .menu-item span {
+                display: none;
+            }
+            .sidebar.show .menu-item span {
+                display: inline;
+            }
+            .sidebar .divider, .sidebar .menu-title {
+                display: none;
+            }
+            .main-content {
+                padding: 1.5rem 1rem;
+                margin-bottom: 80px;
+            }
+            .header .navbar-toggler {
+                display: block !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header text-white py-3 shadow-sm sticky-top">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="logo d-flex align-items-center">
+                    <i class="bi bi-truck me-2"></i>FreightLink
+                </div>
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-sm btn-outline-light d-lg-none me-3" type="button" id="mobile-menu-toggle" aria-label="Toggle mobile menu">
+                        <i class="bi bi-list"></i>
+                    </button>
+
+                    <div class="dropdown me-3">
+                        <a href="#" class="text-white dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-bell me-2"></i>
+                            <span class="badge bg-accent text-dark rounded-pill notification-count">0</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end notifications-dropdown">
+                            <li><a class="dropdown-item" href="#">No new notifications</a></li>
+                        </ul>
+                    </div>
+                   <div class="dropdown">
+                        <a href="#" class="text-white dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="rounded-circle bg-accent text-dark d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                                <i class="bi bi-person-fill"></i>
+                            </div>
+                            <span id="usernamePlaceholder">Loading...</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="profile.html"><i class="bi bi-person me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="settings.html"><i class="bi bi-gear me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="logout-btn"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="dashboard-layout">
+        <div class="sidebar">
+            <a href="dashboard.html" class="menu-item">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="mylisting.html" class="menu-item">
+                <i class="bi bi-box-seam-fill"></i>
+                <span>My Listings</span>
+            </a>
+            <a href="trucks.html" class="menu-item active">
+                <i class="bi bi-truck-flatbed"></i>
+                <span>Available Trucks</span>
+            </a>
+            <a href="history.html" class="menu-item">
+                <i class="bi bi-clock-history"></i>
+                <span>History</span>
+            </a>
+            <a href="messages.html" class="menu-item">
+                <i class="bi bi-chat-left-text-fill"></i>
+                <span>Messages</span>
+            </a>
+            
+            <div class="divider"></div>
+            <div class="menu-title">Account</div>
+            
+            <a href="profile.html" class="menu-item">
+                <i class="bi bi-person-fill"></i>
+                <span>Profile</span>
+            </a>
+            <a href="payments.html" class="menu-item">
+                <i class="bi bi-wallet2"></i>
+                <span>Payments</span>
+            </a>
+            <a href="settings.html" class="menu-item">
+                <i class="bi bi-gear-fill"></i>
+                <span>Settings</span>
+            </a>
+            <a href="help&support.html" class="menu-item">
+                <i class="bi bi-question-circle-fill"></i>
+                <span>Help & Support</span>
+            </a>
+            
+            <div class="divider"></div>
+            
+            <a href="#" class="menu-item" id="sidebar-logout">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+
+        <div class="main-content">
+            <h1 class="page-title">Available Trucks</h1>
+            <p class="page-subtitle">Browse through available trucks and book the one that suits your needs.</p>
+            
+            <!-- Alert container for messages -->
+            <div id="alert-container"></div>
+
+            <!-- Filter Section -->
+            <div class="filter-section">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label for="truckTypeFilter" class="form-label">Truck Type</label>
+                        <select class="form-select" id="truckTypeFilter">
+                            <option value="">All Types</option>
+                            <option value="flatbed">Flatbed</option>
+                            <option value="box">Box Truck</option>
+                            <option value="refrigerated">Refrigerated</option>
+                            <option value="pickup">Pickup</option>
+                            <option value="tanker">Tanker</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="locationFilter" class="form-label">Location</label>
+                        <input type="text" class="form-control" id="locationFilter" placeholder="Enter location">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="capacityFilter" class="form-label">Min Capacity (tons)</label>
+                        <input type="number" class="form-control" id="capacityFilter" placeholder="0">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="filterBtn" class="form-label">&nbsp;</label>
+                        <button type="button" class="btn btn-primary w-100" id="filterBtn">
+                            <i class="bi bi-search me-2"></i>Filter
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Truck listings container -->
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="truck-listings-container">
+                <!-- Trucks will be loaded here dynamically -->
+            </div>
+
+            <!-- Pagination -->
+            <nav aria-label="Page navigation" class="mt-4" id="pagination-container" style="display: none;">
+                <ul class="pagination justify-content-center" id="pagination-list">
+                    <!-- Pagination will be generated dynamically -->
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Truck Details Modal -->
+    <div class="modal fade" id="truckDetailsModal" tabindex="-1" aria-labelledby="truckDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="truckDetailsModalLabel">Truck Details & Booking</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6><i class="bi bi-info-circle me-2 text-accent"></i>Truck Information</h6>
+                            <p><strong>Type:</strong> <span id="modalTruckType"></span></p>
+                            <p><strong>Capacity:</strong> <span id="modalTruckCapacity"></span></p>
+                            <p><strong>License Plate:</strong> <span id="modalTruckLicense"></span></p>
+                            <p><strong>Owner:</strong> <span id="modalTruckOwner"></span></p>
+                            <p><strong>Description:</strong> <span id="modalTruckDescription"></span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="bi bi-geo-alt me-2 text-accent"></i>Route & Availability</h6>
+                            <p><strong>Current Location:</strong> <span id="modalTruckLocation"></span></p>
+                            <p><strong>Preferred Destination:</strong> <span id="modalTruckDestination"></span></p>
+                            <p><strong>Available From:</strong> <span id="modalTruckAvailableFrom"></span></p>
+                            <h5 class="mt-3"><strong>Price:</strong> <span class="text-accent" id="modalTruckPrice"></span></h5>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <h6><i class="bi bi-clipboard-check me-2 text-accent"></i>Book This Truck</h6>
+                    <form id="bookingForm" class="row g-3">
+                        <input type="hidden" id="bookingTruckId" name="truck_id">
+                        <div class="col-md-6">
+                            <label for="bookingPickupDate" class="form-label">Pickup Date</label>
+                            <input type="text" class="form-control date-picker" id="bookingPickupDate" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="bookingDeliveryDate" class="form-label">Expected Delivery Date</label>
+                            <input type="text" class="form-control date-picker" id="bookingDeliveryDate">
+                        </div>
+                        <div class="col-12">
+                            <label for="bookingPickupAddress" class="form-label">Your Pickup Address</label>
+                            <input type="text" class="form-control" id="bookingPickupAddress" placeholder="e.g., House No. 123, Street Name, City" required>
+                        </div>
+                        <div class="col-12">
+                            <label for="bookingDeliveryAddress" class="form-label">Your Delivery Address</label>
+                            <input type="text" class="form-control" id="bookingDeliveryAddress" placeholder="e.g., Warehouse A, Industrial Area, City" required>
+                        </div>
+                        <div class="col-12">
+                            <label for="bookingCargoDetails" class="form-label">Your Cargo Details</label>
+                            <textarea class="form-control" id="bookingCargoDetails" rows="3" placeholder="e.g., 5 tons of electronics, fragile, requires careful handling"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" form="bookingForm" class="btn btn-primary" id="confirmBookingBtn">
+                        <span class="spinner-border spinner-border-sm me-2 d-none" id="bookingSpinner"></span>
+                        Confirm Booking
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        // Configuration
+        const API_BASE_URL = 'http://localhost:8000/api/';
+        
+        // Global variables
+        let currentUser = null;
+        let isAuthenticated = false;
+        let trucksData = [];
+        let currentPage = 1;
+        let totalPages = 1;
+        let currentFilters = {};
+
+        // Cached DOM elements for performance
+        const DOM = {
+            cache: new Map(),
+            get(id) {
+                if (!this.cache.has(id)) {
+                    this.cache.set(id, document.getElementById(id));
+                }
+                return this.cache.get(id);
+            },
+            query(selector) {
+                return document.querySelector(selector);
+            },
+            queryAll(selector) {
+                return document.querySelectorAll(selector);
+            }
+        };
+
+        // Utility functions
+        function escapeHtml(text) {
+            if (!text) return '';
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.toString().replace(/[&<>"']/g, m => map[m]);
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            try {
+                return new Date(dateString).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+            } catch (e) {
+                return 'N/A';
+            }
+        }
+
+        function formatCurrency(amount, currency = 'KSh') {
+            if (!amount) return 'N/A';
+            return `${currency} ${parseFloat(amount).toLocaleString()}`;
+        }
+
+        // localStorage utility functions (matching dashboard pattern)
+        function getLocalStorage(key) {
+            try {
+                return localStorage.getItem(key);
+            } catch (e) {
+                console.error('LocalStorage get error:', e);
+                return null;
+            }
+        }
+
+        function setLocalStorage(key, value) {
+            try {
+                localStorage.setItem(key, value);
+            } catch (e) {
+                console.error('LocalStorage set error:', e);
+            }
+        }
+
+        function removeLocalStorage(key) {
+            try {
+                localStorage.removeItem(key);
+            } catch (e) {
+                console.error('LocalStorage remove error:', e);
+            }
+        }
+
+        // Helper function for CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // Alert functions
+        function showAlert(message, type = 'info', duration = 5000) {
+            const alertContainer = DOM.get('alert-container');
+            if (!alertContainer) return;
+
+            const alertId = 'alert-' + Date.now();
+            const alertHtml = `
+                <div class="alert alert-${type} alert-dismissible fade show" role="alert" id="${alertId}">
+                    <i class="bi bi-${getAlertIcon(type)} me-2"></i>
+                    ${escapeHtml(message)}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `;
+            
+            alertContainer.insertAdjacentHTML('beforeend', alertHtml);
+
+            if (duration > 0) {
+                setTimeout(() => {
+                    const alertElement = DOM.get(alertId);
+                    if (alertElement) {
+                        const bsAlert = new bootstrap.Alert(alertElement);
+                        bsAlert.close();
+                    }
+                }, duration);
+            }
+        }
+
+        function getAlertIcon(type) {
+            const icons = {
+                'success': 'check-circle',
+                'danger': 'exclamation-triangle',
+                'warning': 'exclamation-triangle',
+                'info': 'info-circle'
+            };
+            return icons[type] || 'info-circle';
+        }
+
+        // API functions (updated to match dashboard pattern)
+        async function makeApiRequest(endpoint, options = {}) {
+            const authToken = getLocalStorage('authToken');
+            const defaultHeaders = {
+                'Accept': 'application/json',
+            };
+
+            if (authToken) {
+                defaultHeaders['Authorization'] = `Token ${authToken}`;
+            }
+
+            const config = {
+                method: 'GET',
+                ...options,
+                headers: {
+                    ...defaultHeaders,
+                    ...options.headers
+                },
+            };
+            
+            const httpMethod = (config.method || 'GET').toUpperCase();
+            if (['POST', 'PUT', 'DELETE', 'PATCH'].includes(httpMethod)) {
+                const csrfToken = getCookie('csrftoken');
+                if (csrfToken) {
+                    config.headers['X-CSRFToken'] = csrfToken;
+                }
+            }
+
+            if (options.body instanceof FormData) {
+                delete config.headers['Content-Type'];
+            } else if (typeof options.body === 'object' && options.body !== null) {
+                config.headers['Content-Type'] = 'application/json';
+                config.body = JSON.stringify(options.body);
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
+                
+                let responseData = null;
+                const contentType = response.headers.get("content-type");
+                if (contentType && contentType.includes("application/json")) {
+                    responseData = await response.json();
+                } else {
+                    if (response.status === 204) {
+                        responseData = null;
+                    } else {
+                        try {
+                            responseData = await response.text();
+                            if (!response.ok) responseData = { detail: responseData };
+                        } catch (textErr) {
+                            // If text() fails too, responseData remains null
+                        }
+                    }
+                }
+
+                return {
+                    success: response.ok,
+                    status: response.status,
+                    data: response.ok ? responseData : null,
+                    error: !response.ok ? (responseData || { detail: `Request failed with status ${response.status}` }) : null
+                };
+            } catch (error) {
+                console.error('Fetch API request error:', error);
+                return {
+                    success: false,
+                    status: 0,
+                    data: null,
+                    error: { detail: error.message || "Network error or request failed" }
+                };
+            }
+        }
+
+        async function makeAuthenticatedRequest(endpoint, options = {}) {
+            const authToken = getLocalStorage('authToken');
+            if (!authToken) {
+                handleUnauthorized();
+                return { success: false, status: 401, data: null, error: { detail: "Auth token not found." } };
+            }
+
+            const result = await makeApiRequest(endpoint, options);
+
+            if (result && !result.success && (result.status === 401 || result.status === 403)) {
+                handleUnauthorized();
+            }
+            return result;
+        }
+
+        // Authentication functions (updated to match dashboard pattern)
+        async function checkAuth() {
+            try {
+                const authToken = getLocalStorage('authToken');
+                if (!authToken) {
+                    redirectToLogin();
+                    return false;
+                }
+
+                const storedUser = getLocalStorage('currentUser');
+                if (storedUser) {
+                    try {
+                        currentUser = JSON.parse(storedUser);
+                        updateUserInterface();
+                    } catch (e) {
+                        console.error('Error parsing stored user data:', e);
+                        removeLocalStorage('currentUser');
+                    }
+                }
+
+                await fetchAndDisplayUserProfile();
+                return isAuthenticated;
+            } catch (error) {
+                console.error('Auth check failed:', error);
+                handleUnauthorized();
+                return false;
+            }
+        }
+
+        async function fetchAndDisplayUserProfile() {
+            const result = await makeAuthenticatedRequest('auth/users/me/');
+
+            if (result && result.success) {
+                currentUser = result.data;
+                setLocalStorage('currentUser', JSON.stringify(currentUser));
+                updateUserInterface();
+                isAuthenticated = true;
+            } else {
+                if (result && result.status !== 401 && result.status !== 403) {
+                    showAlert('Failed to load user information.', 'danger');
+                }
+                if (!isAuthenticated) {
+                    const usernamePlaceholder = DOM.get('usernamePlaceholder');
+                    if (usernamePlaceholder) usernamePlaceholder.textContent = 'Guest';
+                }
+            }
+        }
+
+        function redirectToLogin() {
+            window.location.href = 'login.html';
+        }
+
+        function handleUnauthorized() {
+            clearAuthData();
+            showAlert('Your session has expired or is invalid. Please log in again.', 'warning');
+            
+            const usernamePlaceholder = DOM.get('usernamePlaceholder');
+            if (usernamePlaceholder) usernamePlaceholder.textContent = 'Guest';
+            
+            setTimeout(() => {
+                redirectToLogin();
+            }, 3000);
+        }
+
+        function clearAuthData() {
+            removeLocalStorage('authToken');
+            removeLocalStorage('currentUser');
+            isAuthenticated = false;
+            currentUser = null;
+        }
+
+        function handleLogout() {
+            clearAuthData();
+            redirectToLogin();
+        }
+
+        function updateUserInterface() {
+            if (!currentUser) return;
+
+            const displayName = currentUser.first_name || currentUser.username || currentUser.email || 'User';
+
+            const usernamePlaceholder = DOM.get('usernamePlaceholder');
+            if (usernamePlaceholder) {
+                usernamePlaceholder.textContent = displayName;
+            }
+
+            const usernameDisplay = DOM.get('username-display');
+            if (usernameDisplay) {
+                usernameDisplay.textContent = displayName;
+            }
+        }
+
+        async function loadTrucks(page = 1, filters = {}) {
+            try {
+                showLoadingState();
+                
+                const queryParams = new URLSearchParams({
+                    page: page.toString(),
+                    limit: '12',
+                    ...filters
+                });
+
+                const result = await makeAuthenticatedRequest(`trucks/?${queryParams}`);
+                
+                if (result && result.success) {
+                    const response = result.data;
+                    
+                    // Handle different possible response structures
+                    if (Array.isArray(response)) {
+                        // Direct array response (like your API)
+                        trucksData = response;
+                        currentPage = page;
+                        totalPages = Math.ceil(response.length / 12);
+                    } else if (response.data || response.trucks || response.results) {
+                        // Paginated response
+                        trucksData = response.data || response.trucks || response.results || [];
+                        currentPage = response.current_page || response.page || page;
+                        totalPages = response.total_pages || response.num_pages || Math.ceil((response.total || response.count || trucksData.length) / 12);
+                    } else {
+                        trucksData = [];
+                        currentPage = 1;
+                        totalPages = 1;
+                    }
+
+                    console.log('Loaded trucks:', trucksData); // Debug log
+                    renderTrucks();
+                    updatePagination();
+                } else {
+                    console.error('API request failed:', result);
+                    showAlert('Failed to load trucks. Please try again.', 'danger');
+                    trucksData = [];
+                    renderTrucks();
+                }
+                
+                hideLoadingState();
+                
+            } catch (error) {
+                console.error('Error loading trucks:', error);
+                showAlert('Failed to load trucks. Please try again.', 'danger');
+                hideLoadingState();
+            }
+        }
+        function showLoadingState() {
+            const container = DOM.get('truck-listings-container');
+            if (container) {
+                container.innerHTML = `
+                    <div class="col-12">
+                        <div class="loading-spinner text-center py-5">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <div class="mt-2">Loading trucks...</div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function hideLoadingState() {
+            // Loading state is hidden when trucks are rendered
+        }
+
+        function renderTrucks() {
+            const container = DOM.get('truck-listings-container');
+            if (!container) return;
+
+            if (!trucksData || trucksData.length === 0) {
+                container.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <i class="bi bi-truck display-1 text-muted mb-3"></i>
+                        <h4 class="text-muted">No trucks available</h4>
+                        <p class="text-muted">Try adjusting your filters or check back later.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const trucksHtml = trucksData.map(truck => createTruckCard(truck)).join('');
+            container.innerHTML = trucksHtml;
+        }
+
+        function createTruckCard(truck) {
+            const isAvailable = truck.is_available;
+            const badgeClass = isAvailable ? 'badge-available' : 'badge-unavailable';
+            const badgeText = isAvailable ? 'Available' : 'Unavailable';
+
+            return `
+                <div class="col">
+                    <div class="truck-card">
+                        <div class="card-header">
+                            <h5 class="card-title">${escapeHtml(truck.truck_type_display || 'Unknown Type')}</h5>
+                            <span class="badge ${badgeClass}">${badgeText}</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="detail-row">
+                                <i class="bi bi-geo-alt"></i>
+                                <span class="detail-label">Location:</span>
+                                <span class="detail-value">${escapeHtml(truck.current_location || 'N/A')}</span>
+                            </div>
+                            <div class="detail-row">
+                                <i class="bi bi-truck"></i>
+                                <span class="detail-label">Make/Model:</span>
+                                <span class="detail-value">${escapeHtml(truck.make_model || 'N/A')} (${truck.year || 'N/A'})</span>
+                            </div>
+                            <div class="detail-row">
+                                <i class="bi bi-speedometer2"></i>
+                                <span class="detail-label">Capacity:</span>
+                                <span class="detail-value">${escapeHtml(truck.capacity_tons || 'N/A')} kg</span>
+                            </div>
+                            <div class="detail-row">
+                                <i class="bi bi-calendar"></i>
+                                <span class="detail-label">Added:</span>
+                                <span class="detail-value">${formatDate(truck.created_at)}</span>
+                            </div>
+                            <div class="detail-row">
+                                <i class="bi bi-currency-dollar"></i>
+                                <span class="detail-label">Rate:</span>
+                                <span class="detail-value fw-bold text-accent">${formatCurrency(truck.rate_amount)} ${escapeHtml(truck.rate_type_display || '')}</span>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-book btn-sm" 
+                                    onclick="openBookingModal(${truck.id})"
+                                    ${!isAvailable ? 'disabled' : ''}>
+                                <i class="bi bi-calendar-check me-1"></i>
+                                ${isAvailable ? 'Book Now' : 'Unavailable'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+            
+            
+        function updatePagination() {
+            const paginationContainer = DOM.get('pagination-container');
+            const paginationList = DOM.get('pagination-list');
+            
+            if (!paginationContainer || !paginationList) return;
+
+            if (totalPages <= 1) {
+                paginationContainer.style.display = 'none';
+                return;
+            }
+
+            paginationContainer.style.display = 'block';
+            
+            let paginationHtml = '';
+            
+            // Previous button
+            paginationHtml += `
+                <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                    <a class="page-link" href="#" onclick="changePage(${currentPage - 1})" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            `;
+            
+            // Page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+                    paginationHtml += `
+                        <li class="page-item ${i === currentPage ? 'active' : ''}">
+                            <a class="page-link" href="#" onclick="changePage(${i})">${i}</a>
+                        </li>
+                    `;
+                } else if (i === currentPage - 3 || i === currentPage + 3) {
+                    paginationHtml += '<li class="page-item disabled"><span class="page-link">...</span></li>';
+                }
+            }
+            
+            // Next button
+            paginationHtml += `
+                <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+                    <a class="page-link" href="#" onclick="changePage(${currentPage + 1})" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            `;
+            
+            paginationList.innerHTML = paginationHtml;
+        }
+
+        function changePage(page) {
+            if (page < 1 || page > totalPages || page === currentPage) return;
+            loadTrucks(page, currentFilters);
+        }
+
+        // Filter functions
+        function applyFilters() {
+            const filters = {
+                type: DOM.get('truckTypeFilter')?.value || '',
+                location: DOM.get('locationFilter')?.value || '',
+                min_capacity: DOM.get('capacityFilter')?.value || ''
+            };
+
+            // Remove empty filters
+            Object.keys(filters).forEach(key => {
+                if (!filters[key]) delete filters[key];
+            });
+
+            currentFilters = filters;
+            loadTrucks(1, filters);
+        }
+
+        // Modal functions
+        function openBookingModal(truckId) {
+            const truck = trucksData.find(t => t.id === truckId);
+            if (!truck) {
+                showAlert('Truck not found', 'danger');
+                return;
+            }
+
+             // Populate modal with truck details (updated field names)
+            DOM.get('modalTruckType').textContent = truck.truck_type_display || 'N/A';
+            DOM.get('modalTruckCapacity').textContent = `${truck.capacity_tons || 'N/A'} kg`;
+            DOM.get('modalTruckLicense').textContent = truck.license_plate || 'N/A'; // This field doesn't exist in API
+            DOM.get('modalTruckOwner').textContent = truck.owner_name || 'N/A'; // This field doesn't exist in API
+            DOM.get('modalTruckDescription').textContent = `${truck.make_model || ''} ${truck.year || ''} - ${truck.truck_type_display || ''}`;
+            DOM.get('modalTruckLocation').textContent = truck.current_location || 'N/A';
+            DOM.get('modalTruckDestination').textContent = 'Flexible'; // This field doesn't exist in API
+            DOM.get('modalTruckAvailableFrom').textContent = formatDate(truck.created_at);
+            DOM.get('modalTruckPrice').textContent = `${formatCurrency(truck.rate_amount)} ${truck.rate_type_display || ''}`;
+            
+            // Set truck ID in booking form
+            DOM.get('bookingTruckId').value = truckId;
+
+            // Show modal
+            const modal = new bootstrap.Modal(DOM.get('truckDetailsModal'));
+            modal.show();
+        }
+
+        // Booking functions
+        async function submitBooking(event) {
+            event.preventDefault();
+            
+            // Get CSRF token from cookie
+            const csrftoken = getCookie('csrftoken');
+            if (!csrftoken) {
+            showAlert('Session error: CSRF token not found. Please refresh the page.', 'danger');
+            return;
+            }
+            
+            const form = event.target;
+            const bookingData = {
+            truck_id: form.querySelector('#bookingTruckId').value,
+            pickup_date: form.querySelector('#bookingPickupDate').value,
+            delivery_date: form.querySelector('#bookingDeliveryDate').value,
+            pickup_address: form.querySelector('#bookingPickupAddress').value,
+            delivery_address: form.querySelector('#bookingDeliveryAddress').value,
+            cargo_details: form.querySelector('#bookingCargoDetails').value
+            };
+            
+            const submitBtn = DOM.get('confirmBookingBtn');
+            const spinner = DOM.get('bookingSpinner');
+            
+            try {
+            submitBtn.disabled = true;
+            spinner.classList.remove('d-none');
+            
+            const result = await fetch(`${API_BASE_URL}bookings/`, {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken,
+                'Authorization': `Token ${getLocalStorage('authToken')}`
+                },
+                credentials: 'include', // Important for cookies
+                body: JSON.stringify(bookingData)
+            });
+
+            if (result.ok) {
+                const data = await result.json();
+                showAlert('Booking submitted successfully! You will be contacted shortly.', 'success');
+                
+                // Close modal and reset form
+                const modal = bootstrap.Modal.getInstance(DOM.get('truckDetailsModal'));
+                modal.hide();
+                form.reset();
+                
+                // Reload trucks to update availability
+                loadTrucks(currentPage, currentFilters);
+            } else {
+                const error = await result.json();
+                throw new Error(error.detail || 'Booking submission failed');
+            }
+            
+            } catch (error) {
+            console.error('Booking error:', error);
+            showAlert(error.message || 'Failed to submit booking. Please try again.', 'danger');
+            } finally {
+            submitBtn.disabled = false;
+            spinner.classList.add('d-none');
+            }
+        }
+        async function submitBooking(event) {
+            event.preventDefault();
+            
+            const form = event.target;
+            const bookingData = {
+                truck_id: DOM.get('bookingTruckId').value,
+                pickup_date: DOM.get('bookingPickupDate').value,
+                delivery_date: DOM.get('bookingDeliveryDate').value,
+                pickup_address: DOM.get('bookingPickupAddress').value,
+                delivery_address: DOM.get('bookingDeliveryAddress').value,
+                cargo_details: DOM.get('bookingCargoDetails').value
+            };
+            
+            const submitBtn = DOM.get('confirmBookingBtn');
+            const spinner = DOM.get('bookingSpinner');
+            
+            try {
+                submitBtn.disabled = true;
+                spinner.classList.remove('d-none');
+                
+                const result = await makeAuthenticatedRequest('bookings/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(bookingData)
+                });
+                
+                if (result && result.success) {
+                    showAlert('Booking submitted successfully! You will be contacted shortly.', 'success');
+                    
+                    // Close modal and reset form
+                    const modal = bootstrap.Modal.getInstance(DOM.get('truckDetailsModal'));
+                    modal.hide();
+                    form.reset();
+                    
+                    // Reload trucks to update availability
+                    loadTrucks(currentPage, currentFilters);
+                } else {
+                    const errorMessage = result?.error?.detail || 'Failed to submit booking. Please try again.';
+                    showAlert(errorMessage, 'danger');
+                }
+                
+            } catch (error) {
+                console.error('Booking error:', error);
+                showAlert('Failed to submit booking. Please try again.', 'danger');
+            } finally {
+                submitBtn.disabled = false;
+                spinner.classList.add('d-none');
+            }
+        }
+
+        // Initialize date pickers
+        function initializeDatePickers() {
+            const dateInputs = DOM.queryAll('.date-picker');
+            dateInputs.forEach(input => {
+                if (typeof flatpickr !== 'undefined') {
+                    flatpickr(input, {
+                        dateFormat: 'Y-m-d',
+                        minDate: 'today',
+                        altInput: true,
+                        altFormat: 'F j, Y'
+                    });
+                }
+            });
+        }
+
+        // Event listeners
+        function setupEventListeners() {
+            // Filter button
+            const filterBtn = DOM.get('filterBtn');
+            if (filterBtn) {
+                filterBtn.addEventListener('click', applyFilters);
+            }
+
+            // Enter key in filter inputs
+            const filterInputs = ['truckTypeFilter', 'locationFilter', 'capacityFilter'];
+            filterInputs.forEach(id => {
+                const input = DOM.get(id);
+                if (input) {
+                    input.addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter') {
+                            applyFilters();
+                        }
+                    });
+                }
+            });
+
+            // Booking form
+            const bookingForm = DOM.get('bookingForm');
+            if (bookingForm) {
+                bookingForm.addEventListener('submit', submitBooking);
+            }
+
+            // Logout buttons
+            const logoutBtns = ['logout-btn', 'sidebar-logout'];
+            logoutBtns.forEach(id => {
+                const btn = DOM.get(id);
+                if (btn) {
+                    btn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        handleLogout();
+                    });
+                }
+            });
+
+            // Mobile menu toggle
+            const mobileMenuToggle = DOM.get('mobile-menu-toggle');
+            if (mobileMenuToggle) {
+                mobileMenuToggle.addEventListener('click', () => {
+                    const sidebar = DOM.query('.sidebar');
+                    if (sidebar) {
+                        sidebar.classList.toggle('show');
+                    }
+                });
+            }
+        }
+
+        // Initialize application
+        async function init() {
+            try {
+                const isAuth = await checkAuth();
+                if (!isAuth) return;
+
+                setupEventListeners();
+                initializeDatePickers();
+                await loadTrucks();
+                
+            } catch (error) {
+                console.error('Initialization error:', error);
+                showAlert('Failed to initialize application. Please refresh the page.', 'danger');
+            }
+        }
+
+        // Global functions for onclick handlers
+        window.openBookingModal = openBookingModal;
+        window.changePage = changePage;
+
+        // Start application when DOM is loaded
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
+</body>
+</html>

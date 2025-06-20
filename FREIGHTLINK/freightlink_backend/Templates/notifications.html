@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreightLink - Bids & Notifications</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        :root {
+            --primary: #2C3E50;
+            --secondary: #34495E;
+            --accent: #F39C12;
+            --accent-hover: #E67E22;
+            --light: #ECF0F1;
+            --dark: #2C3E50;
+            --gray: #95A5A6;
+            --light-gray: #F8F9FA;
+            --success: #27AE60;
+            --info: #3498DB;
+            --warning: #F39C12;
+            --danger: #E74C3C;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .rounded-md {
+            border-radius: 0.75rem;
+        }
+        
+        .shadow-custom {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--primary);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
+        }
+        .header .logo {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+        .header .nav-link {
+            color: #FFFFFF;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+            margin: 0 0.25rem;
+        }
+        
+        /* Dashboard Layout */
+        .dashboard-layout {
+            display: flex;
+            height: calc(100vh - 70px); /* Assuming header height is 70px */
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background-color: var(--primary);
+            padding: 2rem 1rem;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+        }
+        .sidebar .menu-item {
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.75rem 1rem;
+            margin: 0.25rem 0;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .sidebar .menu-item i {
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+        .sidebar .menu-item:hover, .sidebar .menu-item.active {
+            background-color: var(--accent);
+            color: var(--primary);
+        }
+        .sidebar .menu-item.active {
+            font-weight: 600;
+        }
+        .sidebar .divider {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 1rem 0;
+        }
+        .sidebar .menu-title {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin: 1.5rem 0 0.5rem 1rem;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+        .page-subtitle {
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+
+        /* Dashboard Stat Cards */
+        .stats-card {
+            background-color: #FFFFFF;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        .stats-card .icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: rgba(243, 156, 18, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1.5rem;
+        }
+        .stats-card .icon i {
+            font-size: 1.8rem;
+            color: var(--accent);
+        }
+        .stats-card h4 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            color: var(--primary);
+        }
+        .stats-card p {
+            color: var(--gray);
+            margin-bottom: 0;
+        }
+
+        /* Bids & Notifications Specific Styling */
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .bid-response-card {
+            background-color: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--info);
+            transition: all 0.3s ease;
+        }
+
+        .bid-response-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .bid-response-card .cargo-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .bid-response-card .bid-amount {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .bid-response-card .bidder-info {
+            display: flex;
+            align-items: center;
+            margin: 1rem 0;
+        }
+        .bidder-info .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-size: 1.5rem;
+            color: var(--gray);
+        }
+        .bidder-info .name {
+            font-weight: 600;
+        }
+        .bidder-info .time {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+        
+        .bid-response-card .actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--light-gray);
+        }
+        .btn-accept {
+            background-color: var(--success);
+            color: #fff;
+        }
+        .btn-accept:hover {
+            background-color: #229954;
+            color: #fff;
+        }
+        .btn-reject {
+            background-color: var(--danger);
+            color: #fff;
+        }
+        .btn-reject:hover {
+            background-color: #c0392b;
+            color: #fff;
+        }
+
+        /* Notification Feed */
+        .notifications-feed {
+            background-color: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            padding: 1.5rem;
+            height: 100%;
+        }
+        .notifications-feed .feed-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .notifications-feed .mark-all-read {
+            font-size: 0.8rem;
+            color: var(--info);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .notifications-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        .notification-item {
+            display: flex;
+            padding: 1rem 0.5rem;
+            border-bottom: 1px solid var(--light-gray);
+            transition: background-color 0.3s;
+        }
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+        .notification-item.unread {
+            background-color: #f8f9fa;
+        }
+        .notification-item .icon-col {
+            margin-right: 1rem;
+        }
+        .notification-item .icon-col i {
+            font-size: 1.5rem;
+            width: 32px;
+            text-align: center;
+        }
+        .notification-item .content-col .message {
+            font-size: 0.9rem;
+            color: var(--dark);
+        }
+        .notification-item .content-col .time {
+            font-size: 0.75rem;
+            color: var(--gray);
+        }
+        .notification-item .action-col {
+            margin-left: auto;
+        }
+        .btn-mark-read {
+            width: 12px;
+            height: 12px;
+            background-color: var(--info);
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        /* Generic placeholder */
+        .placeholder-glow .placeholder {
+            border-radius: 0.5rem;
+        }
+        .card-placeholder {
+            height: 200px;
+        }
+
+    </style>
+</head>
+<body>
+    <header class="header text-white py-3 shadow-sm sticky-top">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="logo d-flex align-items-center">
+                    <i class="bi bi-truck me-2"></i>FreightLink
+                </div>
+                <div class="d-flex align-items-center">
+                     <div class="dropdown me-3 position-relative">
+                        <a href="#" class="text-white dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-bell"></i>
+                            <span class="badge bg-danger rounded-pill notification-count position-absolute" style="top: -5px; right: -8px;">0</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end notifications-dropdown p-2 shadow-lg">
+                            <li><a class="dropdown-item" href="#">Loading notifications...</a></li>
+                        </ul>
+                    </div>
+                    <div class="dropdown">
+                        <a href="#" class="text-white dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="rounded-circle bg-accent text-dark d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                                <i class="bi bi-person-fill"></i> </div>
+                            <span id="usernamePlaceholder">User Name</span> </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="profile.html"><i class="bi bi-person me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="settings.html"><i class="bi bi-gear me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="logout-btn"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="dashboard-layout">
+        <div class="sidebar">
+            <a href="dashboard.html" class="menu-item">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="bids.html" class="menu-item active">
+                <i class="bi bi-hammer"></i>
+                <span>My Bids</span>
+            </a>
+            <a href="mylisting.html" class="menu-item">
+                <i class="bi bi-box-seam-fill"></i>
+                <span>My Listings</span>
+            </a>
+            <a href="history.html" class="menu-item">
+                <i class="bi bi-clock-history"></i>
+                <span>History</span>
+            </a>
+            <a href="messages.html" class="menu-item">
+                <i class="bi bi-chat-left-text-fill"></i>
+                <span>Messages</span>
+            </a>
+            <div class="divider"></div>
+            <div class="menu-title">Account</div>
+            <a href="profile.html" class="menu-item">
+                <i class="bi bi-person-fill"></i>
+                <span>Profile</span>
+            </a>
+            <a href="payments.html" class="menu-item">
+                <i class="bi bi-wallet2"></i>
+                <span>Payments</span>
+            </a>
+            <a href="settings.html" class="menu-item">
+                <i class="bi bi-gear-fill"></i>
+                <span>Settings</span>
+            </a>
+        </div>
+
+        <div class="main-content">
+            <h1 class="page-title">Bids & Notifications</h1>
+            <p class="page-subtitle">Manage incoming bids and view your notifications.</p>
+
+            <div id="dashboard-summary-container" class="row">
+                <div class="col-12"><p class="placeholder-glow"><span class="placeholder col-12" style="height: 120px;"></span></p></div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-lg-8">
+                    <h2 class="section-title">Incoming Bid Responses</h2>
+                    <div id="incoming-bids-container">
+                        <div class="card placeholder-glow mb-3"><div class="card-body card-placeholder"></div></div>
+                        <div class="card placeholder-glow mb-3"><div class="card-body card-placeholder"></div></div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="notifications-feed">
+                        <div class="feed-header">
+                            <h2 class="section-title mb-0">Notifications</h2>
+                            <a href="#" class="mark-all-read" id="mark-all-notifications-read-btn">Mark all as read</a>
+                        </div>
+                        <ul class="notifications-list" id="notifications-list-container">
+                             <li class="p-3 placeholder-glow"><span class="placeholder col-12"></span></li>
+                             <li class="p-3 placeholder-glow"><span class="placeholder col-12"></span></li>
+                             <li class="p-3 placeholder-glow"><span class="placeholder col-12"></span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <template id="dashboard-summary-template">
+        <div class="col-md-6 col-lg-3">
+            <div class="stats-card h-100">
+                <div class="icon"><i class="bi"></i></div>
+                <div>
+                    <h4 class="stat-value"></h4>
+                    <p class="stat-title"></p>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="bid-response-card-template">
+        <div class="bid-response-card" id="bid-card-{bidId}">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <p class="text-muted mb-1">Bid on your listing:</p>
+                    <h5 class="cargo-title"></h5>
+                </div>
+                <div class="bid-amount text-end"></div>
+            </div>
+            <div class="bidder-info">
+                <div class="avatar"><i class="bi bi-person-circle"></i></div>
+                <div>
+                    <div class="name"></div>
+                    <div class="time"></div>
+                </div>
+            </div>
+            <div class="actions">
+                <button class="btn btn-reject reject-bid-btn">
+                    <i class="bi bi-x-circle me-1"></i>Reject
+                </button>
+                <button class="btn btn-accept accept-bid-btn">
+                    <i class="bi bi-check-circle me-1"></i>Accept
+                </button>
+            </div>
+        </div>
+    </template>
+
+    <template id="notification-item-template">
+        <li class="notification-item">
+            <div class="icon-col"><i class="bi"></i></div>
+            <div class="content-col">
+                <div class="message"></div>
+                <div class="time"></div>
+            </div>
+            <div class="action-col">
+                <button class="btn-mark-read" title="Mark as read"></button>
+            </div>
+        </li>
+    </template>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API_BASE_URL = 'http://localhost:8000/api'; // Adjust to your actual API base URL
+
+        // --- AUTH & API HELPERS ---
+        function getLocalStorage(key) { return localStorage.getItem(key); }
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+       async function makeAuthenticatedRequest(endpoint, options = {}) {
+            const authToken = getLocalStorage('authToken');
+            const headers = {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                ...options.headers,
+            };
+
+            if (authToken) {
+                headers['Authorization'] = `Token ${authToken}`;
+            }
+            
+            if (['POST', 'PATCH', 'DELETE'].includes(options.method)) {
+                const csrfToken = getCookie('csrftoken');
+                if (csrfToken) {
+                    headers['X-CSRFToken'] = csrfToken;
+                }
+            }
+
+            const config = { ...options, headers };
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({ detail: 'An unknown error occurred.' }));
+                    throw new Error(errorData.detail || JSON.stringify(errorData));
+                }
+                if (response.status === 204) return null; // No Content
+                return response.json();
+            } catch (error) {
+                console.error(`API Error on ${endpoint}:`, error);
+                throw error;
+            }
+        }
+        
+        // --- UTILITY FUNCTIONS ---
+        function timeSince(dateString) {
+            const date = new Date(dateString);
+            const seconds = Math.floor((new Date() - date) / 1000);
+            let interval = seconds / 31536000;
+            if (interval > 1) return Math.floor(interval) + " years ago";
+            interval = seconds / 2592000;
+            if (interval > 1) return Math.floor(interval) + " months ago";
+            interval = seconds / 86400;
+            if (interval > 1) return Math.floor(interval) + " days ago";
+            interval = seconds / 3600;
+            if (interval > 1) return Math.floor(interval) + " hours ago";
+            interval = seconds / 60;
+            if (interval > 1) return Math.floor(interval) + " minutes ago";
+            return "Just now";
+        }
+        
+        function showToast(message, type = 'success') {
+            console.log(`TOAST (${type}): ${message}`);
+            alert(`(${type.toUpperCase()}) ${message}`);
+        }
+
+        // --- DYNAMIC RENDERING FUNCTIONS ---
+
+        /**
+         * Loads and displays the dashboard summary statistics.
+         */
+        async function loadDashboardSummary() {
+            const container = document.getElementById('dashboard-summary-container');
+            container.innerHTML = `<div class="col-12"><p class="placeholder-glow"><span class="placeholder col-12" style="height: 120px;"></span></p></div>`;
+
+            try {
+                const summary = await makeAuthenticatedRequest('/dashboard/');
+                container.innerHTML = '';
+
+                const template = document.getElementById('dashboard-summary-template');
+
+                const createStatCard = (icon, value, title) => {
+                    const clone = template.content.cloneNode(true);
+                    clone.querySelector('.bi').classList.add(icon);
+                    clone.querySelector('.stat-value').textContent = value;
+                    clone.querySelector('.stat-title').textContent = title;
+                    container.appendChild(clone);
+                };
+                
+                createStatCard('bi-box-seam', summary.listings.open_listings || 0, 'Open Listings');
+                createStatCard('bi-truck-front', summary.listings.in_progress_listings || 0, 'In-Progress Listings');
+                createStatCard('bi-hammer', summary.bids.pending_bids || 0, 'Pending Bids');
+                createStatCard('bi-check2-circle', summary.bids.accepted_bids || 0, 'Accepted Bids');
+
+            } catch (error) {
+                container.innerHTML = `<div class="col-12"><p class="text-danger">Failed to load dashboard summary.</p></div>`;
+            }
+        }
+
+        /**
+         * Loads and displays incoming bids from notifications data.
+         */
+        async function loadIncomingBids() {
+            const container = document.getElementById('incoming-bids-container');
+            container.innerHTML = `<div class="card placeholder-glow mb-3"><div class="card-body card-placeholder"></div></div>`;
+
+            try {
+                // Get notifications and filter for new bid notifications
+                const notifications = await makeAuthenticatedRequest('/bids/notifications/');
+                container.innerHTML = '';
+
+                if (notifications.results && notifications.results.length > 0) {
+                    // Filter for new bid notifications that haven't been responded to
+                    const newBidNotifications = notifications.results.filter(notification => 
+                        notification.notification_type === 'new_bid' && 
+                        notification.bid && 
+                        notification.bid.status === 'pending'
+                    );
+
+                    if (newBidNotifications.length > 0) {
+                        const template = document.getElementById('bid-response-card-template');
+                        
+                        newBidNotifications.forEach(notification => {
+                            const bid = notification.bid;
+                            const clone = template.content.cloneNode(true);
+                            
+                            const card = clone.querySelector('.bid-response-card');
+                            card.id = `bid-card-${bid.id}`;
+                            card.dataset.bidId = bid.id;
+
+                            clone.querySelector('.cargo-title').textContent = bid.cargo_listing.title || 'Untitled Listing';
+                            clone.querySelector('.bid-amount').textContent = `KSh ${parseFloat(bid.bid_amount).toLocaleString()}`;
+                            
+                            // Use bidder's full name or username
+                            const bidderName = bid.bidder.first_name && bid.bidder.last_name 
+                                ? `${bid.bidder.first_name} ${bid.bidder.last_name}`.trim()
+                                : bid.bidder.username || 'Anonymous Bidder';
+                            clone.querySelector('.name').textContent = bidderName;
+                            
+                            clone.querySelector('.time').textContent = timeSince(bid.submitted_at);
+
+                            // Add bid message if available
+                            if (bid.message_to_shipper) {
+                                const messageElement = document.createElement('p');
+                                messageElement.className = 'text-muted mb-2 small';
+                                messageElement.textContent = `Message: ${bid.message_to_shipper}`;
+                                clone.querySelector('.bidder-info').appendChild(messageElement);
+                            }
+
+                            container.appendChild(clone);
+                        });
+                    } else {
+                        container.innerHTML = '<p class="text-muted">You have no pending bids to respond to.</p>';
+                    }
+                } else {
+                    container.innerHTML = '<p class="text-muted">You have no pending bids to respond to.</p>';
+                }
+            } catch (error) {
+                container.innerHTML = `<p class="text-danger">Failed to load incoming bids: ${error.message}</p>`;
+            }
+        }
+        
+        /**
+         * Loads and displays user notifications with proper data mapping.
+         */
+        async function loadNotifications() {
+            const container = document.getElementById('notifications-list-container');
+            container.innerHTML = `<li class="p-3 placeholder-glow"><span class="placeholder col-12"></span></li>`;
+
+            try {
+                const notifications = await makeAuthenticatedRequest('/bids/notifications/');
+                container.innerHTML = '';
+
+                if (notifications.results && notifications.results.length > 0) {
+                    const template = document.getElementById('notification-item-template');
+                    
+                    notifications.results.forEach(notification => {
+                        const clone = template.content.cloneNode(true);
+                        const item = clone.querySelector('.notification-item');
+                        item.dataset.notificationId = notification.id;
+                        
+                        const icon = clone.querySelector('.bi');
+                        // Set icon based on notification type - matching your API response
+                        switch(notification.notification_type) {
+                            case 'new_bid': 
+                                icon.classList.add('bi-hammer', 'text-info'); 
+                                break;
+                            case 'bid_accepted': 
+                                icon.classList.add('bi-check-circle-fill', 'text-success'); 
+                                break;
+                            case 'bid_rejected': 
+                                icon.classList.add('bi-x-circle-fill', 'text-danger'); 
+                                break;
+                            default: 
+                                icon.classList.add('bi-bell-fill', 'text-secondary');
+                        }
+
+                        clone.querySelector('.message').textContent = notification.message;
+                        clone.querySelector('.time').textContent = timeSince(notification.sent_at);
+                        
+                        const markReadBtn = clone.querySelector('.btn-mark-read');
+                        if (notification.is_read) {
+                            item.classList.remove('unread');
+                            markReadBtn.style.display = 'none';
+                        } else {
+                            item.classList.add('unread');
+                        }
+
+                        container.appendChild(clone);
+                    });
+                } else {
+                    container.innerHTML = '<li><p class="text-center p-3 text-muted">No notifications found.</p></li>';
+                }
+            } catch (error) {
+                container.innerHTML = `<li><p class="text-danger text-center p-3">Failed to load notifications: ${error.message}</p></li>`;
+            }
+        }
+        
+        // --- EVENT HANDLERS ---
+        
+        /**
+         * Handles accepting or rejecting a bid.
+         */
+        async function handleBidResponse(e) {
+            const button = e.target.closest('.accept-bid-btn, .reject-bid-btn');
+            if (!button) return;
+
+            const card = button.closest('.bid-response-card');
+            const bidId = card.dataset.bidId;
+            const action = button.classList.contains('accept-bid-btn') ? 'accept' : 'reject';
+
+            button.disabled = true;
+            button.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
+
+            try {
+                await makeAuthenticatedRequest(`/bids/${bidId}/respond/`, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: action })
+                });
+
+                showToast(`Bid successfully ${action}ed!`, 'success');
+                card.style.transition = 'opacity 0.5s';
+                card.style.opacity = '0';
+                setTimeout(() => card.remove(), 500);
+                
+                // Refresh data
+                loadDashboardSummary();
+                loadNotifications();
+
+            } catch (error) {
+                showToast(`Error: ${error.message}`, 'danger');
+                button.disabled = false;
+                // Restore original button text
+                if(action === 'accept') {
+                    button.innerHTML = `<i class="bi bi-check-circle me-1"></i>Accept`;
+                } else {
+                    button.innerHTML = `<i class="bi bi-x-circle me-1"></i>Reject`;
+                }
+            }
+        }
+        
+       /**
+        * Handles marking a single notification as read.
+        */
+       async function handleMarkNotificationRead(e) {
+           const button = e.target.closest('.btn-mark-read');
+           if (!button) return;
+
+           const item = button.closest('.notification-item');
+           const notificationId = item.dataset.notificationId;
+
+           try {
+               await makeAuthenticatedRequest(`/bids/notifications/${notificationId}/mark-read/`, {
+                   method: 'POST'
+               });
+
+               item.classList.remove('unread');
+               button.style.display = 'none';
+               updateNotificationCount();
+
+           } catch (error) {
+               showToast(`Error marking notification as read: ${error.message}`, 'danger');
+           }
+       }
+
+       /**
+        * Handles marking all notifications as read.
+        */
+       async function handleMarkAllNotificationsRead() {
+           try {
+               await makeAuthenticatedRequest('/bids/notifications/mark-all-read/', {
+                   method: 'POST'
+               });
+
+               // Update UI
+               document.querySelectorAll('.notification-item.unread').forEach(item => {
+                   item.classList.remove('unread');
+                   const btn = item.querySelector('.btn-mark-read');
+                   if (btn) btn.style.display = 'none';
+               });
+
+               updateNotificationCount();
+               showToast('All notifications marked as read!', 'success');
+
+           } catch (error) {
+               showToast(`Error marking all notifications as read: ${error.message}`, 'danger');
+           }
+       }
+
+       /**
+        * Updates the notification count badge in the header.
+        */
+       async function updateNotificationCount() {
+           try {
+               const notifications = await makeAuthenticatedRequest('/bids/notifications/');
+               const unreadCount = notifications.results ? 
+                   notifications.results.filter(n => !n.is_read).length : 0;
+               
+               const badge = document.querySelector('.notification-count');
+               if (badge) {
+                   badge.textContent = unreadCount;
+                   badge.style.display = unreadCount > 0 ? 'block' : 'none';
+               }
+           } catch (error) {
+               console.error('Error updating notification count:', error);
+           }
+       }
+
+       /**
+        * Loads user profile data and updates the UI.
+        * This corrected function is more robust in handling API responses.
+        */
+       async function loadUserProfile() {
+           const usernamePlaceholder = document.getElementById('usernamePlaceholder');
+           try {
+               // The API endpoint to fetch the logged-in user's profile
+               const profile = await makeAuthenticatedRequest('/auth/users/me/');
+
+               // Check if profile data is available and construct the name
+               if (profile) {
+                   const firstName = profile.first_name || '';
+                   const lastName = profile.last_name || '';
+                   let displayName = `${firstName} ${lastName}`.trim();
+
+                   // Fallback to username if the full name is empty, then to a default
+                   if (!displayName) {
+                       displayName = profile.username || 'User';
+                   }
+
+                   if (usernamePlaceholder) {
+                       usernamePlaceholder.textContent = displayName;
+                   }
+               } else {
+                    // Handle cases where the API returns no profile data
+                    if (usernamePlaceholder) {
+                       usernamePlaceholder.textContent = 'User';
+                    }
+               }
+
+           } catch (error) {
+               console.error('Error loading user profile:', error);
+               // If there's an error, display a default name to avoid a blank space
+               if (usernamePlaceholder) {
+                   usernamePlaceholder.textContent = 'User'; // Fallback on error
+               }
+           }
+       }
+
+       /**
+        * Handles user logout.
+        */
+       async function handleLogout() {
+           try {
+               await makeAuthenticatedRequest('/auth/logout/', { method: 'POST' });
+               localStorage.removeItem('authToken');
+               window.location.href = 'login.html';
+           } catch (error) {
+               console.error('Logout error:', error);
+               // Force logout on client side even if API call fails
+               localStorage.removeItem('authToken');
+               window.location.href = 'login.html';
+           }
+       }
+
+       // --- INITIALIZATION ---
+       
+       /**
+        * Initializes the page when DOM is loaded.
+        */
+       document.addEventListener('DOMContentLoaded', function() {
+           // Check authentication
+           const authToken = getLocalStorage('authToken');
+           if (!authToken) {
+               window.location.href = 'login.html';
+               return;
+           }
+
+           // Load initial data
+           loadUserProfile();
+           loadDashboardSummary();
+           loadIncomingBids();
+           loadNotifications();
+           updateNotificationCount();
+
+           // Set up event listeners
+           document.addEventListener('click', handleBidResponse);
+           document.addEventListener('click', handleMarkNotificationRead);
+           
+           const markAllReadBtn = document.getElementById('mark-all-notifications-read-btn');
+           if (markAllReadBtn) {
+               markAllReadBtn.addEventListener('click', (e) => {
+                   e.preventDefault();
+                   handleMarkAllNotificationsRead();
+               });
+           }
+
+           const logoutBtn = document.getElementById('logout-btn');
+           if (logoutBtn) {
+               logoutBtn.addEventListener('click', (e) => {
+                   e.preventDefault();
+                   if (confirm('Are you sure you want to logout?')) {
+                       handleLogout();
+                   }
+               });
+           }
+
+           // Set up periodic refresh for real-time updates
+           setInterval(() => {
+               updateNotificationCount();
+               loadNotifications();
+           }, 30000); // Refresh every 30 seconds
+       });
+
+       // --- ERROR HANDLING ---
+       
+       /**
+        * Global error handler for unhandled promise rejections.
+        */
+       window.addEventListener('unhandledrejection', function(event) {
+           console.error('Unhandled promise rejection:', event.reason);
+           if (event.reason && event.reason.message && event.reason.message.includes('401')) {
+               localStorage.removeItem('authToken');
+               window.location.href = 'login.html';
+           }
+       });
+
+   </script>
+</body>
+</html>

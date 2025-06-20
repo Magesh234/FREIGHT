@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreightLink - History</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        /* Replicating styles from test7settings.html for consistency */
+        :root {
+            --primary: #2C3E50;
+            --secondary: #34495E;
+            --accent: #F39C12;
+            --accent-hover: #E67E22;
+            --light: #ECF0F1;
+            --dark: #2C3E50;
+            --gray: #95A5A6;
+            --light-gray: #F8F9FA;
+            --success: #27AE60;
+            --danger: #E74C3C;
+            --info: #3498DB; /* Added for info status */
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .rounded-md {
+            border-radius: 0.75rem;
+        }
+        
+        .shadow-custom {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--primary);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
+        }
+        .header .logo {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+        .header .nav-link {
+            color: #FFFFFF;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+            margin: 0 0.25rem;
+        }
+        .header .nav-link:hover, .header .nav-link.active {
+            color: var(--primary);
+            background-color: var(--accent);
+            border-radius: 2rem;
+        }
+        .header .nav-link.active {
+            font-weight: 600;
+        }
+
+        /* Dashboard Layout */
+        .dashboard-layout {
+            display: flex;
+            height: calc(100vh - 70px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background-color: var(--primary);
+            padding: 2rem 1rem;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+        }
+        .sidebar .menu-item {
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.75rem 1rem;
+            margin: 0.25rem 0;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .sidebar .menu-item i {
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+        .sidebar .menu-item:hover, .sidebar .menu-item.active {
+            background-color: var(--accent);
+            color: var(--primary);
+        }
+        .sidebar .menu-item.active {
+            font-weight: 600;
+        }
+        .sidebar .divider {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 1rem 0;
+        }
+        .sidebar .menu-title {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin: 1.5rem 0 0.5rem 1rem;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+        .page-subtitle {
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+
+        /* Form Components (reused for general content cards) */
+        .form-card {
+            background-color: #FFFFFF;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .form-card h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        .form-label {
+            font-weight: 500;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        .form-control, .form-select {
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            border: 1px solid #DDE2E5;
+            transition: all 0.3s ease;
+            background-color: var(--light-gray);
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 0.25rem rgba(243, 156, 18, 0.25);
+            background-color: #FFFFFF;
+        }
+        
+        /* Buttons */
+        .btn-primary, .btn-primary:focus {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            color: var(--dark);
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+        }
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+            border-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(230, 126, 34, 0.4);
+        }
+        .btn-secondary, .btn-secondary:focus {
+            background-color: var(--light-gray);
+            border-color: #DDE2E5;
+            color: var(--gray);
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background-color: #e9ecef;
+            border-color: #c1c7cc;
+            color: var(--dark);
+            transform: translateY(-2px);
+        }
+
+        /* Table specific styles for history */
+        .table-responsive {
+            margin-top: 1.5rem;
+        }
+        .table {
+            width: 100%;
+            margin-bottom: 1rem;
+            color: var(--dark);
+            border-collapse: separate;
+            border-spacing: 0 0.8rem; /* Space between rows */
+        }
+        .table th, .table td {
+            padding: 1rem;
+            vertical-align: middle;
+            border: none; /* Remove default borders */
+        }
+        .table thead th {
+            border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+            font-weight: 600;
+            color: var(--primary);
+            background-color: var(--light-gray);
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+        .table tbody tr {
+            background-color: #FFFFFF;
+            border-radius: 0.75rem; /* Rounded corners for rows */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+            transition: all 0.2s ease-in-out;
+        }
+        .table tbody tr:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
+        .table tbody tr td:first-child {
+            border-top-left-radius: 0.75rem;
+            border-bottom-left-radius: 0.75rem;
+        }
+        .table tbody tr td:last-child {
+            border-top-right-radius: 0.75rem;
+            border-bottom-right-radius: 0.75rem;
+        }
+
+        .status-badge {
+            padding: 0.4rem 0.8rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+        .status-completed {
+            background-color: rgba(39, 174, 96, 0.15); /* Success color with transparency */
+            color: var(--success);
+        }
+        .status-success { /* Alias for completed */
+            background-color: rgba(39, 174, 96, 0.15);
+            color: var(--success);
+        }
+        .status-pending {
+            background-color: rgba(243, 156, 18, 0.15); /* Accent color with transparency */
+            color: var(--accent);
+        }
+        .status-failed {
+            background-color: rgba(231, 76, 60, 0.15); /* Danger color with transparency */
+            color: var(--danger);
+        }
+        .status-archived {
+            background-color: rgba(149, 165, 166, 0.15); /* Gray color for archived */
+            color: var(--gray);
+        }
+        .status-info {
+            background-color: rgba(52, 152, 219, 0.15); /* Info color with transparency */
+            color: var(--info);
+        }
+
+
+        /* Responsive Adjustments */
+        @media (max-width: 991.98px) {
+            .sidebar {
+                width: 80px;
+                padding: 2rem 0.5rem;
+            }
+            .sidebar .menu-item span, .sidebar .menu-title {
+                display: none;
+            }
+            .sidebar .menu-item i {
+                margin-right: 0;
+                font-size: 1.5rem;
+            }
+            .main-content {
+                padding: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 767.98px) {
+            .dashboard-layout {
+                flex-direction: column;
+                height: auto;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                padding: 1rem;
+                display: flex;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            .sidebar .menu-item {
+                margin: 0 0.25rem;
+                padding: 0.5rem 1rem;
+            }
+            .sidebar .menu-item span {
+                display: none;
+            }
+            .sidebar .divider, .sidebar .menu-title {
+                display: none;
+            }
+            .main-content {
+                padding: 1.5rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header text-white py-3 shadow-sm sticky-top">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="logo d-flex align-items-center">
+                    <i class="bi bi-truck me-2"></i>FreightLink
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="dropdown me-3">
+                        <a href="#" class="text-white dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-bell me-2"></i>
+                            <span class="badge bg-accent text-dark rounded-pill">3</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">New match found</a></li>
+                            <li><a class="dropdown-item" href="#">Cargo request accepted</a></li>
+                            <li><a class="dropdown-item" href="#">Payment received</a></li>
+                        </ul>
+                    </div>
+                    <div class="dropdown">
+                        <a href="#" class="text-white dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="rounded-circle bg-accent text-dark d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                                <i class="bi bi-person-fill"></i>
+                            </div>
+                            <span>John Doe</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-layout">
+        <div class="sidebar">
+            <a href="dashboard.html" class="menu-item">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="mylisting.html" class="menu-item">
+                <i class="bi bi-box-seam-fill"></i>
+                <span>My Listings</span>
+            </a>
+            <a href="history.html" class="menu-item">
+                <i class="bi bi-clock-history"></i>
+                <span>History</span>
+            </a>
+            <a href="messages.html" class="menu-item">
+                <i class="bi bi-chat-left-text-fill"></i>
+                <span>Messages</span>
+            </a>
+            
+            <div class="divider"></div>
+            <div class="menu-title">Account</div>
+            
+            <a href="profile.html" class="menu-item active">
+                <i class="bi bi-person-fill"></i>
+                <span>Profile</span>
+            </a>
+            <a href="payments.html" class="menu-item">
+                <i class="bi bi-wallet2"></i>
+                <span>Payments</span>
+            </a>
+            <a href="settings (2).html" class="menu-item">
+                <i class="bi bi-gear-fill"></i>
+                <span>Settings</span>
+            </a>
+            <a href="help&support.html" class="menu-item">
+                <i class="bi bi-question-circle-fill"></i>
+                <span>Help & Support</span>
+            </a>
+            
+            <div class="divider"></div>
+            
+            <a href="#" class="menu-item">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+
+  
+
+        <div class="main-content">
+            <h1 class="page-title">History</h1>
+            <p class="page-subtitle">View a timeline of your activities and transactions</p>
+
+            <div class="form-card">
+                <h3>Activity Log</h3>
+                <p class="text-muted mb-4">A detailed record of significant events on your account.</p>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody">
+                            <tr>
+                                <td>2024-05-15</td>
+                                <td>Cargo Completed</td>
+                                <td>Delivered cargo for INV-2024-001 to Mombasa</td>
+                                <td><span class="status-badge status-completed">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td>2024-05-10</td>
+                                <td>Payment Received</td>
+                                <td>Received KSh 12,000 for INV-2024-002</td>
+                                <td><span class="status-badge status-success">Success</span></td>
+                            </tr>
+                            <tr>
+                                <td>2024-05-01</td>
+                                <td>Listing Archived</td>
+                                <td>Cargo listing #CGL-005 archived due to expiry</td>
+                                <td><span class="status-badge status-archived">Archived</span></td>
+                            </tr>
+                            <tr>
+                                <td>2024-04-28</td>
+                                <td>Profile Update</td>
+                                <td>Updated contact information in profile</td>
+                                <td><span class="status-badge status-info">Info</span></td>
+                            </tr>
+                            <tr>
+                                <td>2024-04-20</td>
+                                <td>New Listing</td>
+                                <td>Created new cargo listing for Nairobi-Kisumu route</td>
+                                <td><span class="status-badge status-success">Success</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="historyMessage" class="alert alert-info mt-3" style="display: none;">No history records found.</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Base URL for your Django API. IMPORTANT: Replace with your actual Django backend URL.
+            const API_BASE_URL = 'http://127.0.0.1:8000/api/'; // Example: 'http://localhost:8000/api/' or your deployed URL
+
+            // Function to get CSRF token from cookies
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            const csrftoken = getCookie('csrftoken');
+
+            // --- DOM Elements ---
+            const historyTableBody = document.getElementById('historyTableBody');
+            const historyMessage = document.getElementById('historyMessage');
+
+            // --- Helper function for fetching data ---
+            async function fetchData(endpoint) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            // 'Authorization': 'Bearer YOUR_AUTH_TOKEN' // Add if you have authentication
+                        }
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        console.error(`Error fetching ${endpoint} data:`, errorData);
+                        historyMessage.textContent = `Failed to load history: ${errorData.detail || 'Unknown error'}`;
+                        historyMessage.style.display = 'block';
+                        historyTableBody.innerHTML = ''; // Clear table
+                        return [];
+                    }
+
+                    const data = await response.json();
+                    if (data.length === 0) {
+                        historyMessage.style.display = 'block';
+                        historyTableBody.innerHTML = ''; // Clear table
+                    } else {
+                        historyMessage.style.display = 'none';
+                    }
+                    return data;
+
+                } catch (error) {
+                    console.error(`Network error or unexpected issue fetching ${endpoint}:`, error);
+                    historyMessage.textContent = 'An error occurred while connecting to the server.';
+                    historyMessage.style.display = 'block';
+                    historyTableBody.innerHTML = ''; // Clear table
+                    return [];
+                }
+            }
+
+            // --- Render function for history table ---
+            function renderHistory(historyItems) {
+                historyTableBody.innerHTML = ''; // Clear existing rows
+
+                if (historyItems.length === 0) {
+                    historyMessage.style.display = 'block';
+                    return;
+                }
+                historyMessage.style.display = 'none';
+
+                historyItems.forEach(item => {
+                    // Normalize status to lowercase for class name, handle potential undefined
+                    const statusClass = item.status ? `status-${item.status.toLowerCase().replace(/\s/g, '-')}` : 'status-info'; 
+                    const row = `
+                        <tr>
+                            <td>${item.date}</td>
+                            <td>${item.type}</td>
+                            <td>${item.description}</td>
+                            <td><span class="status-badge ${statusClass}">${item.status || 'N/A'}</span></td>
+                        </tr>
+                    `;
+                    historyTableBody.insertAdjacentHTML('beforeend', row);
+                });
+            }
+
+            // --- Main function to fetch and render history ---
+            async function fetchAndRenderHistory() {
+                const historyData = await fetchData('history/');
+                // For demonstration, if no history, add some dummy ones
+                if (historyData.length === 0) {
+                    historyData.push(
+                        { id: 1, type: 'Cargo Completed', description: 'Delivered cargo for INV-2024-001 to Mombasa', date: '2024-05-15', status: 'Completed' },
+                        { id: 2, type: 'Payment Received', description: 'Received KSh 12,000 for INV-2024-002', date: '2024-05-10', status: 'Success' },
+                        { id: 3, type: 'Listing Archived', description: 'Cargo listing #CGL-005 archived due to expiry', date: '2024-05-01', status: 'Archived' },
+                        { id: 4, type: 'Profile Update', description: 'Updated contact information in profile', date: '2024-04-28', status: 'Info' },
+                        { id: 5, type: 'New Listing', description: 'Created new cargo listing for Nairobi-Kisumu route', date: '2024-04-20', status: 'Success' }
+                    );
+                }
+                renderHistory(historyData);
+            }
+
+            // Initial load of history data when the page loads
+            fetchAndRenderHistory();
+        });
+    </script>
+</body>
+</html>

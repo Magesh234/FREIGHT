@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreightLink - Messages</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        /* Replicating styles from test7settings.html for consistency */
+        :root {
+            --primary: #2C3E50;
+            --secondary: #34495E;
+            --accent: #F39C12;
+            --accent-hover: #E67E22;
+            --light: #ECF0F1;
+            --dark: #2C3E50;
+            --gray: #95A5A6;
+            --light-gray: #F8F9FA;
+            --success: #27AE60;
+            --danger: #E74C3C;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .rounded-md {
+            border-radius: 0.75rem;
+        }
+        
+        .shadow-custom {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--primary);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
+        }
+        .header .logo {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+        .header .nav-link {
+            color: #FFFFFF;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+            margin: 0 0.25rem;
+        }
+        .header .nav-link:hover, .header .nav-link.active {
+            color: var(--primary);
+            background-color: var(--accent);
+            border-radius: 2rem;
+        }
+        .header .nav-link.active {
+            font-weight: 600;
+        }
+
+        /* Dashboard Layout */
+        .dashboard-layout {
+            display: flex;
+            height: calc(100vh - 70px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background-color: var(--primary);
+            padding: 2rem 1rem;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+        }
+        .sidebar .menu-item {
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.75rem 1rem;
+            margin: 0.25rem 0;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .sidebar .menu-item i {
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+        .sidebar .menu-item:hover, .sidebar .menu-item.active {
+            background-color: var(--accent);
+            color: var(--primary);
+        }
+        .sidebar .menu-item.active {
+            font-weight: 600;
+        }
+        .sidebar .divider {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 1rem 0;
+        }
+        .sidebar .menu-title {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin: 1.5rem 0 0.5rem 1rem;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+        .page-subtitle {
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+
+        /* Form Components (reused for general content cards) */
+        .form-card {
+            background-color: #FFFFFF;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .form-card h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        .form-label {
+            font-weight: 500;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        .form-control, .form-select {
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            border: 1px solid #DDE2E5;
+            transition: all 0.3s ease;
+            background-color: var(--light-gray);
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 0.25rem rgba(243, 156, 18, 0.25);
+            background-color: #FFFFFF;
+        }
+        
+        /* Buttons */
+        .btn-primary, .btn-primary:focus {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            color: var(--dark);
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+        }
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+            border-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(230, 126, 34, 0.4);
+        }
+        .btn-secondary, .btn-secondary:focus {
+            background-color: var(--light-gray);
+            border-color: #DDE2E5;
+            color: var(--gray);
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background-color: #e9ecef;
+            border-color: #c1c7cc;
+            color: var(--dark);
+            transform: translateY(-2px);
+        }
+
+        /* Messages specific styles */
+        .messages-container {
+            display: flex;
+            height: calc(100vh - 250px); /* Adjust height based on header/footer/padding */
+            background-color: #FFFFFF;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .conversation-list {
+            width: 300px;
+            border-right: 1px solid rgba(0, 0, 0, 0.05);
+            overflow-y: auto;
+            padding: 1rem 0;
+            background-color: var(--light-gray);
+        }
+
+        .conversation-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        .conversation-item:hover {
+            background-color: rgba(243, 156, 18, 0.05); /* Light accent hover */
+        }
+        .conversation-item.active {
+            background-color: rgba(243, 156, 18, 0.1); /* Accent with transparency */
+            border-right: 4px solid var(--accent);
+            font-weight: 600;
+        }
+        .conversation-item .avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+        .conversation-item .details {
+            flex-grow: 1;
+            overflow: hidden;
+        }
+        .conversation-item .name {
+            font-weight: 600;
+            color: var(--primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .conversation-item .last-message {
+            font-size: 0.9rem;
+            color: var(--gray);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .conversation-item .time {
+            font-size: 0.75rem;
+            color: var(--gray);
+            margin-left: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            background-color: #FFFFFF;
+        }
+        .chat-header .chat-partner-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-right: 1rem;
+        }
+        .chat-header .chat-partner-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .messages-display {
+            flex-grow: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column-reverse; /* To show latest messages at bottom */
+        }
+
+        .message-bubble {
+            max-width: 75%;
+            padding: 0.75rem 1rem;
+            border-radius: 1rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+        .message-bubble.sent {
+            background-color: var(--accent);
+            color: var(--primary);
+            align-self: flex-end;
+            border-bottom-right-radius: 0.25rem; /* Pointy corner */
+        }
+        .message-bubble.received {
+            background-color: var(--light-gray);
+            color: var(--dark);
+            align-self: flex-start;
+            border-bottom-left-radius: 0.25rem; /* Pointy corner */
+        }
+        .message-bubble .message-time {
+            font-size: 0.7rem;
+            color: rgba(0, 0, 0, 0.5);
+            margin-top: 0.5rem;
+            display: block;
+            text-align: right;
+        }
+        .message-bubble.received .message-time {
+            text-align: left;
+        }
+
+        .message-input-area {
+            padding: 1.5rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            background-color: #FFFFFF;
+            display: flex;
+            align-items: center;
+        }
+        .message-input-area .form-control {
+            flex-grow: 1;
+            margin-right: 1rem;
+            border-radius: 50px;
+            padding: 0.75rem 1.25rem;
+            background-color: var(--light-gray);
+            border-color: #DDE2E5;
+        }
+        .message-input-area .btn-send {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            color: var(--primary);
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.2s ease;
+        }
+        .message-input-area .btn-send:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 991.98px) {
+            .sidebar {
+                width: 80px;
+                padding: 2rem 0.5rem;
+            }
+            .sidebar .menu-item span, .sidebar .menu-title {
+                display: none;
+            }
+            .sidebar .menu-item i {
+                margin-right: 0;
+                font-size: 1.5rem;
+            }
+            .main-content {
+                padding: 1.5rem;
+            }
+            .conversation-list {
+                width: 250px; /* Adjust for smaller screens */
+            }
+        }
+        
+        @media (max-width: 767.98px) {
+            .dashboard-layout {
+                flex-direction: column;
+                height: auto;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                padding: 1rem;
+                display: flex;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            .sidebar .menu-item {
+                margin: 0 0.25rem;
+                padding: 0.5rem 1rem;
+            }
+            .sidebar .menu-item span {
+                display: none;
+            }
+            .sidebar .divider, .sidebar .menu-title {
+                display: none;
+            }
+            .main-content {
+                padding: 1.5rem 1rem;
+            }
+            .messages-container {
+                flex-direction: column;
+                height: auto; /* Allow height to adjust */
+            }
+            .conversation-list {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+                max-height: 300px; /* Limit height for conversation list on mobile */
+            }
+            .chat-area {
+                height: 500px; /* Fixed height for chat area on mobile, or use flex-grow */
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header text-white py-3 shadow-sm sticky-top">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="logo d-flex align-items-center">
+                    <i class="bi bi-truck me-2"></i>FreightLink
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="dropdown me-3">
+                        <a href="#" class="text-white dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-bell me-2"></i>
+                            <span class="badge bg-accent text-dark rounded-pill">3</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">New match found</a></li>
+                            <li><a class="dropdown-item" href="#">Cargo request accepted</a></li>
+                            <li><a class="dropdown-item" href="#">Payment received</a></li>
+                        </ul>
+                    </div>
+                    <div class="dropdown">
+                        <a href="#" class="text-white dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="rounded-circle bg-accent text-dark d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                                <i class="bi bi-person-fill"></i>
+                            </div>
+                            <span>John Doe</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-layout">
+        <div class="sidebar">
+            <a href="dashboard.html" class="menu-item">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="mylisting.html" class="menu-item">
+                <i class="bi bi-box-seam-fill"></i>
+                <span>My Listings</span>
+            </a>
+            <a href="history.html" class="menu-item">
+                <i class="bi bi-clock-history"></i>
+                <span>History</span>
+            </a>
+            <a href="messages.html" class="menu-item">
+                <i class="bi bi-chat-left-text-fill"></i>
+                <span>Messages</span>
+            </a>
+            
+            <div class="divider"></div>
+            <div class="menu-title">Account</div>
+            
+            <a href="profile.html" class="menu-item active">
+                <i class="bi bi-person-fill"></i>
+                <span>Profile</span>
+            </a>
+            <a href="payments.html" class="menu-item">
+                <i class="bi bi-wallet2"></i>
+                <span>Payments</span>
+            </a>
+            <a href="settings (2).html" class="menu-item">
+                <i class="bi bi-gear-fill"></i>
+                <span>Settings</span>
+            </a>
+            <a href="help&support.html" class="menu-item">
+                <i class="bi bi-question-circle-fill"></i>
+                <span>Help & Support</span>
+            </a>
+            
+            <div class="divider"></div>
+            
+            <a href="#" class="menu-item">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+        <div class="main-content">
+            <h1 class="page-title">Messages</h1>
+            <p class="page-subtitle">Communicate with other users and manage your conversations</p>
+
+            <div class="messages-container">
+                <div class="conversation-list" id="conversationList">
+                    <div class="conversation-item active" data-conversation-id="1">
+                        <div class="avatar">JD</div>
+                        <div class="details">
+                            <div class="name">John Doe</div>
+                            <div class="last-message">Hey, are you available for the cargo?</div>
+                        </div>
+                        <div class="time">10:30 AM</div>
+                    </div>
+                    <div class="conversation-item" data-conversation-id="2">
+                        <div class="avatar">AS</div>
+                        <div class="details">
+                            <div class="name">Alice Smith</div>
+                            <div class="last-message">Ok, I'll confirm by end of day.</div>
+                        </div>
+                        <div class="time">Yesterday</div>
+                    </div>
+                    <div class="conversation-item" data-conversation-id="3">
+                        <div class="avatar">BM</div>
+                        <div class="details">
+                            <div class="name">Bob Johnson</div>
+                            <div class="last-message">Received the payment, thanks!</div>
+                        </div>
+                        <div class="time">May 20</div>
+                    </div>
+                </div>
+
+                <div class="chat-area">
+                    <div class="chat-header" id="chatHeader">
+                        <div class="chat-partner-avatar">JD</div>
+                        <div class="chat-partner-name">John Doe</div>
+                    </div>
+                    <div class="messages-display" id="messagesDisplay">
+                        <div class="message-bubble sent">
+                            <p>Yes, I am. What are the details?</p>
+                            <span class="message-time">10:35 AM</span>
+                        </div>
+                        <div class="message-bubble received">
+                            <p>Hey, are you available for the cargo?</p>
+                            <span class="message-time">10:30 AM</span>
+                        </div>
+                    </div>
+                    <div class="message-input-area">
+                        <input type="text" class="form-control" id="messageInput" placeholder="Type your message...">
+                        <button class="btn btn-primary btn-send" id="sendMessageBtn">
+                            <i class="bi bi-send-fill"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Base URL for your Django API. IMPORTANT: Replace with your actual Django backend URL.
+            const API_BASE_URL = 'http://127.0.0.1:8000/api/'; // Example: 'http://localhost:8000/api/' or your deployed URL
+
+            // Function to get CSRF token from cookies
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            const csrftoken = getCookie('csrftoken');
+
+            // --- DOM Elements ---
+            const conversationList = document.getElementById('conversationList');
+            const chatHeader = document.getElementById('chatHeader');
+            const messagesDisplay = document.getElementById('messagesDisplay');
+            const messageInput = document.getElementById('messageInput');
+            const sendMessageBtn = document.getElementById('sendMessageBtn');
+
+            let currentConversationId = null; // Stores the ID of the currently active conversation
+
+            // --- Helper function for fetching data ---
+            async function fetchData(endpoint) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            // 'Authorization': 'Bearer YOUR_AUTH_TOKEN' // Add if you have authentication
+                        }
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        console.error(`Error fetching ${endpoint} data:`, errorData);
+                        // Implement a user-friendly message instead of alert
+                        return [];
+                    }
+
+                    return await response.json();
+
+                } catch (error) {
+                    console.error(`Network error or unexpected issue fetching ${endpoint}:`, error);
+                    // Implement a user-friendly message
+                    return [];
+                }
+            }
+
+            // --- Render functions ---
+            function renderConversations(conversations) {
+                conversationList.innerHTML = ''; // Clear existing conversations
+                if (conversations.length === 0) {
+                    conversationList.innerHTML = '<div class="p-3 text-center text-muted">No conversations found.</div>';
+                    return;
+                }
+
+                conversations.forEach(conv => {
+                    const isActive = conv.id === currentConversationId ? 'active' : '';
+                    const avatarText = (conv.partner_name || 'NN').split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+                    const lastMessageSnippet = conv.last_message ? conv.last_message.substring(0, 30) + (conv.last_message.length > 30 ? '...' : '') : 'No messages yet.';
+                    const lastMessageTime = conv.last_message_timestamp ? new Date(conv.last_message_timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''; // Format time
+
+                    const item = `
+                        <div class="conversation-item ${isActive}" data-conversation-id="${conv.id}">
+                            <div class="avatar">${avatarText}</div>
+                            <div class="details">
+                                <div class="name">${conv.partner_name || 'Unknown User'}</div>
+                                <div class="last-message">${lastMessageSnippet}</div>
+                            </div>
+                            <div class="time">${lastMessageTime}</div>
+                        </div>
+                    `;
+                    conversationList.insertAdjacentHTML('beforeend', item);
+                });
+
+                // Add click listeners to conversation items
+                conversationList.querySelectorAll('.conversation-item').forEach(item => {
+                    item.addEventListener('click', function() {
+                        const convId = this.dataset.conversationId;
+                        selectConversation(convId);
+                    });
+                });
+            }
+
+            function renderMessages(messages, partnerName) {
+                messagesDisplay.innerHTML = ''; // Clear existing messages
+                chatHeader.querySelector('.chat-partner-name').textContent = partnerName;
+                chatHeader.querySelector('.chat-partner-avatar').textContent = (partnerName || 'NN').split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+
+                if (messages.length === 0) {
+                    messagesDisplay.innerHTML = '<div class="p-3 text-center text-muted">No messages in this conversation.</div>';
+                    return;
+                }
+
+                // Sort messages by timestamp in ascending order to display correctly (oldest first)
+                // Then reverse to use flex-direction: column-reverse;
+                messages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)).reverse();
+
+                messages.forEach(msg => {
+                    const messageClass = msg.is_sent_by_me ? 'sent' : 'received';
+                    const messageTime = new Date(msg.timestamp).toLocaleString(); // Full date and time
+
+                    const bubble = `
+                        <div class="message-bubble ${messageClass}">
+                            <p>${msg.content}</p>
+                            <span class="message-time">${messageTime}</span>
+                        </div>
+                    `;
+                    messagesDisplay.insertAdjacentHTML('beforeend', bubble);
+                });
+                messagesDisplay.scrollTop = messagesDisplay.scrollHeight; // Scroll to bottom
+            }
+
+            // --- Main functions ---
+            async function fetchConversations() {
+                const conversations = await fetchData('messages/conversations/');
+                // For demonstration, if no conversations, add some dummy ones
+                if (conversations.length === 0) {
+                    conversations.push(
+                        { id: 1, partner_name: 'John Doe', last_message: 'Hey, are you available for the cargo?', last_message_timestamp: '2024-05-22T10:30:00Z' },
+                        { id: 2, partner_name: 'Alice Smith', last_message: 'Ok, I\'ll confirm by end of day.', last_message_timestamp: '2024-05-21T17:00:00Z' },
+                        { id: 3, partner_name: 'Bob Johnson', last_message: 'Received the payment, thanks!', last_message_timestamp: '2024-05-20T09:15:00Z' }
+                    );
+                }
+                renderConversations(conversations);
+                // Automatically select the first conversation if available
+                if (conversations.length > 0 && !currentConversationId) {
+                    selectConversation(conversations[0].id);
+                }
+            }
+
+            async function selectConversation(conversationId) {
+                currentConversationId = conversationId;
+
+                // Update active state in UI
+                conversationList.querySelectorAll('.conversation-item').forEach(item => {
+                    item.classList.remove('active');
+                    if (item.dataset.conversationId == conversationId) {
+                        item.classList.add('active');
+                    }
+                });
+
+                // Fetch messages for the selected conversation
+                const messages = await fetchData(`messages/conversations/${conversationId}/messages/`);
+                
+                // For demonstration, if no messages, add some dummy ones
+                if (messages.length === 0) {
+                    if (conversationId == 1) {
+                        messages.push(
+                            { id: 101, content: 'Hey, are you available for the cargo?', timestamp: '2024-05-22T10:30:00Z', is_sent_by_me: false },
+                            { id: 102, content: 'Yes, I am. What are the details?', timestamp: '2024-05-22T10:35:00Z', is_sent_by_me: true }
+                        );
+                    } else if (conversationId == 2) {
+                        messages.push(
+                            { id: 201, content: 'Just following up on the last load.', timestamp: '2024-05-21T16:00:00Z', is_sent_by_me: false },
+                            { id: 202, content: 'Ok, I\'ll confirm by end of day.', timestamp: '2024-05-21T17:00:00Z', is_sent_by_me: true }
+                        );
+                    } else if (conversationId == 3) {
+                        messages.push(
+                            { id: 301, content: 'Payment for invoice #123 has been processed.', timestamp: '2024-05-20T09:00:00Z', is_sent_by_me: false },
+                            { id: 302, content: 'Received the payment, thanks!', timestamp: '2024-05-20T09:15:00Z', is_sent_by_me: true }
+                        );
+                    }
+                }
+
+                // Get partner name from the conversation list (or fetch if not available)
+                const selectedConvElement = conversationList.querySelector(`[data-conversation-id="${conversationId}"]`);
+                const partnerName = selectedConvElement ? selectedConvElement.querySelector('.name').textContent : 'Unknown User';
+
+                renderMessages(messages, partnerName);
+            }
+
+            async function sendMessage() {
+                const content = messageInput.value.trim();
+                if (!content || !currentConversationId) {
+                    console.warn('Message content or conversation ID missing.');
+                    return;
+                }
+
+                const messageData = {
+                    conversation_id: currentConversationId,
+                    content: content
+                };
+
+                try {
+                    const response = await fetch(`${API_BASE_URL}messages/conversations/${currentConversationId}/send/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrftoken,
+                            // 'Authorization': 'Bearer YOUR_AUTH_TOKEN'
+                        },
+                        body: JSON.stringify(messageData)
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        console.error('Error sending message:', errorData);
+                        alert(`Failed to send message: ${errorData.detail || 'Unknown error'}`); // Use custom modal
+                        return;
+                    }
+
+                    const newMessage = await response.json();
+                    console.log('Message sent successfully:', newMessage);
+                    messageInput.value = ''; // Clear input field
+                    // Refresh messages for the current conversation
+                    selectConversation(currentConversationId);
+                    // Also refresh conversations to update last message/timestamp
+                    fetchConversations(); 
+
+                } catch (error) {
+                    console.error('Network error sending message:', error);
+                    alert('An error occurred while sending the message.'); // Use custom modal
+                }
+            }
+
+            // --- Event Listeners ---
+            sendMessageBtn.addEventListener('click', sendMessage);
+            messageInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+
+            // Initial load of conversations
+            fetchConversations();
+        });
+    </script>
+</body>
+</html>

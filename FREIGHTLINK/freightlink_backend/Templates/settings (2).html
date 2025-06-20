@@ -1,0 +1,1555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreightLink - Settings</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        :root {
+            --primary: #2C3E50;
+            --secondary: #34495E;
+            --accent: #F39C12;
+            --accent-hover: #E67E22;
+            --light: #ECF0F1;
+            --dark: #2C3E50;
+            --gray: #95A5A6;
+            --light-gray: #F8F9FA;
+            --success: #27AE60;
+            --danger: #E74C3C;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .rounded-md {
+            border-radius: 0.75rem;
+        }
+        
+        .shadow-custom {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--primary);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
+        }
+        .header .logo {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+        .header .nav-link {
+            color: #FFFFFF;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+            margin: 0 0.25rem;
+        }
+        .header .nav-link:hover, .header .nav-link.active {
+            color: var(--primary);
+            background-color: var(--accent);
+            border-radius: 2rem;
+        }
+        .header .nav-link.active {
+            font-weight: 600;
+        }
+
+        /* Dashboard Layout */
+        .dashboard-layout {
+            display: flex;
+            height: calc(100vh - 70px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background-color: var(--primary);
+            padding: 2rem 1rem;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+        }
+        .sidebar .menu-item {
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.75rem 1rem;
+            margin: 0.25rem 0;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .sidebar .menu-item i {
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+        .sidebar .menu-item:hover, .sidebar .menu-item.active {
+            background-color: var(--accent);
+            color: var(--primary);
+        }
+        .sidebar .menu-item.active {
+            font-weight: 600;
+        }
+        .sidebar .divider {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 1rem 0;
+        }
+        .sidebar .menu-title {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin: 1.5rem 0 0.5rem 1rem;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+        .page-subtitle {
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+
+        /* Form Components */
+        .form-card {
+            background-color: #FFFFFF;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .form-card h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        .form-label {
+            font-weight: 500;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        .form-control, .form-select {
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            border: 1px solid #DDE2E5;
+            transition: all 0.3s ease;
+            background-color: var(--light-gray);
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 0.25rem rgba(243, 156, 18, 0.25);
+            background-color: #FFFFFF;
+        }
+        
+        /* Buttons */
+        .btn-primary, .btn-primary:focus {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            color: var(--dark);
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+        }
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+            border-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(230, 126, 34, 0.4);
+        }
+        .btn-secondary, .btn-secondary:focus {
+            background-color: var(--light-gray);
+            border-color: #DDE2E5;
+            color: var(--gray);
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background-color: #e9ecef;
+            border-color: #c1c7cc;
+            color: var(--dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn-danger, .btn-danger:focus {
+            background-color: var(--danger);
+            border-color: var(--danger);
+            color: #FFFFFF;
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+        .btn-danger:hover {
+            background-color: #c0392b;
+            border-color: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(192, 57, 43, 0.4);
+        }
+
+        /* Settings specific styles */
+        .settings-nav {
+            background-color: #FFFFFF;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+        
+        .settings-nav .nav-link {
+            color: var(--dark);
+            font-weight: 500;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .settings-nav .nav-link.active {
+            background-color: rgba(243, 156, 18, 0.1);
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        .settings-nav .nav-link:hover:not(.active) {
+            background-color: var(--light-gray);
+        }
+        
+        .settings-nav .nav-link i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .settings-content {
+            background-color: #FFFFFF;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+        }
+        
+        .settings-content h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .form-section {
+            margin-bottom: 2.5rem;
+        }
+        
+        .form-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .form-section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background-color: var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 1rem;
+        }
+        
+        .profile-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .profile-pic .edit-icon {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background-color: var(--accent);
+            color: var(--dark);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .profile-pic .edit-icon:hover {
+            background-color: var(--accent-hover);
+            transform: scale(1.1);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--accent);
+        }
+        
+        input:focus + .slider {
+            box-shadow: 0 0 1px var(--accent);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .toggle-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .toggle-option .option-label {
+            font-weight: 500;
+        }
+        
+        .toggle-option .option-description {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+        
+        .secure-badge {
+            display: inline-flex;
+            align-items: center;
+            background-color: rgba(39, 174, 96, 0.1);
+            color: var(--success);
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 1rem;
+            margin-left: 0.5rem;
+        }
+        
+        .secure-badge i {
+            font-size: 0.8rem;
+            margin-right: 0.25rem;
+        }
+        
+        .account-action {
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            padding-top: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 991.98px) {
+            .sidebar {
+                width: 80px;
+                padding: 2rem 0.5rem;
+            }
+            .sidebar .menu-item span, .sidebar .menu-title {
+                display: none;
+            }
+            .sidebar .menu-item i {
+                margin-right: 0;
+                font-size: 1.5rem;
+            }
+            .main-content {
+                padding: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 767.98px) {
+            .dashboard-layout {
+                flex-direction: column;
+                height: auto;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                padding: 1rem;
+                display: flex;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            .sidebar .menu-item {
+                margin: 0 0.25rem;
+                padding: 0.5rem 1rem;
+            }
+            .sidebar .menu-item span {
+                display: none;
+            }
+            .sidebar .divider, .sidebar .menu-title {
+                display: none;
+            }
+            .main-content {
+                padding: 1.5rem 1rem;
+            }
+            .settings-nav {
+                margin-bottom: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header text-white py-3 shadow-sm sticky-top">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="logo d-flex align-items-center">
+                    <i class="bi bi-truck me-2"></i>FreightLink
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="dropdown me-3">
+                        <a href="#" class="text-white dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-bell me-2"></i>
+                            <span class="badge bg-accent text-dark rounded-pill">3</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">New match found</a></li>
+                            <li><a class="dropdown-item" href="#">Cargo request accepted</a></li>
+                            <li><a class="dropdown-item" href="#">Payment received</a></li>
+                        </ul>
+                    </div>
+                    <div class="dropdown">
+                        <a href="#" class="text-white dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="rounded-circle bg-accent text-dark d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                                <i class="bi bi-person-fill"></i>
+                            </div>
+                            <span>John Doe</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-layout">
+        <div class="sidebar">
+            <a href="dashboard.html" class="menu-item">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="mylisting.html" class="menu-item">
+                <i class="bi bi-box-seam-fill"></i>
+                <span>My Listings</span>
+            </a>
+            <a href="history.html" class="menu-item">
+                <i class="bi bi-clock-history"></i>
+                <span>History</span>
+            </a>
+            <a href="messages.html" class="menu-item">
+                <i class="bi bi-chat-left-text-fill"></i>
+                <span>Messages</span>
+            </a>
+            
+            <div class="divider"></div>
+            <div class="menu-title">Account</div>
+            
+            <a href="profile.html" class="menu-item active">
+                <i class="bi bi-person-fill"></i>
+                <span>Profile</span>
+            </a>
+            <a href="payments.html" class="menu-item">
+                <i class="bi bi-wallet2"></i>
+                <span>Payments</span>
+            </a>
+            <a href="settings (2).html" class="menu-item">
+                <i class="bi bi-gear-fill"></i>
+                <span>Settings</span>
+            </a>
+            <a href="help&support.html" class="menu-item">
+                <i class="bi bi-question-circle-fill"></i>
+                <span>Help & Support</span>
+            </a>
+            
+            <div class="divider"></div>
+            
+            <a href="#" class="menu-item">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+        <div class="main-content">
+            <h1 class="page-title">Settings</h1>
+            <p class="page-subtitle">Manage your account settings and preferences</p>
+
+            <div class="row">
+                <div class="col-lg-3 col-md-4">
+                    <div class="settings-nav">
+                        <div class="nav flex-column" id="settings-tabs" role="tablist">
+                            <a class="nav-link active" id="profile-tab" data-bs-toggle="tab" href="#profile" role="tab">
+                                <i class="bi bi-person"></i> Profile
+                            </a>
+                            <a class="nav-link" id="account-tab" data-bs-toggle="tab" href="#account" role="tab">
+                                <i class="bi bi-shield-lock"></i> Account & Security
+                            </a>
+                            <a class="nav-link" id="preferences-tab" data-bs-toggle="tab" href="#preferences" role="tab">
+                                <i class="bi bi-sliders"></i> Preferences
+                            </a>
+                            <a class="nav-link" id="notifications-tab" data-bs-toggle="tab" href="#notifications" role="tab">
+                                <i class="bi bi-bell"></i> Notifications
+                            </a>
+                            <a class="nav-link" id="payment-tab" data-bs-toggle="tab" href="#payment" role="tab">
+                                <i class="bi bi-credit-card"></i> Payment Methods
+                            </a>
+                            <a class="nav-link" id="privacy-tab" data-bs-toggle="tab" href="#privacy" role="tab">
+                                <i class="bi bi-eye"></i> Privacy
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-9 col-md-8">
+                    <div class="settings-content">
+                        <div> <div class="tab-content active" id="profile">
+                                <h3>Profile Settings</h3>
+                                
+                                <div class="form-section">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-3">
+                                            <div class="profile-pic">
+                                                <img src="https://placehold.co/150x150/E0E0E0/333333?text=Profile" alt="John Doe" id="profilePic">
+                                                <div class="edit-icon">
+                                                    <i class="bi bi-pencil"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="row g-3">
+                                                <div class="col-md-6">
+                                                    <label for="firstName" class="form-label">First Name</label>
+                                                    <input type="text" class="form-control" id="firstName" value="">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="lastName" class="form-label">Last Name</label>
+                                                    <input type="text" class="form-control" id="lastName" value="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h4 class="form-section-title">Contact Information</h4>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label for="email" class="form-label">Email Address</label>
+                                            <input type="email" class="form-control" id="email" value="">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="phone" class="form-label">Phone Number</label>
+                                            <input type="tel" class="form-control" id="phone" value="">
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label for="address" class="form-label">Address</label>
+                                            <input type="text" class="form-control" id="address" value="">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="city" class="form-label">City</label>
+                                            <input type="text" class="form-control" id="city" value="">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="region" class="form-label">Region/State</label>
+                                            <input type="text" class="form-control" id="region" value="">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="postalCode" class="form-label">Postal Code</label>
+                                            <input type="text" class="form-control" id="postalCode" value="">
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label for="country" class="form-label">Country</label>
+                                            <select class="form-select" id="country">
+                                                <option value="kenya">Kenya</option>
+                                                <option value="uganda">Uganda</option>
+                                                <option value="tanzania">Tanzania</option>
+                                                <option value="rwanda">Rwanda</option>
+                                                <option value="ethiopia">Ethiopia</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h4 class="form-section-title">Business Information</h4>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label for="companyName" class="form-label">Company Name</label>
+                                            <input type="text" class="form-control" id="companyName" value="">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="businessType" class="form-label">Business Type</label>
+                                            <select class="form-select" id="businessType">
+                                                <option value="trucking">Trucking Company</option>
+                                                <option value="individual">Individual Truck Owner</option>
+                                                <option value="broker">Freight Broker</option>
+                                                <option value="shipper">Shipper</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="businessReg" class="form-label">Business Registration Number</label>
+                                            <input type="text" class="form-control" id="businessReg" value="">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="taxId" class="form-label">KRA PIN</label>
+                                            <input type="text" class="form-control" id="taxId" value="">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h4 class="form-section-title">Bio & Description</h4>
+                                    <div class="mb-3">
+                                        <label for="bio" class="form-label">Bio</label>
+                                        <textarea class="form-control" id="bio" rows="4"></textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-end mt-4">
+                                    <button class="btn btn-secondary me-2" id="cancelProfileChanges">Cancel</button>
+                                    <button class="btn btn-primary" id="saveProfileChanges">Save Changes</button>
+                                </div>
+                            </div>
+                            
+                            <div class="tab-content" id="account">
+                                <h3>Account & Security</h3>
+                                
+                                <div class="form-section">
+                                    <h4 class="form-section-title">Change Password</h4>
+                                    <div class="row g-3">
+                                        <div class="col-md-12">
+                                            <label for="currentPassword" class="form-label">Current Password</label>
+                                            <input type="password" class="form-control" id="currentPassword" placeholder="Enter your current password">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="newPassword" class="form-label">New Password</label>
+                                            <input type="password" class="form-control" id="newPassword" placeholder="Enter new password">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                                            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm new password">
+                                        </div>
+                                        <div class="col-12">
+                                            <small class="text-muted">
+                                                <i class="bi bi-info-circle me-1"></i>
+                                                Password must be at least 8 characters and include uppercase, lowercase, numbers, and special characters.
+                                            </small>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3">
+                                        <button class="btn btn-primary">Update Password</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h4 class="form-section-title">Two-Factor Authentication</h4>
+                                    <p class="text-muted mb-3">Enhance your account security by enabling two-factor authentication.</p>
+                                    
+                                    <div class="toggle-option">
+                                        <div>
+                                            <div class="option-label">Enable Two-Factor Authentication</div>
+                                            <div class="option-description">Receive a verification code via SMS or email when signing in.</div>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="toggle-option">
+                                        <div>
+                                            <div class="option-label">Receive verification code via SMS</div>
+                                            <div class="option-description">A verification code will be sent to your number.</div>
+                                            
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="toggle-option">
+                                        <div>
+                                            <div class="option-label">Receive verification code via Email</div>
+                                            <div class="option-description">A verification code will be sent to your email address.</div>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h4 class="form-section-title">Login Sessions</h4>
+                                    <p class="text-muted mb-3">Manage your active login sessions across devices.</p>
+                                    
+                                    <div class="list-group mb-3">
+                                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h6 class="mb-1">Current Session</h6>
+                                                <small class="text-muted">
+                                                    <i class="bi bi-laptop me-1"></i>
+                                                    Chrome on Windows - Nairobi, Kenya
+                                                </small>
+                                                <div>
+                                                    <span class="badge bg-success text-white">Active Now</span>
+                                                </div>
+                                            </div>
+                                            <span class="text-success">This Device</span>
+                                        </div>
+                                        
+                                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h6 class="mb-1">Mobile App</h6>
+                                                <small class="text-muted">
+                                                    <i class="bi bi-phone me-1"></i>
+                                                    FreightLink App on iPhone - Nairobi, Kenya
+                                                </small>
+                                                <div>
+                                                    <small class="text-muted">Last active: 2 hours ago</small>
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-sm btn-outline-danger">Logout</button>
+                                        </div>
+                                        
+                                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h6 class="mb-1">Safari Browser</h6>
+                                                <small class="text-muted">
+                                                    <i class="bi bi-tablet me-1"></i>
+                                                    Safari on iPad - Nairobi, Kenya
+                                                </small>
+                                                <div>
+                                                    <small class="text-muted">Last active: Yesterday at 3:45 PM</small>
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-sm btn-outline-danger">Logout</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <button class="btn btn-danger">Logout of All Other Devices</button>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h4 class="form-section-title">Account Verification</h4>
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div class="me-3">
+                                            <span class="badge bg-success p-2">
+                                                <i class="bi bi-check-circle-fill me-1"></i>
+                                                Verified
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-0">Your account is verified</h6>
+                                            <small class="text-muted">Verified on March 15, 2025</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section account-action">
+                                    <h4 class="form-section-title text-danger">Danger Zone</h4>
+                                    <p class="text-muted mb-3">These actions are irreversible. Please proceed with caution.</p>
+                                    
+                                    <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded-3 mb-3">
+                                        <div>
+                                            <h6>Deactivate Account</h6>
+                                            <p class="text-muted mb-0">Temporarily disable your account</p>
+                                        </div>
+                                        <button class="btn btn-outline-danger">Deactivate</button>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded-3">
+                                        <div>
+                                            <h6>Delete Account</h6>
+                                            <p class="text-muted mb-0">Permanently delete your account and data</p>
+                                        </div>
+                                        <button class="btn btn-danger">Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="tab-content" id="preferences">
+                                <h3>Preferences</h3>
+                                
+                                <div class="form-section">
+                                    <h4 class="form-section-title">Display Settings</h4>
+                                    
+                                    <div class="toggle-option">
+                                        <div>
+                                            <div class="option-label">Dark Mode</div>
+                                            <div class="option-description">Use dark theme across the application.</div>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-group mb-4">
+                                        <label for="language" class="form-label">Language</label>
+                                        <select class="form-select" id="language">
+                                            <option value="en" selected>English</option>
+                                            <option value="sw">Swahili</option>
+                                            <option value="fr">French</option>
+                                            <option value="ar">Arabic</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="timezone" class="form-label">Timezone</label>
+                                        <select class="form-select" id="timezone">
+                                            <option value="Africa/Nairobi" selected>Africa/Nairobi (EAT, +03:00)</option>
+                                            <option value="Africa/Lagos">Africa/Lagos (WAT, +01:00)</option>
+                                            <option value="Africa/Cairo">Africa/Cairo (EET, +02:00)</option>
+                                            <option value="Europe/London">Europe/London (GMT, +00:00)</option>
+                                            <option value="America/New_York">America/New_York (EST, -05:00)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h4 class="form-section-title">Dashboard Preferences</h4>
+                                    
+                                    <div class="form-group mb-4">
+                                        <label for="defaultPage" class="form-label">Default Landing Page</label>
+                                        <select class="form-select" id="defaultPage">
+                                            <option value="dashboard" selected>Dashboard</option>
+                                            <option value="listings">My Listings</option>
+                                            <option value="messages">Messages</option>
+                                            <option value="history">History</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="toggle-option">
+                                        <div>
+                                            <div class="option-label">Show Welcome Message</div>
+                                            <div class="option-description">Display welcome message on dashboard.</div>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="toggle-option">
+                                        <div>
+                                            <div class="option-label">Show Quick Stats</div>
+                                            <div class="option-description">Display quick statistics on dashboard.</div>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h4 class="form-section-title">Distance and Weight Units</h4>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Distance Unit</label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="distanceUnit" id="kilometers" checked>
+                                            <label class="form-check-label" for="kilometers">
+                                                Kilometers (km)
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="distanceUnit" id="miles">
+                                            <label class="form-check-label" for="miles">
+                                                Miles (mi)
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="form-label">Weight Unit</label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="weightUnit" id="kilograms" checked>
+                                            <label class="form-check-label" for="kilograms">
+                                                Kilograms (kg)
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="weightUnit" id="pounds">
+                                            <label class="form-check-label" for="pounds">
+                                                Pounds (lbs)
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-end mt-4">
+                                    <button class="btn btn-secondary me-2">Reset to Default</button>
+                                    <button class="btn btn-primary">Save Preferences</button>
+                                </div>
+                            </div>
+                            
+                            <div class="tab-content" id="notifications">
+                                <h3>Notification Settings</h3>
+                                
+                                <div class="form-section">
+                                    <h4 class="form-section-title">Email Notifications</h4>
+                                    
+                                    <div class="toggle-option">
+                                        <div>
+                                            <div class="option-label">New Cargo Match</div>
+                                            <div class="option-description">Receive email when there's a new cargo matching your vehicles.</div>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="toggle-option">
+                                        <div>
+                                            <div class="option-label">Cargo Request Updates</div>
+                                            <div class="option-description">Receive email when your cargo request status changes.</div>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="toggle-option">
+                                        <div>
+                                            <div class="option-label">New Messages</div>
+                                            <div class="option-description">Receive email when you get new messages.</div>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="toggle-option">
+                                        <div>
+                                            <div class="option-label">Payment Confirmations</div>
+                                            <div class="option-description">Receive email for payment confirmations.</div>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="toggle-option">
+                                        <div>
+                                            <div class="option-label">System Updates</div>
+                                            <div class="option-description">Receive email about system updates and maintenance.</div>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h4 class="form-section-title">SMS Notifications</h4>
+                                    
+                                    <div class="toggle-option">
+                                        <div>
+                                            <div class="option-label">Cargo Status Updates</div>
+                                            <div class="option-description">Receive SMS when cargo status changes.</div>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="toggle-option">
+                                        <div>
+                                            <div class="option-label">Urgent Alerts</div>
+                                            <div class="option-description">Receive SMS for urgent delivery alerts.</div>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="toggle-option">
+                                        <div>
+                                            <div class="option-label">Security Alerts</div>
+                                            <div class="option-description">Receive SMS for account security alerts.</div>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h4 class="form-section-title">In-App Notifications</h4>
+                                    
+                                    <div class="toggle-option">
+                                        <div>
+                                            <div class="option-label">Enable All In-App Notifications</div>
+                                            <div class="option-description">Receive all notifications within the app.</div>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="toggle-option">
+                                        <div>
+                                            <div class="option-label">Sound Alerts</div>
+                                            <div class="option-description">Play sound when receiving notifications.</div>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-end mt-4">
+                                    <button class="btn btn-secondary me-2">Cancel</button>
+                                    <button class="btn btn-primary">Save Changes</button>
+                                </div>
+                            </div>
+                            
+                            <div class="tab-content" id="payment">
+                                <h3>Payment Methods</h3>
+                                
+                                <div class="form-section">
+                                    <h4 class="form-section-title">Saved Payment Methods</h4>
+                                    
+                                    <div class="list-group mb-4">
+                                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                                            <div class="d-flex align-items-center">
+                                                <div class="me-3">
+                                                    <i class="bi bi-credit-card-2-front fs-3"></i>
+                                                </div>
+                                                <div>
+                                                    <h6 class="mb-0">M-Pesa</h6>
+                                                    <small class="text-muted">+254 712 345 678</small>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <span class="badge bg-success me-2">Default</span>
+                                                <button class="btn btn-sm btn-outline-primary">Edit</button>
+                                                <button class="btn btn-sm btn-outline-danger">Remove</button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                                            <div class="d-flex align-items-center">
+                                                <div class="me-3">
+                                                    <i class="bi bi-bank fs-3"></i>
+                                                </div>
+                                                <div>
+                                                    <h6 class="mb-0">Bank Account</h6>
+                                                    <small class="text-muted">Equity Bank ****3456</small>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <button class="btn btn-sm btn-outline-secondary me-2">Set Default</button>
+                                                <button class="btn btn-sm btn-outline-primary">Edit</button>
+                                                <button class="btn btn-sm btn-outline-danger">Remove</button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                                            <div class="d-flex align-items-center">
+                                                <div class="me-3">
+                                                    <i class="bi bi-credit-card fs-3"></i>
+                                                </div>
+                                                <div>
+                                                    <h6 class="mb-0">Visa Card</h6>
+                                                    <small class="text-muted">**** **** **** 5678</small>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <button class="btn btn-sm btn-outline-secondary me-2">Set Default</button>
+                                                <button class="btn btn-sm btn-outline-primary">Edit</button>
+                                                <button class="btn btn-sm btn-outline-danger">Remove</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <button class="btn btn-primary mb-4">
+                                        <i class="bi bi-plus-circle me-2"></i>Add Payment Method
+                                    </button>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h4 class="form-section-title">Billing Information</h4>
+                                    
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label for="billingName" class="form-label">Billing Name</label>
+                                            <input type="text" class="form-control" id="billingName" value="John Doe">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="billingCompany" class="form-label">Company Name</label>
+                                            <input type="text" class="form-control" id="billingCompany" value="JD Logistics">
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label for="billingAddress" class="form-label">Billing Address</label>
+                                            <input type="text" class="form-control" id="billingAddress" value="123 Business Street">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="billingCity" class="form-label">City</label>
+                                            <input type="text" class="form-control" id="billingCity" value="Nairobi">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="billingRegion" class="form-label">Region/State</label>
+                                            <input type="text" class="form-control" id="billingRegion" value="Nairobi County">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="billingPostalCode" class="form-label">Postal Code</label>
+                                            <input type="text" class="form-control" id="billingPostalCode" value="00100">
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label for="billingCountry" class="form-label">Country</label>
+                                            <select class="form-select" id="billingCountry">
+                                                <option value="kenya" selected>Kenya</option>
+                                                <option value="uganda">Uganda</option>
+                                                <option value="tanzania">Tanzania</option>
+                                                <option value="rwanda">Rwanda</option>
+                                                <option value="ethiopia">Ethiopia</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-end mt-4">
+                                    <button class="btn btn-secondary me-2">Cancel</button>
+                                    <button class="btn btn-primary">Save Changes</button>
+                                </div>
+                            </div>
+                            
+                            <div class="tab-content" id="privacy">
+                                <h3>Privacy Settings</h3>
+                                
+                                <div class="form-section">
+                                    <h4 class="form-section-title">Profile Visibility</h4>
+                                    
+                                    <div class="toggle-option">
+                                        <div>
+                                            <div class="option-label">Public Profile</div>
+                                            <div class="option-description">Allow others to view your public profile.</div>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="toggle-option">
+                                        <div>
+                                            <div class="option-label">Show Contact Information</div>
+                                            <div class="option-description">Display your contact information on your profile.</div>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="toggle-option">
+                                        <div>
+                                            <div class="option-label">Show Business Details</div>
+                                            <div class="option-description">Display your business information on your profile.</div>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h4 class="form-section-title">Data Usage</h4>
+                                    
+                                    <div class="toggle-option">
+                                        <div>
+                                            <div class="option-label">Analytics & Improvement</div>
+                                            <div class="option-description">Allow us to collect usage data to improve our services.</div>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="toggle-option">
+                                        <div>
+                                            <div class="option-label">Personalized Recommendations</div>
+                                            <div class="option-description">Receive personalized cargo and route recommendations.</div>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="toggle-option">
+                                        <div>
+                                            <div class="option-label">Location Tracking</div>
+                                            <div class="option-description">Allow location tracking for better service.</div>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h4 class="form-section-title">Communication Preferences</h4>
+                                    
+                                    <div class="toggle-option">
+                                        <div>
+                                            <div class="option-label">Marketing Communications</div>
+                                            <div class="option-description">Receive marketing emails and promotions.</div>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="toggle-option">
+                                        <div>
+                                            <div class="option-label">Newsletter</div>
+                                            <div class="option-description">Subscribe to our monthly newsletter.</div>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h4 class="form-section-title">Data Management</h4>
+                                    
+                                    <div class="mb-4">
+                                        <button class="btn btn-outline-primary">
+                                            <i class="bi bi-cloud-download me-2"></i>Download My Data
+                                        </button>
+                                        <p class="text-muted mt-2 small">
+                                            Download all your personal data that we have stored.
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-end mt-4">
+                                    <button class="btn btn-secondary me-2">Cancel</button>
+                                    <button class="btn btn-primary">Save Changes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Base URL for your Django API. IMPORTANT: Replace with your actual Django backend URL.
+            const API_BASE_URL = 'http://127.0.0.1:8000/api/'; // Example: 'http://localhost:8000/api/' or your deployed URL
+
+            // Function to get CSRF token from cookies
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            const csrftoken = getCookie('csrftoken');
+
+            // --- Tab navigation logic (existing code, unchanged) ---
+            const tabs = document.querySelectorAll('#settings-tabs .nav-link');
+            const tabContents = document.querySelectorAll('.settings-content > div > .tab-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                    const tabId = this.getAttribute('href').substring(1);
+                    const targetContent = document.getElementById(tabId);
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                    }
+                    // Optionally, trigger data load for the activated tab
+                    if (tabId === 'profile') {
+                        fetchProfileData();
+                    }
+                    // Add similar calls for other tabs if they need data loading
+                });
+            });
+
+            // Initialize flatpickr for any date inputs
+            const datePickers = document.querySelectorAll('.date-picker');
+            if (datePickers.length > 0) {
+                flatpickr(datePickers, {
+                    dateFormat: 'Y-m-d'
+                });
+            }
+
+            // --- Profile Data Handling ---
+
+            // Elements for profile form
+            const firstNameInput = document.getElementById('firstName');
+            const lastNameInput = document.getElementById('lastName');
+            const emailInput = document.getElementById('email');
+            const phoneInput = document.getElementById('phone');
+            const addressInput = document.getElementById('address');
+            const cityInput = document.getElementById('city');
+            const regionInput = document.getElementById('region');
+            const postalCodeInput = document.getElementById('postalCode');
+            const countrySelect = document.getElementById('country');
+            const companyNameInput = document.getElementById('companyName');
+            const businessTypeSelect = document.getElementById('businessType');
+            const businessRegInput = document.getElementById('businessReg');
+            const taxIdInput = document.getElementById('taxId');
+            const bioTextarea = document.getElementById('bio');
+            const profilePicImg = document.getElementById('profilePic');
+
+            const saveProfileBtn = document.getElementById('saveProfileChanges');
+            const cancelProfileBtn = document.getElementById('cancelProfileChanges');
+
+            let originalProfileData = {}; // To store data fetched from the backend for cancellation
+
+            // Function to fetch profile data from Django backend
+            async function fetchProfileData() {
+                try {
+                    const response = await fetch(`${API_BASE_URL}profile/`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            // 'Authorization': 'Bearer YOUR_AUTH_TOKEN' // If you have authentication
+                        }
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        console.error('Error fetching profile data:', errorData);
+                        // Implement a user-friendly message instead of alert
+                        // alert('Failed to fetch profile data. Please try again.');
+                        return;
+                    }
+
+                    const data = await response.json();
+                    originalProfileData = { ...data }; // Store a copy for cancellation
+
+                    // Populate form fields with fetched data
+                    firstNameInput.value = data.first_name || '';
+                    lastNameInput.value = data.last_name || '';
+                    emailInput.value = data.email || '';
+                    phoneInput.value = data.phone || '';
+                    addressInput.value = data.address || '';
+                    cityInput.value = data.city || '';
+                    regionInput.value = data.region || '';
+                    postalCodeInput.value = data.postal_code || '';
+                    countrySelect.value = data.country || 'kenya'; // Default if not set
+                    companyNameInput.value = data.company_name || '';
+                    businessTypeSelect.value = data.business_type || 'trucking'; // Default
+                    businessRegInput.value = data.business_registration_number || '';
+                    taxIdInput.value = data.tax_id || '';
+                    bioTextarea.value = data.bio || '';
+                    if (data.profile_picture) {
+                        profilePicImg.src = data.profile_picture; // Assuming this is a full URL
+                    } else {
+                        profilePicImg.src = "https://placehold.co/150x150/E0E0E0/333333?text=Profile";
+                    }
+
+                } catch (error) {
+                    console.error('Network error or unexpected issue:', error);
+                    // Implement a user-friendly message
+                    // alert('An error occurred while connecting to the server.');
+                }
+            }
+
+            // Function to save profile data to Django backend
+            async function saveProfileData() {
+                const updatedData = {
+                    first_name: firstNameInput.value,
+                    last_name: lastNameInput.value,
+                    email: emailInput.value,
+                    phone: phoneInput.value,
+                    address: addressInput.value,
+                    city: cityInput.value,
+                    region: regionInput.value,
+                    postal_code: postalCodeInput.value,
+                    country: countrySelect.value,
+                    company_name: companyNameInput.value,
+                    business_type: businessTypeSelect.value,
+                    business_registration_number: businessRegInput.value,
+                    tax_id: taxIdInput.value,
+                    bio: bioTextarea.value,
+                    // profile_picture: '...' // Handle file uploads separately if needed
+                };
+
+                try {
+                    const response = await fetch(`${API_BASE_URL}profile/update/`, { // Or PATCH if you prefer partial updates
+                        method: 'PUT', // Or 'PATCH'
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrftoken, // Important for Django
+                            // 'Authorization': 'Bearer YOUR_AUTH_TOKEN' // If you have authentication
+                        },
+                        body: JSON.stringify(updatedData)
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        console.error('Error saving profile data:', errorData);
+                        // Implement a user-friendly message
+                        // alert('Failed to save profile data. Please check your input and try again.');
+                        return;
+                    }
+
+                    const result = await response.json();
+                    console.log('Profile saved successfully:', result);
+                    // Implement a success message for the user
+                    // alert('Profile updated successfully!');
+                    originalProfileData = { ...updatedData }; // Update original data after successful save
+
+                } catch (error) {
+                    console.error('Network error or unexpected issue:', error);
+                    // Implement a user-friendly message
+                    // alert('An error occurred while connecting to the server.');
+                }
+            }
+
+            // Event Listeners for Profile tab buttons
+            if (saveProfileBtn) {
+                saveProfileBtn.addEventListener('click', saveProfileData);
+            }
+
+            if (cancelProfileBtn) {
+                cancelProfileBtn.addEventListener('click', () => {
+                    // Revert form fields to original data
+                    firstNameInput.value = originalProfileData.first_name || '';
+                    lastNameInput.value = originalProfileData.last_name || '';
+                    emailInput.value = originalProfileData.email || '';
+                    phoneInput.value = originalProfileData.phone || '';
+                    addressInput.value = originalProfileData.address || '';
+                    cityInput.value = originalProfileData.city || '';
+                    regionInput.value = originalProfileData.region || '';
+                    postalCodeInput.value = originalProfileData.postal_code || '';
+                    countrySelect.value = originalProfileData.country || 'kenya';
+                    companyNameInput.value = originalProfileData.company_name || '';
+                    businessTypeSelect.value = originalProfileData.business_type || 'trucking';
+                    businessRegInput.value = originalProfileData.business_registration_number || '';
+                    taxIdInput.value = originalProfileData.tax_id || '';
+                    bioTextarea.value = originalProfileData.bio || '';
+                    if (originalProfileData.profile_picture) {
+                        profilePicImg.src = originalProfileData.profile_picture;
+                    } else {
+                        profilePicImg.src = "https://placehold.co/150x150/E0E0E0/333333?text=Profile";
+                    }
+                    console.log('Profile changes cancelled.');
+                });
+            }
+
+            // Initial fetch of profile data when the page loads
+            fetchProfileData();
+        });
+    </script>
+</body>
+</html>

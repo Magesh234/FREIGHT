@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreightLink - Truck Booking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        :root {
+            --primary: #2C3E50;
+            --secondary: #34495E;
+            --accent: #F39C12;
+            --accent-hover: #E67E22;
+            --light: #ECF0F1;
+            --dark: #2C3E50;
+            --gray: #95A5A6;
+            --light-gray: #F8F9FA;
+            --success: #27AE60;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .rounded-md {
+            border-radius: 0.75rem;
+        }
+        
+        .shadow-custom {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--primary);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
+        }
+        .header .logo {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+        .header .nav-link {
+            color: #FFFFFF;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+            margin: 0 0.25rem;
+        }
+        .header .nav-link:hover, .header .nav-link.active {
+            color: var(--primary);
+            background-color: var(--accent);
+            border-radius: 2rem;
+        }
+        .header .nav-link.active {
+            font-weight: 600;
+        }
+
+        /* Dashboard Layout */
+        .dashboard-layout {
+            display: flex;
+            height: calc(100vh - 70px); /* Adjusted for fixed header */
+            margin-top: 70px; /* Height of the header */
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background-color: var(--primary);
+            padding: 2rem 1rem;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+            height: 100%; /* Fill available height */
+        }
+        .sidebar .menu-item {
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.75rem 1rem;
+            margin: 0.25rem 0;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .sidebar .menu-item i {
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+        .sidebar .menu-item:hover, .sidebar .menu-item.active {
+            background-color: var(--accent);
+            color: var(--primary);
+        }
+        .sidebar .menu-item.active {
+            font-weight: 600;
+        }
+        .sidebar .divider {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 1rem 0;
+        }
+        .sidebar .menu-title {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin: 1.5rem 0 0.5rem 1rem;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            height: 100%; /* Fill available height */
+        }
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+        .page-subtitle {
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+
+        /* Form Components */
+        .form-card {
+            background-color: #FFFFFF;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .form-card h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        .form-label {
+            font-weight: 500;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        .form-control, .form-select {
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            border: 1px solid #DDE2E5;
+            transition: all 0.3s ease;
+            background-color: var(--light-gray);
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 0.25rem rgba(243, 156, 18, 0.25);
+            background-color: #FFFFFF;
+        }
+        
+        /* Buttons */
+        .btn-primary, .btn-primary:focus {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            color: var(--dark);
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+        }
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+            border-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(230, 126, 34, 0.4);
+        }
+        .btn-secondary, .btn-secondary:focus {
+            background-color: var(--light-gray);
+            border-color: #DDE2E5;
+            color: var(--gray);
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background-color: #e9ecef;
+            border-color: #c1c7cc;
+            color: var(--dark);
+            transform: translateY(-2px);
+        }
+
+        /* Custom styles for truck details page */
+        .truck-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 3rem 0;
+            position: relative;
+            z-index: 1; /* Ensure it's above the clipped ellipse */
+        }
+        
+        .truck-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50px;
+            background-color: var(--light);
+            clip-path: ellipse(70% 50% at 50% 100%);
+            z-index: 0;
+        }
+        
+        .truck-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .truck-badge {
+            font-size: 0.8rem;
+            padding: 0.5em 1em;
+            border-radius: 50px;
+            margin-left: 1rem;
+            vertical-align: middle;
+        }
+        
+        .truck-details-card {
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        
+        .truck-image-container {
+            height: 300px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .truck-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .truck-image-nav {
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .truck-image-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+        }
+        
+        .truck-image-dot.active {
+            background-color: white;
+        }
+        
+        .truck-details-content {
+            padding: 2rem;
+        }
+        
+        .truck-info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+        
+        .truck-info-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .truck-info-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .truck-info-value {
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 1.1rem;
+        }
+        
+        .truck-description {
+            margin: 1.5rem 0;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .truck-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        
+        .truck-feature {
+            display: flex;
+            align-items: center;
+        }
+        
+        .truck-feature i {
+            color: var(--success);
+            margin-right: 0.75rem;
+        }
+        
+        .price-tag {
+            background-color: var(--accent);
+            color: var(--dark);
+            font-weight: 700;
+            font-size: 1.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+        
+        .booking-progress {
+            margin-bottom: 2rem;
+        }
+        
+        .booking-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-bottom: 2rem;
+        }
+        
+        .booking-steps::before {
+            content: '';
+            position: absolute;
+            top: 14px; /* Adjusted for 30px circle */
+            left: 15px; /* Half of circle width */
+            right: 15px; /* Half of circle width */
+            height: 2px;
+            background-color: var(--light-gray);
+            z-index: 1;
+        }
+        
+        .booking-step {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: auto; /* Allow natural width for label */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .booking-step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--light-gray);
+            border: 2px solid var(--gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.5rem;
+            font-weight: 600;
+            color: var(--gray);
+            transition: all 0.3s ease;
+        }
+        
+        .booking-step.active .booking-step-circle {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            color: var(--dark);
+        }
+        
+        .booking-step.completed .booking-step-circle {
+            background-color: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+        
+        .booking-step-label {
+            font-size: 0.8rem;
+            color: var(--gray);
+            font-weight: 500;
+            /* width: 100px; Removed fixed width */
+            /* margin-left: -35px; Removed offset */
+        }
+        
+        .booking-step.active .booking-step-label {
+            color: var(--dark);
+            font-weight: 600;
+        }
+        
+        .booking-form-step {
+            display: none;
+        }
+        
+        .booking-form-step.active {
+            display: block;
+        }
+        
+        .booking-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .date-range-input {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .truck-owner-info {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background-color: var(--light-gray);
+            border-radius: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .truck-owner-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+        
+        .truck-owner-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .truck-owner-rating {
+            color: var(--accent);
+        }
+        
+        .summary-table {
+            width: 100%;
+            margin-bottom: 1.5rem;
+        }
+        
+        .summary-table td {
+            padding: 0.75rem 0;
+        }
+        
+        .summary-table tr:not(:last-child) {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .summary-table .summary-label {
+            color: var(--gray);
+        }
+        
+        .summary-table .summary-value {
+            text-align: right;
+            font-weight: 500;
+        }
+        
+        .summary-table .summary-total td {
+            font-weight: 700;
+            color: var(--accent);
+            font-size: 1.2rem;
+        }
+        
+        .payment-method {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border: 1px solid #DDE2E5;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .payment-method:hover, .payment-method.active {
+            border-color: var(--accent);
+            background-color: rgba(243, 156, 18, 0.05);
+        }
+        
+        .payment-method-logo {
+            width: 60px;
+            margin-right: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .payment-method-logo i {
+            font-size: 2rem;
+            color: var(--accent);
+        }
+        
+        .payment-method-details {
+            flex-grow: 1;
+        }
+        
+        .payment-method-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .confirmation-message {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .confirmation-icon {
+            font-size: 4rem;
+            color: var(--success);
+            margin-bottom: 1.5rem;
+        }
+        
+        .confirmation-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .booking-details {
+            background-color: var(--light-gray);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+        
+        .booking-detail-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+        
+        .booking-detail-label {
+            color: var(--gray);
+        }
+        
+        .booking-detail-value {
+            font-weight: 500;
+        }
+
+        .header.sticky-top {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            z-index: 1030; /* Standard Bootstrap sticky-top z-index */
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 991.98px) {
+            .dashboard-layout {
+                margin-top: 0; /* Remove margin for smaller screens if header isn't always fixed or layout changes */
+            }
+            .sidebar {
+                width: 80px;
+                padding: 2rem 0.5rem;
+                height: calc(100vh - 70px); /* Adjust if header is fixed for tablet */
+            }
+            .sidebar .menu-item span, .sidebar .menu-title {
+                display: none;
+            }
+            .sidebar .menu-item i {
+                margin-right: 0;
+                font-size: 1.5rem;
+            }
+            .main-content {
+                padding: 1.5rem;
+                 height: calc(100vh - 70px); /* Adjust if header is fixed for tablet */
+            }
+            .truck-info-grid {
+                grid-template-columns: 1fr;
+            }
+             .booking-steps {
+                flex-direction: row; /* Keep horizontal on medium */
+                align-items: flex-start;
+            }
+            .booking-step-label {
+                font-size: 0.7rem; /* Smaller labels for smaller screens */
+                white-space: normal; /* Allow wrapping */
+                max-width: 70px; /* Limit width to encourage wrapping */
+            }
+        }
+        
+        @media (max-width: 767.98px) {
+            .dashboard-layout {
+                flex-direction: column;
+                height: auto;
+                margin-top: 0; /* Header might not be fixed or layout changes */
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                padding: 1rem;
+                display: flex;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            .sidebar .menu-item {
+                margin: 0 0.25rem;
+                padding: 0.5rem 1rem;
+            }
+            .sidebar .menu-item span {
+                display: none; /* Kept hidden for consistency */
+            }
+            .sidebar .divider, .sidebar .menu-title {
+                display: none;
+            }
+            .main-content {
+                padding: 1.5rem 1rem;
+                height: auto;
+            }
+            .truck-header {
+                padding: 2rem 0;
+            }
+            .truck-title {
+                font-size: 1.8rem;
+            }
+            .truck-features {
+                grid-template-columns: 1fr;
+            }
+            .date-range-input {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            .booking-steps {
+                flex-direction: column; /* Stack steps vertically */
+                align-items: center; /* Center items when stacked */
+            }
+            .booking-steps::before {
+                left: 50%;
+                right: auto;
+                top: 15px;
+                bottom: 15px;
+                width: 2px;
+                height: auto; /* Full height between circles */
+                transform: translateX(-50%);
+            }
+             .booking-step {
+                width: 100%; /* Full width for step */
+                margin-bottom: 1rem; /* Space between vertical steps */
+            }
+            .booking-step-label {
+                max-width: none; /* Allow full width for labels */
+                margin-top: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header text-white py-3 shadow-sm sticky-top">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="logo d-flex align-items-center">
+                    <i class="bi bi-truck me-2"></i>FreightLink
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="dropdown me-3">
+                        <a href="#" class="text-white dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-bell me-2"></i>
+                            <span class="badge bg-accent text-dark rounded-pill">3</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">New match found</a></li>
+                            <li><a class="dropdown-item" href="#">Cargo request accepted</a></li>
+                            <li><a class="dropdown-item" href="#">Payment received</a></li>
+                        </ul>
+                    </div>
+                    <div class="dropdown">
+                        <a href="#" class="text-white dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="rounded-circle bg-accent text-dark d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                                <i class="bi bi-person-fill"></i>
+                            </div>
+                            <span>John Doe</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-layout">
+        <div class="sidebar">
+            <a href="#" class="menu-item">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="menu-item active">
+                <i class="bi bi-box-seam-fill"></i>
+                <span>My Listings</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i class="bi bi-clock-history"></i>
+                <span>History</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i class="bi bi-chat-left-text-fill"></i>
+                <span>Messages</span>
+            </a>
+            
+            <div class="divider"></div>
+            <div class="menu-title">Account</div>
+            
+            <a href="#" class="menu-item">
+                <i class="bi bi-person-fill"></i>
+                <span>Profile</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i class="bi bi-wallet2"></i>
+                <span>Payments</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i class="bi bi-gear-fill"></i>
+                <span>Settings</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i class="bi bi-question-circle-fill"></i>
+                <span>Help & Support</span>
+            </a>
+            
+            <div class="divider"></div>
+            
+            <a href="#" class="menu-item">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+
+        <div class="main-content">
+            <div class="d-flex align-items-center mb-4">
+                <a href="#" class="btn btn-sm btn-secondary me-3">
+                    <i class="bi bi-arrow-left"></i> Back to Listings
+                </a>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="#" class="text-accent">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="#" class="text-accent">Find Cargo</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">10-Ton Truck</li>
+                    </ol>
+                </nav>
+            </div>
+
+            <div class="truck-header mb-4">
+                <div class="container">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h1 class="truck-title" id="truckTitle">10-Ton Closed Body Truck
+                                <span class="badge truck-badge bg-success text-white" id="truckStatus">Available Now</span>
+                            </h1>
+                            <p class="mb-0"><i class="bi bi-geo-alt-fill me-2"></i><span id="truckRoute">Nairobi - Mombasa Route</span></p>
+                        </div>
+                        <div class="price-tag" id="truckPrice">
+                            KSh 45,000
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-5">
+                        <div class="truck-details-card">
+                            <div class="truck-image-container">
+                                <img src="https://via.placeholder.com/800x400.png?text=Truck+Image" alt="10-Ton Truck" class="truck-image" id="mainTruckImage">
+                                <div class="truck-image-nav" id="truckImageNav">
+                                    <div class="truck-image-dot active" data-image-src="https://via.placeholder.com/800x400.png?text=Truck+Image+1"></div>
+                                    <div class="truck-image-dot" data-image-src="https://via.placeholder.com/800x400.png?text=Truck+Image+2"></div>
+                                    <div class="truck-image-dot" data-image-src="https://via.placeholder.com/800x400.png?text=Truck+Image+3"></div>
+                                </div>
+                            </div>
+                            <div class="truck-details-content">
+                                <div class="truck-owner-info">
+                                    <div class="truck-owner-avatar">
+                                        <i class="bi bi-person-fill"></i>
+                                    </div>
+                                    <div>
+                                        <div class="truck-owner-name" id="ownerName">David Kamau</div>
+                                        <div class="truck-owner-rating">
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-half"></i>
+                                            <span class="ms-2 text-dark" id="ownerRating">4.8 (124 trips)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="truck-info-grid">
+                                    <div class="truck-info-item">
+                                        <span class="truck-info-label">Truck Type</span>
+                                        <span class="truck-info-value" id="truckType">Closed Body</span>
+                                    </div>
+                                    <div class="truck-info-item">
+                                        <span class="truck-info-label">Maximum Load</span>
+                                        <span class="truck-info-value" id="maxLoad">10 Tons</span>
+                                    </div>
+                                    <div class="truck-info-item">
+                                        <span class="truck-info-label">Make & Model</span>
+                                        <span class="truck-info-value" id="makeModel">Isuzu FTR</span>
+                                    </div>
+                                    <div class="truck-info-item">
+                                        <span class="truck-info-label">Year</span>
+                                        <span class="truck-info-value" id="truckYear">2022</span>
+                                    </div>
+                                    <div class="truck-info-item">
+                                        <span class="truck-info-label">Dimensions (L×W×H)</span>
+                                        <span class="truck-info-value" id="dimensions">7.5m × 2.4m × 2.6m</span>
+                                    </div>
+                                    <div class="truck-info-item">
+                                        <span class="truck-info-label">Volume Capacity</span>
+                                        <span class="truck-info-value" id="volumeCapacity">46.8 m³</span>
+                                    </div>
+                                </div>
+
+                                <div class="truck-description">
+                                    <h5>Description</h5>
+                                    <p id="truckDescription">Well-maintained 10-ton closed body truck available for transport between Nairobi and Mombasa. Suitable for general cargo, packaged goods, and furniture. Experienced driver with excellent safety record.</p>
+                                    
+                                    <h5 class="mt-4">Features</h5>
+                                    <div class="truck-features" id="truckFeatures">
+                                        <div class="truck-feature">
+                                            <i class="bi bi-check-circle-fill"></i>
+                                            <span>GPS Tracking</span>
+                                        </div>
+                                        <div class="truck-feature">
+                                            <i class="bi bi-check-circle-fill"></i>
+                                            <span>Hydraulic Lift</span>
+                                        </div>
+                                        <div class="truck-feature">
+                                            <i class="bi bi-check-circle-fill"></i>
+                                            <span>Load Securing Equipment</span>
+                                        </div>
+                                        <div class="truck-feature">
+                                            <i class="bi bi-check-circle-fill"></i>
+                                            <span>Cargo Insurance</span>
+                                        </div>
+                                        <div class="truck-feature">
+                                            <i class="bi bi-check-circle-fill"></i>
+                                            <span>24/7 Support</span>
+                                        </div>
+                                        <div class="truck-feature">
+                                            <i class="bi bi-check-circle-fill"></i>
+                                            <span>Experienced Driver</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-7">
+                        <div class="form-card">
+                            <h3>Book This Truck</h3>
+                            
+                            <div class="booking-progress">
+                                <div class="booking-steps">
+                                    <div class="booking-step active" data-step="1">
+                                        <div class="booking-step-circle">1</div>
+                                        <div class="booking-step-label">Details</div>
+                                    </div>
+                                    <div class="booking-step" data-step="2">
+                                        <div class="booking-step-circle">2</div>
+                                        <div class="booking-step-label">Payment</div>
+                                    </div>
+                                    <div class="booking-step" data-step="3">
+                                        <div class="booking-step-circle">3</div>
+                                        <div class="booking-step-label">Confirm</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <form id="bookingForm">
+                                <div class="booking-form-step active" id="step-details">
+                                    <h4 class="mb-3">Trip Details</h4>
+                                    <div class="mb-3">
+                                        <label for="pickupLocation" class="form-label">Pickup Location</label>
+                                        <input type="text" class="form-control" id="pickupLocation" value="Nairobi (Industrial Area)" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="dropoffLocation" class="form-label">Drop-off Location</label>
+                                        <input type="text" class="form-control" id="dropoffLocation" value="Mombasa (Port Reitz)" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Booking Dates</label>
+                                        <div class="date-range-input">
+                                            <input type="text" class="form-control date-picker" id="pickupDate" placeholder="Pickup Date" required>
+                                            <input type="text" class="form-control date-picker" id="returnDate" placeholder="Return Date (Optional)">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="cargoType" class="form-label">Type of Cargo</label>
+                                        <input type="text" class="form-control" id="cargoType" placeholder="e.g., Packaged Goods, Electronics" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="cargoWeight" class="form-label">Estimated Weight (Tons)</label>
+                                        <input type="number" class="form-control" id="cargoWeight" placeholder="Max 10 Tons" min="0" max="10" step="0.1" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="specialInstructions" class="form-label">Special Instructions</label>
+                                        <textarea class="form-control" id="specialInstructions" rows="3" placeholder="e.g., Fragile items, specific handling requirements"></textarea>
+                                    </div>
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="checkbox" value="" id="addInsurance">
+                                        <label class="form-check-label" for="addInsurance">
+                                            Add Extra Cargo Insurance (KSh 2,500)
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="booking-form-step" id="step-payment">
+                                    <h4 class="mb-3">Payment Information</h4>
+                                    <div class="mb-4">
+                                        <h5>Booking Summary</h5>
+                                        <table class="summary-table">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="summary-label">Trip Cost (Nairobi - Mombasa)</td>
+                                                    <td class="summary-value" id="summaryTripCost">KSh 45,000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="summary-label">Pickup Date</td>
+                                                    <td class="summary-value" id="summaryPickupDate">-</td>
+                                                </tr>
+                                                 <tr>
+                                                    <td class="summary-label">Return Date</td>
+                                                    <td class="summary-value" id="summaryReturnDate">-</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="summary-label">Cargo Type</td>
+                                                    <td class="summary-value" id="summaryCargoType">-</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="summary-label">Estimated Weight</td>
+                                                    <td class="summary-value" id="summaryCargoWeight">-</td>
+                                                </tr>
+                                                <tr id="summaryInsuranceRow" style="display: none;">
+                                                    <td class="summary-label">Extra Insurance</td>
+                                                    <td class="summary-value" id="summaryInsuranceCost">KSh 2,500</td>
+                                                </tr>
+                                                <tr class="summary-total">
+                                                    <td class="summary-label">Total Amount</td>
+                                                    <td class="summary-value" id="summaryTotalAmount">KSh 45,000</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <h5>Select Payment Method</h5>
+                                    <div class="payment-method active" data-payment="mpesa">
+                                        <div class="payment-method-logo"><i class="bi bi-phone"></i></div>
+                                        <div class="payment-method-details">
+                                            <div class="payment-method-name">M-Pesa</div>
+                                            <small class="text-muted">Pay securely with M-Pesa.</small>
+                                        </div>
+                                        <i class="bi bi-check-circle-fill ms-auto fs-4 text-accent"></i>
+                                    </div>
+                                    <div class="payment-method" data-payment="card">
+                                        <div class="payment-method-logo"><i class="bi bi-credit-card"></i></div>
+                                        <div class="payment-method-details">
+                                            <div class="payment-method-name">Credit/Debit Card</div>
+                                            <small class="text-muted">Visa, Mastercard, Amex.</small>
+                                        </div>
+                                        <i class="bi bi-check-circle-fill ms-auto fs-4 text-accent" style="display:none;"></i>
+                                    </div>
+                                    <div class="payment-method" data-payment="bank">
+                                        <div class="payment-method-logo"><i class="bi bi-bank"></i></div>
+                                        <div class="payment-method-details">
+                                            <div class="payment-method-name">Bank Transfer</div>
+                                            <small class="text-muted">Direct bank deposit.</small>
+                                        </div>
+                                         <i class="bi bi-check-circle-fill ms-auto fs-4 text-accent" style="display:none;"></i>
+                                    </div>
+                                    
+                                    <div id="card-details-form" style="display:none;" class="mt-3">
+                                        <div class="mb-3">
+                                            <label for="cardNumber" class="form-label">Card Number</label>
+                                            <input type="text" class="form-control" id="cardNumber" placeholder="•••• •••• •••• ••••">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-7 mb-3">
+                                                <label for="cardExpiry" class="form-label">Expiry Date</label>
+                                                <input type="text" class="form-control" id="cardExpiry" placeholder="MM/YY">
+                                            </div>
+                                            <div class="col-md-5 mb-3">
+                                                <label for="cardCVC" class="form-label">CVC</label>
+                                                <input type="text" class="form-control" id="cardCVC" placeholder="•••">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="booking-form-step" id="step-confirmation">
+                                    <div class="confirmation-message">
+                                        <div class="confirmation-icon">
+                                            <i class="bi bi-check-circle-fill"></i>
+                                        </div>
+                                        <h3 class="confirmation-title">Booking Confirmed!</h3>
+                                        <p class="text-muted">Your truck booking has been successfully placed. A confirmation email with all the details has been sent to you.</p>
+                                        
+                                        <div class="booking-details">
+                                            <h5 class="mb-3">Your Booking Details:</h5>
+                                            <div class="booking-detail-item">
+                                                <span class="booking-detail-label">Booking ID:</span>
+                                                <span class="booking-detail-value" id="confirmBookingID">FLNK-12345XYZ</span>
+                                            </div>
+                                            <div class="booking-detail-item">
+                                                <span class="booking-detail-label">Truck:</span>
+                                                <span class="booking-detail-value" id="confirmTruckName">10-Ton Closed Body Truck</span>
+                                            </div>
+                                            <div class="booking-detail-item">
+                                                <span class="booking-detail-label">Route:</span>
+                                                <span class="booking-detail-value" id="confirmRoute">Nairobi - Mombasa</span>
+                                            </div>
+                                            <div class="booking-detail-item">
+                                                <span class="booking-detail-label">Pickup Date:</span>
+                                                <span class="booking-detail-value" id="confirmPickupDate">-</span>
+                                            </div>
+                                             <div class="booking-detail-item">
+                                                <span class="booking-detail-label">Return Date:</span>
+                                                <span class="booking-detail-value" id="confirmReturnDate">-</span>
+                                            </div>
+                                            <div class="booking-detail-item">
+                                                <span class="booking-detail-label">Cargo:</span>
+                                                <span class="booking-detail-value" id="confirmCargoType">-</span>
+                                            </div>
+                                            <div class="booking-detail-item">
+                                                <span class="booking-detail-label">Total Amount:</span>
+                                                <span class="booking-detail-value fw-bold text-accent" id="confirmTotalAmount">KSh 45,000</span>
+                                            </div>
+                                             <div class="booking-detail-item">
+                                                <span class="booking-detail-label">Payment Method:</span>
+                                                <span class="booking-detail-value" id="confirmPaymentMethod">M-Pesa</span>
+                                            </div>
+                                        </div>
+                                        <a href="#" class="btn btn-primary mt-3"><i class="bi bi-list-check me-2"></i>View My Bookings</a>
+                                        <a href="#" class="btn btn-secondary mt-3"><i class="bi bi-house me-2"></i>Back to Home</a>
+                                    </div>
+                                </div>
+
+                                <div class="booking-nav">
+                                    <button type="button" class="btn btn-secondary" id="prevBtn" style="display: none;">
+                                        <i class="bi bi-arrow-left me-2"></i>Previous
+                                    </button>
+                                    <button type="button" class="btn btn-primary" id="nextBtn">
+                                        Next<i class="bi bi-arrow-right ms-2"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- Configuration ---
+            // Replace with your actual Django backend URL
+            const DJANGO_BASE_URL = 'http://127.0.0.1:8000'; 
+            // Assuming a truck ID is passed or hardcoded for this page
+            // In a real application, this would likely come from the URL (e.g., /trucks/1/)
+            const TRUCK_ID = 1; 
+
+            // --- DOM Elements ---
+            const formSteps = document.querySelectorAll('.booking-form-step');
+            const progressSteps = document.querySelectorAll('.booking-step');
+            const nextBtn = document.getElementById('nextBtn');
+            const prevBtn = document.getElementById('prevBtn');
+            const bookingForm = document.getElementById('bookingForm');
+            
+            const pickupDateElem = document.getElementById('pickupDate');
+            const returnDateElem = document.getElementById('returnDate');
+            const cargoTypeElem = document.getElementById('cargoType');
+            const cargoWeightElem = document.getElementById('cargoWeight');
+            const addInsuranceElem = document.getElementById('addInsurance');
+            const pickupLocationElem = document.getElementById('pickupLocation');
+            const dropoffLocationElem = document.getElementById('dropoffLocation');
+
+            // Truck details elements (for dynamic updates from backend)
+            const truckTitleElem = document.getElementById('truckTitle');
+            const truckStatusElem = document.getElementById('truckStatus');
+            const truckRouteElem = document.getElementById('truckRoute');
+            const truckPriceElem = document.getElementById('truckPrice');
+            const mainTruckImageElem = document.getElementById('mainTruckImage');
+            const truckImageNavElem = document.getElementById('truckImageNav');
+            const ownerNameElem = document.getElementById('ownerName');
+            const ownerRatingElem = document.getElementById('ownerRating');
+            const truckTypeElem = document.getElementById('truckType');
+            const maxLoadElem = document.getElementById('maxLoad');
+            const makeModelElem = document.getElementById('makeModel');
+            const truckYearElem = document.getElementById('truckYear');
+            const dimensionsElem = document.getElementById('dimensions');
+            const volumeCapacityElem = document.getElementById('volumeCapacity');
+            const truckDescriptionElem = document.getElementById('truckDescription');
+            const truckFeaturesElem = document.getElementById('truckFeatures');
+
+
+            // Summary elements
+            const summaryPickupDate = document.getElementById('summaryPickupDate');
+            const summaryReturnDate = document.getElementById('summaryReturnDate');
+            const summaryCargoType = document.getElementById('summaryCargoType');
+            const summaryCargoWeight = document.getElementById('summaryCargoWeight');
+            const summaryTripCost = document.getElementById('summaryTripCost');
+            const summaryInsuranceRow = document.getElementById('summaryInsuranceRow');
+            const summaryInsuranceCost = document.getElementById('summaryInsuranceCost');
+            const summaryTotalAmount = document.getElementById('summaryTotalAmount');
+
+            // Confirmation elements
+            const confirmBookingID = document.getElementById('confirmBookingID');
+            const confirmTruckName = document.getElementById('confirmTruckName');
+            const confirmRoute = document.getElementById('confirmRoute');
+            const confirmPickupDate = document.getElementById('confirmPickupDate');
+            const confirmReturnDate = document.getElementById('confirmReturnDate');
+            const confirmCargoType = document.getElementById('confirmCargoType');
+            const confirmTotalAmount = document.getElementById('confirmTotalAmount');
+            const confirmPaymentMethod = document.getElementById('confirmPaymentMethod');
+
+            const paymentMethods = document.querySelectorAll('.payment-method');
+            const cardDetailsForm = document.getElementById('card-details-form');
+
+            let currentStep = 1;
+            let baseTripCost = 0; // Will be fetched from backend
+            const insuranceCost = 2500;
+            let selectedPayment = 'mpesa'; // Default
+
+            // --- Functions ---
+
+            /**
+             * Displays a custom alert message instead of the browser's alert.
+             * @param {string} message - The message to display.
+             * @param {string} type - The type of message (e.g., 'success', 'error', 'info').
+             */
+            function showCustomMessage(message, type = 'info') {
+                // Create a simple modal or toast message for user feedback
+                // This is a basic example; you might want a more sophisticated UI
+                const messageContainer = document.createElement('div');
+                messageContainer.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    padding: 15px 25px;
+                    border-radius: 8px;
+                    color: white;
+                    font-weight: bold;
+                    z-index: 1050;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                    opacity: 0;
+                    transition: opacity 0.5s ease-in-out;
+                `;
+
+                if (type === 'success') {
+                    messageContainer.style.backgroundColor = '#27AE60';
+                } else if (type === 'error') {
+                    messageContainer.style.backgroundColor = '#E74C3C';
+                } else {
+                    messageContainer.style.backgroundColor = '#3498DB';
+                }
+
+                messageContainer.textContent = message;
+                document.body.appendChild(messageContainer);
+
+                // Animate in
+                setTimeout(() => {
+                    messageContainer.style.opacity = 1;
+                }, 100);
+
+                // Animate out and remove after a few seconds
+                setTimeout(() => {
+                    messageContainer.style.opacity = 0;
+                    messageContainer.addEventListener('transitionend', () => messageContainer.remove());
+                }, 3000);
+            }
+
+            /**
+             * Fetches truck details from the Django backend and updates the frontend.
+             */
+            async function fetchTruckDetails() {
+                try {
+                    const response = await fetch(`${DJANGO_BASE_URL}/api/trucks/${TRUCK_ID}/`);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const truckData = await response.json();
+                    
+                    // Update truck details on the page
+                    truckTitleElem.innerHTML = `${truckData.make_model} - ${truckData.truck_type}
+                        <span class="badge truck-badge ${truckData.is_available ? 'bg-success' : 'bg-danger'} text-white">${truckData.is_available ? 'Available Now' : 'Booked'}</span>`;
+                    truckStatusElem.textContent = truckData.is_available ? 'Available Now' : 'Booked';
+                    truckRouteElem.textContent = truckData.route;
+                    truckPriceElem.textContent = `KSh ${truckData.price.toLocaleString()}`;
+                    baseTripCost = truckData.price; // Set base cost from backend
+                    mainTruckImageElem.src = truckData.image_url || 'https://via.placeholder.com/800x400.png?text=Truck+Image';
+                    
+                    // Clear existing dots and add new ones based on images (if multiple)
+                    truckImageNavElem.innerHTML = '';
+                    if (truckData.image_urls && truckData.image_urls.length > 0) {
+                        truckData.image_urls.forEach((imgUrl, index) => {
+                            const dot = document.createElement('div');
+                            dot.classList.add('truck-image-dot');
+                            if (index === 0) dot.classList.add('active');
+                            dot.dataset.imageSrc = imgUrl;
+                            dot.addEventListener('click', function() {
+                                mainTruckImageElem.src = this.dataset.imageSrc;
+                                document.querySelectorAll('.truck-image-dot').forEach(d => d.classList.remove('active'));
+                                this.classList.add('active');
+                            });
+                            truckImageNavElem.appendChild(dot);
+                        });
+                    } else {
+                         // Fallback if no specific images are provided
+                         const defaultDot = document.createElement('div');
+                         defaultDot.classList.add('truck-image-dot', 'active');
+                         defaultDot.dataset.imageSrc = 'https://via.placeholder.com/800x400.png?text=Truck+Image';
+                         defaultDot.addEventListener('click', function() {
+                             mainTruckImageElem.src = this.dataset.imageSrc;
+                             document.querySelectorAll('.truck-image-dot').forEach(d => d.classList.remove('active'));
+                             this.classList.add('active');
+                         });
+                         truckImageNavElem.appendChild(defaultDot);
+                    }
+
+
+                    ownerNameElem.textContent = truckData.owner_name;
+                    ownerRatingElem.textContent = `${truckData.owner_rating} (${truckData.trips_completed} trips)`;
+                    truckTypeElem.textContent = truckData.truck_type;
+                    maxLoadElem.textContent = `${truckData.max_load} Tons`;
+                    makeModelElem.textContent = truckData.make_model;
+                    truckYearElem.textContent = truckData.year;
+                    dimensionsElem.textContent = truckData.dimensions;
+                    volumeCapacityElem.textContent = `${truckData.volume_capacity} m³`;
+                    truckDescriptionElem.textContent = truckData.description;
+
+                    // Clear existing features and add new ones
+                    truckFeaturesElem.innerHTML = '';
+                    if (truckData.features && truckData.features.length > 0) {
+                        truckData.features.forEach(feature => {
+                            const featureDiv = document.createElement('div');
+                            featureDiv.classList.add('truck-feature');
+                            featureDiv.innerHTML = `<i class="bi bi-check-circle-fill"></i><span>${feature}</span>`;
+                            truckFeaturesElem.appendChild(featureDiv);
+                        });
+                    }
+
+                    updateSummary(); // Update summary with fetched price
+                } catch (error) {
+                    console.error('Error fetching truck details:', error);
+                    showCustomMessage('Failed to load truck details. Please try again later.', 'error');
+                }
+            }
+
+            // Initialize Flatpickr
+            flatpickr(".date-picker", {
+                altInput: true,
+                altFormat: "F j, Y",
+                dateFormat: "Y-m-d",
+                minDate: "today"
+            });
+
+            function updateProgress() {
+                progressSteps.forEach((step, index) => {
+                    const stepCircle = step.querySelector('.booking-step-circle');
+                    if (index < currentStep -1) { // Changed to currentStep -1 for completed steps
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                        stepCircle.innerHTML = '<i class="bi bi-check-lg"></i>';
+                    } else if (index === currentStep -1) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                        stepCircle.innerHTML = currentStep;
+                    } else {
+                        step.classList.remove('active', 'completed');
+                        stepCircle.innerHTML = index + 1;
+                    }
+                });
+
+                formSteps.forEach(step => step.classList.remove('active'));
+                document.getElementById(`step-${formSteps[currentStep - 1].id.split('-')[1]}`).classList.add('active');
+
+
+                if (currentStep === 1) {
+                    prevBtn.style.display = 'none';
+                } else {
+                    prevBtn.style.display = 'inline-block';
+                }
+
+                if (currentStep === formSteps.length) {
+                    nextBtn.innerHTML = 'Confirm Booking <i class="bi bi-check-circle-fill ms-2"></i>';
+                } else {
+                    nextBtn.innerHTML = 'Next <i class="bi bi-arrow-right ms-2"></i>';
+                }
+            }
+            
+            function validateStep(stepNumber) {
+                const currentFormStep = formSteps[stepNumber - 1];
+                const inputs = currentFormStep.querySelectorAll('input[required], select[required], textarea[required]');
+                let isValid = true;
+                inputs.forEach(input => {
+                    if (input.offsetParent !== null && !input.value.trim()) { // Check if element is visible
+                        isValid = false;
+                        input.classList.add('is-invalid'); // Bootstrap validation class
+                    } else {
+                        input.classList.remove('is-invalid');
+                        input.classList.add('is-valid');
+                    }
+                });
+                if (!isValid) showCustomMessage('Please fill all required fields in the current step.', 'error');
+                return isValid;
+            }
+
+            function calculateTotal() {
+                let total = baseTripCost;
+                if (addInsuranceElem.checked) {
+                    total += insuranceCost;
+                    summaryInsuranceRow.style.display = 'table-row';
+                } else {
+                    summaryInsuranceRow.style.display = 'none';
+                }
+                summaryTotalAmount.textContent = `KSh ${total.toLocaleString()}`;
+                return total;
+            }
+
+            function updateSummary() {
+                summaryPickupDate.textContent = pickupDateElem.value ? flatpickr.formatDate(new Date(pickupDateElem.value), "F j, Y") : '-';
+                summaryReturnDate.textContent = returnDateElem.value ? flatpickr.formatDate(new Date(returnDateElem.value), "F j, Y") : 'N/A';
+                summaryCargoType.textContent = cargoTypeElem.value || '-';
+                summaryCargoWeight.textContent = cargoWeightElem.value ? `${cargoWeightElem.value} Tons` : '-';
+                calculateTotal();
+            }
+            
+            function updateConfirmationDetails() {
+                confirmBookingID.textContent = `FLNK-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+                confirmTruckName.textContent = truckTitleElem.textContent.split('\n')[0].trim(); // Get just the truck name
+                confirmRoute.textContent = `${pickupLocationElem.value} - ${dropoffLocationElem.value}`;
+                confirmPickupDate.textContent = summaryPickupDate.textContent;
+                confirmReturnDate.textContent = summaryReturnDate.textContent;
+                confirmCargoType.textContent = summaryCargoType.textContent;
+                confirmTotalAmount.textContent = summaryTotalAmount.textContent;
+                
+                const activePaymentMethod = document.querySelector('.payment-method.active');
+                if (activePaymentMethod) {
+                    confirmPaymentMethod.textContent = activePaymentMethod.querySelector('.payment-method-name').textContent;
+                }
+            }
+
+            /**
+             * Sends booking data to the Django backend.
+             */
+            async function submitBooking() {
+                const bookingData = {
+                    truck_id: TRUCK_ID, // Or dynamically get from URL/selected truck
+                    pickup_location: pickupLocationElem.value,
+                    dropoff_location: dropoffLocationElem.value,
+                    pickup_date: pickupDateElem.value,
+                    return_date: returnDateElem.value || null, // Allow null for optional
+                    cargo_type: cargoTypeElem.value,
+                    cargo_weight: parseFloat(cargoWeightElem.value),
+                    special_instructions: document.getElementById('specialInstructions').value,
+                    add_insurance: addInsuranceElem.checked,
+                    payment_method: selectedPayment,
+                    total_amount: calculateTotal()
+                };
+
+                try {
+                    const response = await fetch(`${DJANGO_BASE_URL}/api/bookings/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            // Add CSRF token if you are using Django's CSRF protection
+                            // 'X-CSRFToken': getCookie('csrftoken'), 
+                        },
+                        body: JSON.stringify(bookingData)
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        console.error('Booking submission error:', errorData);
+                        throw new Error(`Booking failed: ${JSON.stringify(errorData)}`);
+                    }
+
+                    const result = await response.json();
+                    console.log('Booking successful:', result);
+                    showCustomMessage('Booking confirmed successfully!', 'success');
+
+                    // Proceed to confirmation step on frontend
+                    updateConfirmationDetails();
+                    currentStep++; 
+                    updateProgress(); 
+                    
+                    nextBtn.style.display = 'none';
+                    prevBtn.style.display = 'none';
+                    document.querySelector('.booking-progress').style.display = 'none';
+                    document.querySelector('h3').textContent = "Booking Complete"; 
+                    formSteps.forEach(step => step.classList.remove('active'));
+                    document.getElementById('step-confirmation').classList.add('active');
+
+                } catch (error) {
+                    console.error('There was a problem with the fetch operation:', error);
+                    showCustomMessage(`Booking failed: ${error.message}`, 'error');
+                }
+            }
+
+            // Function to get CSRF token (if needed for Django)
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+
+            // --- Event Listeners ---
+            nextBtn.addEventListener('click', () => {
+                if (!validateStep(currentStep)) {
+                    return;
+                }
+
+                if (currentStep < formSteps.length) {
+                    currentStep++;
+                    if (currentStep === 2) { // Moving to payment step
+                        updateSummary();
+                    }
+                    updateProgress();
+                } else {
+                    // This is the final step, submit the form
+                    submitBooking();
+                }
+            });
+
+            prevBtn.addEventListener('click', () => {
+                if (currentStep > 1) {
+                    currentStep--;
+                    updateProgress();
+                }
+            });
+            
+            addInsuranceElem.addEventListener('change', updateSummary);
+
+            // Add event listeners for input changes to update summary dynamically
+            pickupDateElem.addEventListener('change', updateSummary);
+            returnDateElem.addEventListener('change', updateSummary);
+            cargoTypeElem.addEventListener('input', updateSummary);
+            cargoWeightElem.addEventListener('input', updateSummary);
+
+
+            paymentMethods.forEach(method => {
+                method.addEventListener('click', function() {
+                    paymentMethods.forEach(m => {
+                        m.classList.remove('active');
+                        m.querySelector('.bi-check-circle-fill').style.display = 'none';
+                    });
+                    this.classList.add('active');
+                    this.querySelector('.bi-check-circle-fill').style.display = 'inline-block';
+                    selectedPayment = this.dataset.payment;
+
+                    if (selectedPayment === 'card') {
+                        cardDetailsForm.style.display = 'block';
+                        // Add required attributes to card fields if they are not already there
+                        cardDetailsForm.querySelectorAll('input').forEach(input => input.setAttribute('required', 'required'));
+
+                    } else {
+                        cardDetailsForm.style.display = 'none';
+                        // Remove required attributes from card fields
+                         cardDetailsForm.querySelectorAll('input').forEach(input => input.removeAttribute('required'));
+                    }
+                });
+            });
+
+
+            // --- Initial Setup ---
+            updateProgress();
+            fetchTruckDetails(); // Fetch truck details when the page loads
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreightLink - Sign Up</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        :root {
+            --primary: #2C3E50;
+            --secondary: #34495E;
+            --accent: #F39C12;
+            --accent-hover: #E67E22;
+            --light: #ECF0F1;
+            --dark: #2C3E50;
+            --gray: #95A5A6;
+            --light-gray: #F8F9FA;
+            --success: #27AE60;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-gray); /* Fallback background color */
+            background-image: url('b290ef71-462a-452e-8ff3-33b5de7407d8.jpeg'); /* Same background image */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: var(--dark);
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 2rem 0;
+        }
+
+        /* Using a generic container name for reusability */
+        .form-container {
+            background-color: #FFFFFF;
+            border-radius: 1rem;
+            border: none;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            width: 100%;
+            max-width: 550px; /* Slightly wider for the longer form */
+        }
+        .form-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: #FFFFFF;
+            border-bottom: none;
+            padding: 1.75rem;
+            text-align: center;
+            position: relative;
+        }
+        .form-header h2 {
+            color: #FFFFFF;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 0;
+        }
+        .form-body {
+            padding: 2rem 2.5rem; /* Adjusted padding */
+            background-color: #FFFFFF;
+        }
+        .form-body label {
+            font-weight: 500;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .form-control, .form-select {
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            border: 1px solid #DDE2E5;
+            transition: all 0.3s ease;
+            background-color: var(--light-gray);
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 0.25rem rgba(243, 156, 18, 0.25);
+            background-color: #FFFFFF;
+        }
+        .form-footer {
+            justify-content: center;
+            padding: 1.5rem 2rem 2rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            background-color: #FFFFFF;
+            text-align: center;
+        }
+
+        .text-danger {
+            color: #E74C3C !important;
+        }
+        .is-invalid {
+            border-color: #E74C3C !important;
+        }
+        .is-invalid:focus {
+            box-shadow: 0 0 0 0.25rem rgba(231, 76, 60, 0.25) !important;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            color: var(--dark);
+            padding: 0.75rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+        }
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+            border-color: var(--accent-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(230, 126, 34, 0.4);
+        }
+        .text-accent {
+            color: var(--accent) !important;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .text-accent:hover {
+            color: var(--accent-hover) !important;
+            text-decoration: none;
+        }
+
+        #messageBoxModal .modal-content, #messageBoxModal .modal-header, #messageBoxModal .modal-title, #messageBoxModal .modal-body, #messageBoxModal .modal-footer, #messageBoxModal .btn-primary {
+             border-radius: 0.75rem;
+             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+             background-color: var(--primary);
+             color: white;
+             border-bottom: none;
+             padding: 1.25rem;
+             font-size: 1.25rem;
+             font-weight: 600;
+             padding: 1.5rem;
+             font-size: 1rem;
+             color: var(--dark);
+             border-top: none;
+             padding: 1rem 1.5rem;
+             justify-content: flex-end;
+             background-color: var(--accent);
+             border-color: var(--accent);
+             color: var(--dark);
+             padding: 0.5rem 1.5rem;
+             border-radius: 0.5rem;
+             font-weight: 500;
+        }
+        #messageBoxModal .btn-primary:hover {
+            background-color: var(--accent-hover);
+            border-color: var(--accent-hover);
+        }
+
+        @media (max-width: 767.98px) {
+            .form-container {
+                margin: 1rem;
+            }
+            .form-header h2 {
+                font-size: 1.5rem;
+            }
+            .form-body {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="form-header">
+            <h2>Create Your Account</h2>
+        </div>
+        <div class="form-body">
+            <form id="signupForm" class="space-y-4" novalidate>
+                <div class="mb-3">
+                    <label for="signupName" class="form-label">Full Name:</label>
+                    <input type="text" id="signupName" name="full_name" class="form-control" placeholder="Enter your full name" required>
+                    <div id="signupNameError" class="text-danger small mt-1" style="display: none;"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="signupEmail" class="form-label">Email Address:</label>
+                    <input type="email" id="signupEmail" name="email" class="form-control" placeholder="Enter your email" required>
+                    <div id="signupEmailError" class="text-danger small mt-1" style="display: none;"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="signupPassword" class="form-label">Password:</label>
+                    <input type="password" id="signupPassword" name="password" class="form-control" placeholder="Create a password (min. 8 characters)" required>
+                    <div id="signupPasswordError" class="text-danger small mt-1" style="display: none;"></div>
+                </div>
+                 <div class="mb-3">
+                    <label for="signupRePassword" class="form-label">Re-enter Password:</label>
+                    <input type="password" id="signupRePassword" name="re_password" class="form-control" placeholder="Confirm your password" required>
+                    <div id="signupRePasswordError" class="text-danger small mt-1" style="display: none;"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="signupPhone" class="form-label">Phone Number:</label>
+                    <input type="tel" id="signupPhone" name="phone_number" class="form-control" placeholder="+254xxxxxxxxx" required>
+                    <div id="signupPhoneError" class="text-danger small mt-1" style="display: none;"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="signupUserType" class="form-label">I am a:</label>
+                    <select id="signupUserType" name="user_type" class="form-select" required>
+                        <option value="" disabled selected>Select User Type</option>
+                        <option value="business">Business (I have cargo to ship)</option>
+                        <option value="truck_owner">Truck Owner (I have a truck for hire)</option>
+                    </select>
+                    <div id="signupUserTypeError" class="text-danger small mt-1" style="display: none;"></div>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 mt-4">Create Account</button>
+            </form>
+        </div>
+        <div class="form-footer">
+            <p class="text-center mb-0">Already have an account? <a href="login.html" class="text-accent">Log In</a></p>
+        </div>
+    </div>
+
+    <!-- Message Box Modal -->
+    <div class="modal fade" id="messageBoxModal" tabindex="-1" aria-labelledby="messageBoxModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="messageBoxModalLabel">Message</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="messageBoxBody">
+                    <!-- Message content will be inserted here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script>
+        // IMPORTANT: Replace with your actual Django backend URL when deploying
+        const API_BASE_URL = 'http://127.0.0.1:8000/api/';
+
+        let messageBoxModal;
+
+        // --- UTILITY FUNCTIONS ---
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        
+        // --- UI HELPER FUNCTIONS ---
+        function showMessageBox(title, message, type = 'info') {
+            if (!messageBoxModal) {
+                 const messageBoxModalEl = document.getElementById('messageBoxModal');
+                if (messageBoxModalEl) {
+                    messageBoxModal = new bootstrap.Modal(messageBoxModalEl);
+                } else {
+                    console.error('MessageBox modal element not found!');
+                    alert(`${title}: ${message}`); // Fallback
+                    return;
+                }
+            }
+            const modalLabel = document.getElementById('messageBoxModalLabel');
+            const modalBody = document.getElementById('messageBoxBody');
+            const modalHeader = messageBoxModal._element.querySelector('.modal-header');
+
+            if(modalLabel) modalLabel.textContent = title;
+            if(modalBody) modalBody.innerHTML = message;
+            
+            if(modalHeader) {
+                modalHeader.style.backgroundColor = 'var(--primary)'; // Default
+                if(type === 'success') modalHeader.style.backgroundColor = 'var(--success)';
+                if(type === 'error') modalHeader.style.backgroundColor = '#E74C3C';
+            }
+            
+            messageBoxModal.show();
+        }
+
+        function setButtonLoading(button, loading) {
+            if (!button) return;
+            if (loading) {
+                button.disabled = true;
+                button.dataset.originalText = button.innerHTML;
+                button.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span>Signing Up...';
+            } else {
+                button.disabled = false;
+                button.innerHTML = button.dataset.originalText || 'Create Account';
+            }
+        }
+        
+        // --- FORM VALIDATION ---
+        function clearFormErrors(form) {
+            form.querySelectorAll('.text-danger').forEach(el => {
+                el.textContent = '';
+                el.style.display = 'none';
+            });
+            form.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+        }
+
+        function displayFieldError(fieldId, message) {
+            const field = document.getElementById(fieldId);
+            const errorDiv = document.getElementById(`${fieldId}Error`);
+            if (field) field.classList.add('is-invalid');
+            if (errorDiv) {
+                errorDiv.textContent = message;
+                errorDiv.style.display = 'block';
+            }
+        }
+
+        function validateSignupForm(formData) {
+            let isValid = true;
+            
+            if (!formData.get('full_name')?.trim()) {
+                displayFieldError('signupName', 'Full name is required.');
+                isValid = false;
+            }
+            const email = formData.get('email')?.trim();
+            if (!email) {
+                displayFieldError('signupEmail', 'Email is required.');
+                isValid = false;
+            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                displayFieldError('signupEmail', 'Please enter a valid email address.');
+                isValid = false;
+            }
+            const password = formData.get('password');
+            if (!password || password.length < 8) {
+                displayFieldError('signupPassword', 'Password must be at least 8 characters long.');
+                isValid = false;
+            }
+            if (password !== formData.get('re_password')) {
+                displayFieldError('signupRePassword', 'Passwords do not match.');
+                isValid = false;
+            }
+             if (!formData.get('phone_number')?.trim()) {
+                displayFieldError('signupPhone', 'Phone number is required.');
+                isValid = false;
+            }
+            if (!formData.get('user_type')) {
+                displayFieldError('signupUserType', 'Please select a user type.');
+                isValid = false;
+            }
+
+            return isValid;
+        }
+        
+        // --- API & SUBMISSION ---
+        async function handleSignupSubmit(event) {
+            event.preventDefault();
+            
+            const form = event.target;
+            const submitButton = form.querySelector('button[type="submit"]');
+            const formData = new FormData(form);
+
+            clearFormErrors(form);
+
+            if (!validateSignupForm(formData)) {
+                 showMessageBox('Validation Error', 'Please correct the highlighted fields.', 'error');
+                return;
+            }
+
+            setButtonLoading(submitButton, true);
+
+            try {
+                const response = await fetch(`${API_BASE_URL}auth/users/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    },
+                    body: JSON.stringify(Object.fromEntries(formData)),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showMessageBox('Success!', 'Your account has been created successfully. Please log in to continue.', 'success');
+                    form.reset();
+                    setTimeout(() => window.location.href = 'login.html', 2000);
+                } else {
+                    // Handle backend errors
+                    let errorMessage = 'An unknown error occurred. Please try again.';
+                    if (data && typeof data === 'object') {
+                        errorMessage = '';
+                        for (const field in data) {
+                           const fieldError = Array.isArray(data[field]) ? data[field].join(' ') : data[field];
+                           const fieldId = `signup${field.charAt(0).toUpperCase() + field.slice(1)}`;
+                           if (document.getElementById(fieldId)) {
+                               displayFieldError(fieldId, fieldError);
+                           } else {
+                                errorMessage += `${field}: ${fieldError}<br>`;
+                           }
+                        }
+                        if(errorMessage === '') errorMessage = 'Please correct the errors shown above.';
+                    }
+                    showMessageBox('Registration Failed', errorMessage, 'error');
+                }
+            } catch (error) {
+                console.error('Signup failed:', error);
+                showMessageBox('Network Error', 'Could not connect to the server. Please check your internet connection and try again.', 'error');
+            } finally {
+                setButtonLoading(submitButton, false);
+            }
+        }
+        
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const signupForm = document.getElementById('signupForm');
+            if (signupForm) {
+                signupForm.addEventListener('submit', handleSignupSubmit);
+            }
+            
+            // Initialize the Bootstrap Modal instance for the message box
+            const messageBoxModalEl = document.getElementById('messageBoxModal');
+            if (messageBoxModalEl) {
+                messageBoxModal = new bootstrap.Modal(messageBoxModalEl);
+            }
+        });
+    </script>
+</body>
+</html>

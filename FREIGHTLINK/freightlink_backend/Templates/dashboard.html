@@ -1,0 +1,3258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreightLink - Post or Find</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        :root {
+            --primary: #2C3E50;
+            --secondary: #34495E;
+            --accent: #F39C12;
+            --accent-hover: #E67E22;
+            --light: #ECF0F1;
+            --dark: #2C3E50;
+            --gray: #95A5A6;
+            --light-gray: #F8F9FA;
+            --success: #27AE60;
+            --info: #3498DB;
+            --warning: #F39C12;
+            --danger: #E74C3C;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .rounded-md {
+            border-radius: 0.75rem;
+        }
+        
+        .shadow-custom {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--primary);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
+        }
+        .header .logo {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+        .header .nav-link {
+            color: #FFFFFF;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+            margin: 0 0.25rem;
+        }
+        .header .nav-link:hover, .header .nav-link.active {
+            color: var(--primary);
+            background-color: var(--accent);
+            border-radius: 2rem;
+        }
+        .header .nav-link.active {
+            font-weight: 600;
+        }
+        
+        .dashboard-header {
+            padding: 1rem 0rem; 
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .dashboard-header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+
+        /* Dashboard Layout */
+        .dashboard-layout {
+            display: flex;
+            height: calc(100vh - 70px); /* Assuming header height is 70px */
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background-color: var(--primary);
+            padding: 2rem 1rem;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+        }
+        .sidebar .menu-item {
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.75rem 1rem;
+            margin: 0.25rem 0;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .sidebar .menu-item i {
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+        .sidebar .menu-item:hover, .sidebar .menu-item.active {
+            background-color: var(--accent);
+            color: var(--primary);
+        }
+        .sidebar .menu-item.active {
+            font-weight: 600;
+        }
+        .sidebar .divider {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 1rem 0;
+        }
+        .sidebar .menu-title {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin: 1.5rem 0 0.5rem 1rem;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+        .page-title { /* Existing page-title, might need adjustment if dashboard-header h1 is preferred */
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+        .page-subtitle {
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+
+        /* Form Components */
+        .form-card {
+            background-color: #FFFFFF;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .form-card h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        .form-label {
+            font-weight: 500;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        .form-control, .form-select {
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            border: 1px solid #DDE2E5;
+            transition: all 0.3s ease;
+            background-color: var(--light-gray);
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 0.25rem rgba(243, 156, 18, 0.25);
+            background-color: #FFFFFF;
+        }
+        
+        /* Buttons */
+        .btn-primary, .btn-primary:focus {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            color: var(--dark);
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+        }
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+            border-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(230, 126, 34, 0.4);
+        }
+        .btn-secondary, .btn-secondary:focus {
+            background-color: var(--light-gray);
+            border-color: #DDE2E5;
+            color: var(--gray);
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background-color: #e9ecef;
+            border-color: #c1c7cc;
+            color: var(--dark);
+            transform: translateY(-2px);
+        }
+         .btn-outline-accent {
+            color: var(--accent);
+            border-color: var(--accent);
+        }
+        .btn-outline-accent:hover {
+            color: var(--dark);
+            background-color: var(--accent);
+            border-color: var(--accent);
+        }
+
+
+        /* Toggle Tabs */
+        .toggle-tabs {
+            display: flex;
+            background-color: var(--light-gray);
+            border-radius: 50px;
+            padding: 0.3rem;
+            margin-bottom: 2rem;
+            max-width: 400px;
+        }
+        .toggle-tab {
+            flex: 1;
+            text-align: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            color: var(--gray);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .toggle-tab.active {
+            background-color: var(--accent);
+            color: var(--dark);
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+        }
+
+        /* Dashboard Cards */
+        .stats-card {
+            background-color: #FFFFFF;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        .stats-card .icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: rgba(243, 156, 18, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1.5rem;
+        }
+        .stats-card .icon i {
+            font-size: 1.8rem;
+            color: var(--accent);
+        }
+        .stats-card h4 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            color: var(--primary);
+        }
+        .stats-card p {
+            color: var(--gray);
+            margin-bottom: 0;
+        }
+
+        /* Upload Zone */
+        .upload-zone {
+            border: 2px dashed rgba(0, 0, 0, 0.1);
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            background-color: var(--light-gray);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .upload-zone:hover {
+            border-color: var(--accent);
+            background-color: rgba(243, 156, 18, 0.05);
+        }
+        .upload-zone i {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+        .upload-zone p {
+            color: var(--gray);
+            margin-bottom: 0;
+        }
+
+        /* Map Placeholder */
+        .map-placeholder {
+            width: 100%;
+            height: 300px;
+            background-color: #E8EAF6;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+        .map-placeholder i {
+            font-size: 3rem;
+            color: var(--primary);
+            opacity: 0.5;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 991.98px) {
+            .sidebar {
+                width: 80px;
+                padding: 2rem 0.5rem;
+            }
+            .sidebar .menu-item span, .sidebar .menu-title {
+                display: none;
+            }
+            .sidebar .menu-item i {
+                margin-right: 0;
+                font-size: 1.5rem;
+            }
+            .main-content {
+                padding: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 767.98px) {
+            .dashboard-layout {
+                flex-direction: column;
+                height: auto;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                padding: 1rem;
+                display: flex;
+                overflow-x: auto;
+                white-space: nowrap;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                z-index: 1000;
+                box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            }
+            .sidebar.show {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                overflow-y: auto; /* Allow scrolling if content overflows */
+            }
+            .sidebar .menu-item {
+                margin: 0 0.25rem;
+                padding: 0.5rem 1rem;
+            }
+            .sidebar .menu-item span { /* Initially hide for horizontal scroll */
+                display: none; 
+            }
+            .sidebar.show .menu-item span { /* Show text when sidebar is fullscreen 'show' */
+                display: inline; 
+            }
+            .sidebar .divider, .sidebar .menu-title {
+                display: none; /* Hide dividers and titles in mobile bottom bar */
+            }
+            .sidebar.show .divider, .sidebar.show .menu-title { /* Show them if sidebar is fullscreen */
+                 display: block;
+            }
+            .main-content {
+                padding: 1.5rem 1rem;
+                margin-bottom: 80px; /* Space for fixed bottom sidebar */
+            }
+             /* Note: Using !important here for the mobile menu toggler.
+               If mobile layout issues arise with the header/toggler,
+               consider refactoring by increasing specificity or adjusting rule order.
+               Bootstrap's d-lg-none on the toggler parent might also influence this. */
+            .header .navbar-toggler { 
+                display: block !important; 
+            }
+        }
+
+        /* Add custom styling for the current page */
+        .required-label::after {
+            content: "*";
+            color: #E74C3C;
+            margin-left: 3px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Card for displaying available trucks/cargo */
+        .listing-card { 
+            background-color: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem; /* This will be overridden by g-3 on parent row if it's a grid item */
+            border-left: 4px solid var(--accent);
+            transition: all 0.3s ease;
+            display: flex; /* For h-100 to work well with flex-direction column */
+            flex-direction: column; /* Ensure footer is at bottom */
+        }
+        .listing-card.h-100 { /* Ensure cards in a grid take full height */
+             height: 100% !important;
+        }
+        .listing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .listing-card .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding-bottom: 1rem;
+        }
+        .listing-card .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0;
+        }
+        .listing-card .badge {
+            font-size: 0.7rem;
+            padding: 0.5em 0.8em;
+            border-radius: 50px;
+        }
+        .listing-card .badge-available { /* For general available status */
+            background-color: rgba(39, 174, 96, 0.1);
+            color: var(--success);
+        }
+        .listing-card .badge-unavailable { /* Example for unavailable status */
+            background-color: rgba(231, 76, 60, 0.1); /* Light red */
+            color: var(--danger);
+        }
+        .listing-card .badge-urgent {
+            background-color: rgba(231, 76, 60, 0.1);
+            color: #E74C3C;
+        }
+        .listing-card .card-body {
+            flex-grow: 1; /* Allows body to expand and push footer down */
+        }
+        .listing-card .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            padding-top: 1rem;
+        }
+        .listing-card .price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        .listing-card .location {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        .listing-card .location i {
+            color: var(--accent);
+            margin-right: 0.5rem;
+        }
+        .listing-card .detail-row {
+            display: flex;
+            margin-bottom: 0.75rem;
+        }
+        .listing-card .detail-label {
+            /* flex: 1; */ /* Can cause issues if icons are present, adjust as needed */
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-right: 0.5rem; /* Space between icon+label and value */
+            display: flex;
+            align-items: center;
+        }
+         .listing-card .detail-label i {
+            color: var(--gray); /* Keep icons consistent */
+            opacity: 0.8;
+         }
+        .listing-card .detail-value {
+            /* flex: 2; */ /* Can cause issues, let content define width */
+            font-weight: 500;
+            color: var(--dark);
+            text-align: right; /* Align values to the right */
+            flex-grow: 1; /* Allow value to take remaining space */
+        }
+
+        /* Specific styles for truck preview cards in Business tab */
+        .truck-preview-item .card-header .card-title {
+            font-size: 1.05rem; /* Slightly smaller title for previews */
+        }
+        .truck-preview-item .card-body {
+            padding: 0.75rem 1rem; /* Reduced padding for compact view */
+        }
+         .truck-preview-item .detail-row {
+            margin-bottom: 0.5rem; /* Tighter spacing for preview details */
+            align-items: center; /* Vertically align items in row */
+        }
+        .truck-preview-item .detail-label {
+            font-size: 0.85rem; /* Smaller label text */
+        }
+        .truck-preview-item .detail-value {
+            font-size: 0.85rem; /* Smaller value text */
+        }
+        .truck-preview-item .card-footer {
+            padding: 0.75rem 1rem; /* Reduced padding for footer */
+            background-color: transparent; /* No extra background for this footer */
+            border-top: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        /* Filter sidebar styling */
+        .filter-sidebar {
+            background-color: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            height: fit-content; 
+            /* Note: The sticky positioning of this element relies on a fixed header height.
+               The 'top' value (e.g., 90px) should be adjusted if the header height changes. */
+        }
+        .filter-sidebar h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+        .filter-group {
+            margin-bottom: 1.5rem;
+        }
+        .filter-group label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+        .range-slider {
+            margin-top: 0.5rem;
+        }
+
+        /* Specific Cargo Listing Card Styles */
+        .cargo-listing-card {
+            background-color: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--accent);
+            transition: all 0.3s ease;
+            cursor: pointer; 
+        }
+        .cargo-listing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .cargo-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding-bottom: 1rem;
+        }
+        .cargo-type-badge {
+            font-size: 0.7rem;
+            padding: 0.5em 0.8em;
+            border-radius: 50px;
+            background-color: rgba(44, 62, 80, 0.1); 
+            color: var(--primary);
+            font-weight: 600;
+        }
+        .cargo-status {
+            font-size: 0.7rem;
+            padding: 0.5em 0.8em;
+            border-radius: 50px;
+            font-weight: 600;
+        }
+        .cargo-status.open { /* Matches common status names */
+            background-color: rgba(39, 174, 96, 0.1); 
+            color: var(--success);
+        }
+        .cargo-status.assigned {
+            background-color: rgba(52, 152, 219, 0.1); 
+            color: var(--info);
+        }
+        .cargo-status.completed {
+            background-color: rgba(149, 165, 166, 0.1); 
+            color: var(--gray);
+        }
+        /* Add more status styles if needed */
+        .cargo-status.pending, .cargo-status.in-transit {
+            background-color: rgba(243, 156, 18, 0.1); /* warning light */
+            color: var(--warning);
+        }
+
+
+        .cargo-card-body {
+            margin-bottom: 1rem;
+        }
+        .cargo-route {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            position: relative;
+        }
+        .route-points {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 60px; 
+            position: relative;
+            z-index: 1;
+        }
+        .route-line {
+            position: absolute;
+            left: 10px; 
+            top: 15px;
+            height: calc(100% - 30px); 
+            width: 2px;
+            background-color: var(--gray);
+            border-radius: 1px;
+        }
+        .pickup-point, .delivery-point {
+            display: flex;
+            align-items: center;
+        }
+        .pickup-point i, .delivery-point i {
+            font-size: 1.1rem;
+            margin-right: 8px;
+            background-color: #fff; 
+            padding: 2px;
+            border-radius: 50%;
+            z-index: 2;
+        }
+        .pickup-point .pickup-location, .delivery-point .delivery-location {
+            font-weight: 500;
+            color: var(--primary);
+        }
+        .route-distance {
+            margin-left: 28px; 
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+        .cargo-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.75rem;
+            font-size: 0.9rem;
+        }
+        .cargo-detail-item {
+            display: flex;
+            align-items: center;
+            color: var(--dark);
+        }
+        .cargo-detail-item i {
+            margin-right: 8px;
+            color: var(--accent);
+        }
+        .cargo-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        .cargo-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            padding-top: 1rem;
+            font-size: 0.9rem;
+        }
+        .cargo-posted-by {
+            display: flex;
+            align-items: center;
+        }
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            color: var(--gray);
+            font-size: 1.2rem;
+            /* You can add background-image for actual avatars */
+        }
+        .user-name {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        .user-rating {
+            color: var(--gray);
+            font-size: 0.8rem;
+        }
+        .cargo-posted-time {
+            color: var(--gray);
+        }
+
+        /* Specific Truck Listing Card Styles (Full Page View, not the business tab preview) */
+        .truck-card {
+            background-color: #FFFFFF;
+            border-radius: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--accent);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%; /* Ensure cards in a row have similar height */
+        }
+        .truck-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .truck-card .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding-bottom: 1rem;
+        }
+        .truck-card .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0;
+        }
+        .truck-card .badge-available {
+            background-color: rgba(39, 174, 96, 0.1);
+            color: var(--success);
+            font-size: 0.7rem;
+            padding: 0.5em 0.8em;
+            border-radius: 50px;
+        }
+        .truck-card .card-body {
+            flex-grow: 1; /* Allow body to grow */
+        }
+        .truck-card .detail-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+        .truck-card .detail-row i {
+            color: var(--accent);
+            margin-right: 0.75rem;
+            font-size: 1.1rem;
+        }
+        .truck-card .detail-label {
+            color: var(--gray);
+            flex-shrink: 0;
+            width: 90px; /* Fixed width for labels */
+        }
+        .truck-card .detail-value {
+            font-weight: 500;
+            color: var(--dark);
+        }
+        .truck-card .card-footer {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            text-align: right;
+        }
+        .truck-card .btn-book {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            color: var(--primary);
+            font-weight: 600;
+            border-radius: 50px;
+            padding: 0.6rem 1.5rem;
+            transition: all 0.3s ease;
+        }
+        .truck-card .btn-book:hover {
+            background-color: var(--accent-hover);
+            border-color: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+        
+        /* Photo Previews */
+        .photo-preview {
+            display: inline-block;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+        .photo-preview img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            display: block;
+        }
+        .photo-preview .remove-btn {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+        .photo-preview .remove-btn:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        /* Toast Notifications */
+        #toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050; /* Ensure it's above most elements */
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast { /* Bootstrap's default styling is good, minor adjustments */
+            width: 350px;
+            max-width: 100%;
+            font-size: .875rem;
+            background-clip: padding-box;
+            border: 1px solid rgba(0,0,0,.1);
+            box-shadow: 0 .25rem .75rem rgba(0,0,0,.1);
+            opacity: 0;
+            transition: opacity .15s linear;
+             border-radius: .375rem; /* Bootstrap 5 default */
+        }
+        .toast.show {
+            opacity: 1;
+        }
+        .toast-header {
+            display: flex;
+            align-items: center;
+            padding: .5rem .75rem;
+            color: #6c757d; /* Default text color */
+            background-color: rgba(255,255,255,.85);
+            background-clip: padding-box;
+            border-bottom: 1px solid rgba(0,0,0,.05);
+            border-top-left-radius: calc(.375rem - 1px);
+            border-top-right-radius: calc(.375rem - 1px);
+        }
+        .toast-header .btn-close {
+            padding: .25rem .5rem; /* Adjust if needed */
+            margin: -.25rem -.5rem -.25rem auto; /* Pushes to the right */
+        }
+        .toast-body {
+            padding: .75rem;
+            /* For dark theme toasts, adjust text color */
+        }
+        /* Icons in toast header for different types */
+        .toast-header i.bi-check-circle-fill { color: var(--success); }
+        .toast-header i.bi-exclamation-triangle-fill { color: var(--warning); }
+        .toast-header i.bi-x-circle-fill { color: var(--danger); }
+        .toast-header i.bi-info-circle-fill { color: var(--info); }
+
+        .notification-dropdown {
+            min-width: 320px; /* Give notifications more space */
+            max-height: 400px; /* Limit height and make scrollable */
+            overflow-y: auto;
+        }
+        .notification-item .notification-icon {
+            font-size: 1.5rem; /* Slightly larger icon */
+        }
+        .notification-item .notification-content .notification-title {
+            font-weight: 600;
+        }
+        .notification-item .notification-content .notification-text {
+            font-size: 0.85rem;
+            white-space: normal; /* Allow text to wrap */
+        }
+         .notification-item .notification-content .notification-time {
+            font-size: 0.75rem;
+        }
+        .notification-count { /* Ensure this is the correct class for the badge span */
+             position: absolute;
+             top: -5px;
+             right: -8px;
+             font-size: 0.65rem;
+             padding: 0.2em 0.5em;
+        }
+        .dropdown-menu .dropdown-item {
+            white-space: normal; /* Allow notification text to wrap */
+        }
+        .form-card.sticky-top {
+            /* Note: The sticky positioning of this element relies on a fixed header height.
+               The 'top' value (e.g., 90px) should be adjusted if the header height changes. */
+            top: 90px;
+        }
+
+    </style>
+</head>
+<body>
+    <header class="header text-white py-3 shadow-sm sticky-top">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="logo d-flex align-items-center">
+                    <i class="bi bi-truck me-2"></i>FreightLink
+                </div>
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-sm btn-outline-light d-lg-none me-3" type="button" id="mobile-menu-toggle" aria-label="Toggle mobile menu">
+                        <i class="bi bi-list"></i>
+                    </button>
+
+                    <div class="dropdown me-3 position-relative">
+                        <a href="#" class="text-white dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-bell"></i>
+                            <span class="badge bg-danger rounded-pill notification-count position-absolute" style="top: -5px; right: -8px;">0</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end notifications-dropdown p-2 shadow-lg">
+                            <li><a class="dropdown-item" href="#">Loading notifications...</a></li>
+                        </ul>
+                    </div>
+                    <div class="dropdown">
+                        <a href="#" class="text-white dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="rounded-circle bg-accent text-dark d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                                <i class="bi bi-person-fill"></i> </div>
+                            <span id="usernamePlaceholder">User Name</span> </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="profile.html"><i class="bi bi-person me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="settings (2).html"><i class="bi bi-gear me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="logout-btn"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="dashboard-layout">
+        <div class="sidebar">
+            <a href="dashboard.html" class="menu-item">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="Bids.html" class="menu-item">
+                <i class="bi bi-truck-front-fill"></i>
+                <span>My Bids</span>
+            </a>
+            <a href="bookings.html" class="menu-item active">
+                <i class="bi bi-journal-check"></i>
+                <span>My Bookings</span>
+            </a>
+            <a href="notifications.html" class="menu-item">
+                <i class="bi bi-bell-fill"></i>
+                <span>Notifications</span>
+            </a>
+            <a href="mylisting.html" class="menu-item">
+                <i class="bi bi-box-seam-fill"></i>
+                <span>My Listings</span>
+            </a>
+            <a href="history.html" class="menu-item">
+                <i class="bi bi-clock-history"></i>
+                <span>History</span>
+            </a>
+            <a href="messages.html" class="menu-item">
+                <i class="bi bi-chat-left-text-fill"></i>
+                <span>Messages</span>
+            </a>
+            
+            <div class="divider"></div>
+            <div class="menu-title">Account</div>
+            
+            <a href="profile.html" class="menu-item active"> <i class="bi bi-person-fill"></i>
+                <span>Profile</span>
+            </a>
+            <a href="payments.html" class="menu-item">
+                <i class="bi bi-wallet2"></i>
+                <span>Payments</span>
+            </a>
+            <a href="settings (2).html" class="menu-item">
+                <i class="bi bi-gear-fill"></i>
+                <span>Settings</span>
+            </a>
+            <a href="help&support.html" class="menu-item">
+                <i class="bi bi-question-circle-fill"></i>
+                <span>Help & Support</span>
+            </a>
+            
+            <div class="divider"></div>
+            
+            <a href="login.html" id="sidebar-logout-btn" class="menu-item"> <i class="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+
+        <div class="main-content">
+            <div class="dashboard-header">
+                <h1>Welcome, <span id="username-display">Loading...</span>!</h1>
+            </div>
+
+            <div class="toggle-tabs">
+                <div class="toggle-tab" id="business-tab">Business</div>
+                <div class="toggle-tab active" id="truck-owner-tab">Truck Owner</div>
+            </div>
+
+            <div class="tab-content" id="business-content">
+                <h1 class="page-title">Post Your Cargo</h1>
+                <p class="page-subtitle">Fill in the details below to find available transport for your cargo.</p>
+
+                <div class="row">
+                    <div class="col-lg-12"> 
+                        <div class="form-card">
+                            <h3><i class="bi bi-box-seam me-2 text-accent"></i>Cargo Details</h3>
+                            <form id="postCargoForm">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="cargoType" class="form-label required-label">Cargo Type</label>
+                                        <select id="cargoType" name="cargo_type" class="form-select" required>
+                                            <option value="" selected disabled>Select cargo type</option>
+                                            <option value="general">General Goods</option>
+                                            <option value="perishable">Perishable Goods</option>
+                                            <option value="fragile">Fragile Items</option>
+                                            <option value="machinery">Machinery/Equipment</option>
+                                            <option value="construction">Construction Materials</option>
+                                            <option value="furniture">Furniture</option>
+                                            <option value="electronics">Electronics</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="cargoWeight" class="form-label required-label">Weight (kg)</label>
+                                        <input type="number" id="cargoWeight" name="cargo_weight" class="form-control" placeholder="Enter weight in kg" required min="0">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="cargoVolume" class="form-label">Volume (m³)</label>
+                                        <input type="number" id="cargoVolume" name="cargo_volume" class="form-control" placeholder="Enter volume in m³" min="0" step="0.01">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="cargoValue" class="form-label">Estimated Value (KSh)</label>
+                                        <input type="number" id="cargoValue" name="cargo_value" class="form-control" placeholder="Enter cargo value" min="0">
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="cargoDescription" class="form-label">Description</label>
+                                        <textarea id="cargoDescription" name="cargo_description" class="form-control" rows="3" placeholder="Describe your cargo in detail..."></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4">
+                                    <label class="form-label">Add Photos (Optional)</label>
+                                    <div class="upload-zone">
+                                        <input type="file" id="cargoPhotos" name="cargo_photos_input" class="d-none" multiple accept="image/jpeg, image/png, image/jpg">
+                                        <i class="bi bi-cloud-arrow-up"></i>
+                                        <p>Click or drop files here</p>
+                                        <small class="text-muted d-block mt-2">Upload up to 3 photos (JPEG, PNG - max 5MB each)</small>
+                                    </div>
+                                    <div id="photo-preview-container" class="d-flex flex-wrap mt-2"></div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="form-card">
+                            <h3><i class="bi bi-geo-alt me-2 text-accent"></i>Pickup & Delivery Details</h3>
+                            <form id="locationForm"> <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="pickupLocation" class="form-label required-label">Pickup Location</label>
+                                        <input type="text" id="pickupLocation" name="pickup_location" class="form-control" placeholder="Enter pickup address" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="deliveryLocation" class="form-label required-label">Delivery Location</label>
+                                        <input type="text" id="deliveryLocation" name="delivery_location" class="form-control" placeholder="Enter delivery address" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="map-placeholder">
+                                            <i class="bi bi-map"></i>
+                                             <small class="text-muted">Map integration coming soon</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="pickupDate" class="form-label required-label">Pickup Date</label>
+                                        <input type="text" id="pickupDate" name="pickup_date" class="form-control date-picker" placeholder="Select date" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="deliveryDate" class="form-label">Expected Delivery Date</label>
+                                        <input type="text" id="deliveryDate" name="delivery_date" class="form-control date-picker" placeholder="Select date">
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="flexibleDates" name="flexible_dates">
+                                            <label class="form-check-label" for="flexibleDates">Flexible with dates</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="form-card">
+                            <h3><i class="bi bi-cash-coin me-2 text-accent"></i>Budget & Preferences</h3>
+                            <form id="budgetForm"> <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="budgetAmount" class="form-label">Budget (KSh)</label>
+                                        <input type="number" id="budgetAmount" name="budget_amount" class="form-control" placeholder="Enter your budget (optional)" min="0">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="paymentMethod" class="form-label">Preferred Payment Method</label>
+                                        <select id="paymentMethod" name="payment_method" class="form-select">
+                                            <option value="" selected disabled>Select method</option>
+                                            <option value="mpesa">M-Pesa</option>
+                                            <option value="bank">Bank Transfer</option>
+                                            <option value="cash_on_delivery">Cash on Delivery</option>
+                                            <option value="platform_escrow">Platform Escrow</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label for="additionalRequirements" class="form-label">Additional Requirements</label>
+                                        <textarea id="additionalRequirements" name="additional_requirements" class="form-control" rows="3" placeholder="Any specific requirements..."></textarea>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4 mb-5">
+                            <button type="button" class="btn btn-secondary" id="saveDraftBtn">Save as Draft</button>
+                            <button type="button" class="btn btn-primary" id="postCargoBtn">Post Cargo</button>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div class="mt-4 pt-4 border-top">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                             <h3 class="mb-0"><i class="bi bi-truck me-2 text-accent"></i>Quick Look: Available Trucks</h3>
+                             <p class="text-muted mb-0">Potential matches for your cargo needs.</p>
+                        </div>
+                        <a href="Trucks.html" class="btn btn-sm btn-outline-accent" id="show-all-trucks-main">
+                            Show All Available Trucks <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                    
+                    <div id="available-trucks-container" class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+                        
+                        <div class="text-center py-4 w-100">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2">Loading available trucks...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content active" id="truck-owner-content">
+                <h1 class="page-title">Find Available Cargo</h1>
+                <p class="page-subtitle">Browse through available cargo or post your truck details to get matched.</p>
+
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="filter-sidebar sticky-top"> <h4>Filters</h4>
+                            
+                            <form id="cargoFilterForm">
+                                <div class="filter-group">
+                                    <label class="form-label" for="filterLocation">Location</label>
+                                    <select class="form-select" name="location" id="filterLocation">
+                                        <option value="" selected>All Locations</option>
+                                        <option value="Nairobi">Nairobi</option>
+                                        <option value="Mombasa">Mombasa</option>
+                                        <option value="Kisumu">Kisumu</option>
+                                        <option value="Nakuru">Nakuru</option>
+                                        <option value="Eldoret">Eldoret</option>
+                                        </select>
+                                </div>
+                                
+                                <div class="filter-group">
+                                    <label class="form-label" for="filterDistance">Max Distance (km)</label>
+                                    <div class="range-slider">
+                                        <input type="range" class="form-range" min="0" max="1000" value="500" name="distance" id="filterDistance">
+                                        <div class="d-flex justify-content-between">
+                                            <small>0 km</small>
+                                            <small id="distance-value">500 km</small>
+                                            <small>1000 km</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="filter-group">
+                                    <label class="form-label">Cargo Type</label>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="cargoTypeGeneral" name="cargo_type" value="general">
+                                        <label class="form-check-label" for="cargoTypeGeneral">General Goods</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="cargoTypePerishable" name="cargo_type" value="perishable">
+                                        <label class="form-check-label" for="cargoTypePerishable">Perishable Goods</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="cargoTypeFragile" name="cargo_type" value="fragile">
+                                        <label class="form-check-label" for="cargoTypeFragile">Fragile Items</label>
+                                    </div>
+                                     <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="cargoTypeMachinery" name="cargo_type" value="machinery">
+                                        <label class="form-check-label" for="cargoTypeMachinery">Machinery</label>
+                                    </div>
+                                    </div>
+                                
+                                <div class="filter-group">
+                                    <label class="form-label">Cargo Weight (tons)</label>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="weight1" name="weight_range" value="0-1">
+                                        <label class="form-check-label" for="weight1">0-1 ton</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="weight2" name="weight_range" value="1-5">
+                                        <label class="form-check-label" for="weight2">1-5 tons</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="weight3" name="weight_range" value="5-10">
+                                        <label class="form-check-label" for="weight3">5-10 tons</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="weight4" name="weight_range" value="10+">
+                                        <label class="form-check-label" for="weight4">10+ tons</label>
+                                    </div>
+                                </div>
+                                
+                                <div class="filter-group">
+                                    <label class="form-label" for="filterPriceRange">Price Range (KSh)</label>
+                                    <div class="range-slider">
+                                        <input type="range" class="form-range" min="1000" max="200000" value="50000" step="1000" name="price_range" id="filterPriceRange">
+                                        <div class="d-flex justify-content-between">
+                                            <small>1,000</small>
+                                            <small id="price-value">50,000</small>
+                                            <small>200,000</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="filter-group">
+                                    <label class="form-label" for="filterDate">Pickup Date</label>
+                                    <input type="text" class="form-control date-picker" placeholder="Any date" name="filter_date" id="filterDate">
+                                </div>
+                                
+                                <div class="mt-4">
+                                    <button type="button" class="btn btn-primary w-100 mb-2" id="apply-filters">Apply Filters</button>
+                                    <button type="reset" class="btn btn-secondary w-100" id="clear-filters">Clear All</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-9">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div>
+                                <h4 class="mb-1">Available Cargo (<span id="cargo-count">0</span>)</h4>
+                                <p class="text-muted mb-0" id="cargo-results-info">Showing all cargo listings</p>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <label class="me-2 form-label" for="sort-by">Sort by:</label>
+                                <select class="form-select form-select-sm" style="width: auto;" id="sort-by" name="sort_by">
+                                    <option value="newest">Newest First</option>
+                                    <option value="pickup_date">Pickup Date (Soonest)</option>
+                                    <option value="distance_asc">Distance: Low to High</option>
+                                    <option value="price_desc">Price: High to Low</option>
+                                    <option value="price_asc">Price: Low to High</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div id="cargo-listings-container">
+                            <div class="text-center py-5">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p class="mt-3">Loading cargo listings...</p>
+                            </div>
+                        </div>
+                        
+                        <nav aria-label="Page navigation" class="mt-4">
+                            <ul class="pagination justify-content-center" id="pagination-container">
+                                </ul>
+                        </nav>
+                    </div>
+                </div>
+                
+                <div class="text-center my-5">
+                    <p class="mb-3">Don't see suitable cargo? Post your truck's availability!</p>
+                    <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#postTruckModal">
+                        <i class="bi bi-truck me-2"></i>Post Your Truck
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <div class="modal fade" id="postTruckModal" tabindex="-1" aria-labelledby="postTruckModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="postTruckModalLabel">Post Your Truck</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="postTruckForm">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="truckType" class="form-label required-label">Truck Type</label>
+                                <select id="truckType" name="truck_type" class="form-select" required>
+                                    <option value="" selected disabled>Select truck type</option>
+                                    <option value="pickup">Pickup Truck</option>
+                                    <option value="van">Cargo Van</option>
+                                    <option value="closed_body">Closed Body Truck</option>
+                                    <option value="flatbed">Flatbed Truck</option>
+                                    <option value="refrigerated">Refrigerated Truck</option>
+                                    <option value="tipper">Tipper Truck</option>
+                                    <option value="tanker">Tanker Truck</option>
+                                    <option value="low_loader">Low Loader</option>
+                                    <option value="semi_trailer">Semi-Trailer</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="truckCapacity" class="form-label required-label">Capacity (tons)</label>
+                                <input type="number" id="truckCapacity" name="truck_capacity" class="form-control" placeholder="Enter capacity in tons" required min="0.1" step="0.1">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="truckModel" class="form-label">Make & Model</label>
+                                <input type="text" id="truckModel" name="truck_model" class="form-control" placeholder="E.g., Isuzu FTR, Scania P360">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="truckYear" class="form-label">Year</label>
+                                <input type="number" id="truckYear" name="truck_year" class="form-control" placeholder="Enter manufacturing year" min="1950" max="2099">
+                            </div>
+                            <div class="col-12">
+                                <label for="truckPhotosInput" class="form-label">Add Photos (Optional)</label>
+                                <div class="upload-zone">
+                                    <input type="file" id="truckPhotosInput" name="truck_photos_input" class="d-none" multiple accept="image/jpeg, image/png, image/jpg">
+                                    <i class="bi bi-cloud-arrow-up"></i>
+                                    <p>Click or drop files here</p>
+                                    <small class="text-muted d-block mt-2">Upload up to 3 photos (JPEG, PNG - max 5MB each)</small>
+                                </div>
+                                <div id="truck-photo-preview" class="d-flex flex-wrap mt-2"></div>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="currentLocationTruck" class="form-label required-label">Current Location</label>
+                                <input type="text" id="currentLocationTruck" class="form-control" name="current_location" placeholder="Enter your truck's current base or city" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="availableFromDate" class="form-label required-label">Available From</label>
+                                <input type="text" id="availableFromDate" name="available_from" class="form-control date-picker" placeholder="Select date" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="availableToDate" class="form-label">Available To (Optional)</label>
+                                <input type="text" id="availableToDate" name="available_to" class="form-control date-picker" placeholder="Select end date if applicable">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="preferredRoutes" class="form-label">Preferred Routes</label>
+                                <input type="text" id="preferredRoutes" name="preferred_routes" class="form-control" placeholder="E.g., Nairobi-Mombasa, All Kenya">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="pricePerKm" class="form-label">Rate (e.g., per km, per trip)</label>
+                                <input type="text" id="pricePerKm" name="rate_description" class="form-control" placeholder="E.g., KSh 150/km or KSh 20,000 per trip NBO-MSA">
+                            </div>
+                            <div class="col-12">
+                                <label for="additionalNotes" class="form-label">Additional Notes</label>
+                                <textarea id="additionalNotes" name="additional_notes" class="form-control" rows="3" placeholder="E.g., Goods in Transit insurance, specific equipment..."></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="submit-truck-btn">Post Truck</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center p-4">
+                    <i class="bi bi-check-circle-fill text-success mb-3" style="font-size: 3rem;"></i>
+                    <h5 id="success-modal-title">Success!</h5>
+                    <p id="success-message" class="mb-4">Your information has been submitted successfully!</p>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Continue</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                 <div class="modal-body text-center p-4">
+                    <i class="bi bi-exclamation-triangle-fill text-danger mb-3" style="font-size: 3rem;"></i>
+                    <h5 id="error-modal-title">Error!</h5>
+                    <p id="error-message" class="mb-4">An error occurred. Please try again.</p>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="cargoDetailModal" tabindex="-1" aria-labelledby="cargoDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable"> <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cargoDetailModalLabel">Cargo Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="cargo-detail-content">
+                    <div class="text-center py-4">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Loading cargo details...</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="bid-cargo-btn-modal" data-cargo-id="">Submit Bid</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="bidModal" tabindex="-1" aria-labelledby="bidModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="bidModalLabel">Submit Your Bid</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form  method="POST" id="bidForm">
+                        
+                        <input type="hidden" id="bid_cargo_id" name="cargo_id"> <div class="mb-3">
+                            <label for="bidAmount" class="form-label required-label">Your Bid Amount (KSh)</label>
+                            <input type="number" class="form-control" id="bidAmount" name="bid_amount" required placeholder="Enter your offer" min="0">
+                        </div>
+                        <div class="mb-3">
+                            <label for="bidDeliveryTime" class="form-label required-label">Estimated Delivery Time</label>
+                            <select class="form-select" id="bidDeliveryTime" name="delivery_timeframe" required>
+                                <option value="" selected disabled>Select delivery timeframe</option>
+                                <option value="same-day">Same Day</option>
+                                <option value="next-day">Next Day</option>
+                                <option value="2-3-days">2-3 Days</option>
+                                <option value="3-5-days">3-5 Days</option>
+                                <option value="5+-days">5+ Days</option>
+                                 <option value="custom">Custom (specify below)</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="bidMessage" class="form-label">Message to Shipper (Optional)</label>
+                            <textarea class="form-control" id="bidMessage" name="bid_message" rows="3" placeholder="Include any conditions, questions, or details about your service..."></textarea>
+                        </div>
+                         <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary" id="submit-bid-btn">Submit Bid</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <template id="notification-item-template">
+        <li>
+            <a class="dropdown-item notification-item d-flex align-items-start py-2" href="#"> <div class="notification-icon me-3 fs-4"> <i class="bi"></i> </div>
+                <div class="notification-content flex-grow-1">
+                    <div class="notification-title fw-bold"></div>
+                    <div class="notification-text text-muted small"></div>
+                    <div class="notification-time text-muted small mt-1"></div>
+                </div>
+            </a>
+        </li>
+    </template>
+
+    <template id="cargo-listing-template">
+        <div class="cargo-listing-card"> <div class="cargo-card-header">
+                <div class="cargo-type-badge"></div>
+                <div class="cargo-status"></div>
+            </div>
+            <div class="cargo-card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="cargo-route mb-3">
+                            <div class="route-points">
+                                <div class="pickup-point">
+                                    <i class="bi bi-geo-alt-fill text-success"></i>
+                                    <span class="pickup-location"></span>
+                                </div>
+                                <div class="route-line"></div> <div class="delivery-point">
+                                    <i class="bi bi-geo-alt-fill text-danger"></i>
+                                    <span class="delivery-location"></span>
+                                </div>
+                            </div>
+                            <div class="route-distance text-muted"></div>
+                        </div>
+                        <div class="cargo-details">
+                            <div class="cargo-detail-item">
+                                <i class="bi bi-box-seam"></i>
+                                <span class="cargo-type-detail"></span> </div>
+                            <div class="cargo-detail-item">
+                                <i class="bi bi-truck"></i> <span class="cargo-weight"></span>
+                            </div>
+                            <div class="cargo-detail-item date-info">
+                                <i class="bi bi-calendar-event"></i>
+                                <span class="pickup-date"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-md-end mt-3 mt-md-0"> <div class="cargo-price mb-2"></div>
+                        <button type="button" class="btn btn-outline-primary btn-sm view-details-btn" data-cargo-id="">View Details</button>
+                    </div>
+                </div>
+            </div>
+            <div class="cargo-card-footer">
+                <div class="cargo-posted-by">
+                    <div class="user-avatar">
+                        <i class="bi bi-person-circle"></i> </div>
+                    <div class="user-info ms-2"> <div class="user-name"></div>
+                        <div class="user-rating small"></div> </div>
+                </div>
+                <div class="cargo-posted-time text-muted"></div>
+            </div>
+        </div>
+    </template>
+
+    <template id="generic-truck-listing-item-template">
+        <div class="truck-listing-item">
+            <div class="truck-icon">
+                <i class="bi bi-truck"></i>
+            </div>
+            <div class="truck-details">
+                <div class="truck-type"></div>
+                <div class="truck-info">
+                    <span class="truck-capacity"></span> &bull; 
+                    <span class="truck-location"></span>
+                </div>
+            </div>
+            <div class="truck-availability"></div>
+        </div>
+    </template>
+
+    <template id="business-truck-preview-card-template">
+        <div class="col"> 
+            <div class="listing-card truck-preview-item h-100">
+                <div class="card-header">
+                    <h5 class="card-title mb-0 truck-type">Truck Type</h5>
+                    <span class="badge truck-availability-badge">Status</span>
+                </div>
+                <div class="card-body">
+                    <div class="detail-row">
+                        <div class="detail-label"><i class="bi bi-box-seam me-2"></i>Capacity:</div>
+                        <div class="detail-value truck-capacity">N/A</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label"><i class="bi bi-geo-alt me-2"></i>Location:</div>
+                        <div class="detail-value truck-location">N/A</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label"><i class="bi bi-cash-coin me-2"></i>Rate:</div>
+                        <div class="detail-value truck-rate">N/A</div>
+                    </div>
+                </div>
+                <div class="card-footer text-end">
+                    <button class="btn btn-sm btn-outline-primary view-truck-details-btn" data-truck-id="">View Details</button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+      
+        const API_BASE_URL = 'http://localhost:8000/api/'; 
+
+        // Global variables
+        let currentUser = null;
+        let isAuthenticated = false;
+
+        // --- Utility functions for localStorage ---
+        function getLocalStorage(key) {
+            try {
+                return localStorage.getItem(key);
+            } catch (e) {
+                console.error('LocalStorage get error:', e);
+                return null;
+            }
+        }
+
+        function setLocalStorage(key, value) {
+            try {
+                localStorage.setItem(key, value);
+            } catch (e) {
+                console.error('LocalStorage set error:', e);
+            }
+        }
+
+        function removeLocalStorage(key) {
+            try {
+                localStorage.removeItem(key);
+            } catch (e) {
+                console.error('LocalStorage remove error:', e);
+            }
+        }
+        
+        // --- showMessageBox (using existing showNotification) ---
+        function showMessageBox(title, message, type) {
+            showNotification({ title: title, message: message, type: type });
+        }
+
+
+       
+        /**
+         * Initialize dashboard on page load - called from original initializeApp
+         */
+        async function initializeDashboard() {
+            try {
+                const authToken = getLocalStorage('authToken');
+                if (!authToken) {
+                    console.warn("No auth token found. User might not be logged in.");
+                }
+
+                const storedUser = getLocalStorage('currentUser');
+                if (storedUser) {
+                    try {
+                        currentUser = JSON.parse(storedUser);
+                        displayUserInfo(); 
+                    } catch (e) {
+                        console.error('Error parsing stored user data:', e);
+                        removeLocalStorage('currentUser'); 
+                    }
+                }
+                await fetchAndDisplayUserProfile(); 
+
+            } catch (error) {
+                console.error('Dashboard initialization error:', error);
+            }
+        }
+
+        /**
+         * Fetch user profile and display on dashboard
+         */
+        async function fetchAndDisplayUserProfile() {
+            const result = await makeAuthenticatedRequest('auth/users/me/');
+
+            if (result && result.success) {
+                currentUser = result.data;
+                setLocalStorage('currentUser', JSON.stringify(currentUser));
+                displayUserInfo();
+                isAuthenticated = true;
+            } else {
+                if (result && result.status !== 401 && result.status !== 403) {
+                    showMessageBox('Error', 'Failed to load user information.', 'error');
+                }
+                if (!isAuthenticated) {
+                     const usernameElement = DOM.get('username-display');
+                     if (usernameElement) usernameElement.textContent = 'Guest';
+                     const usernamePlaceholder = DOM.get('usernamePlaceholder');
+                     if (usernamePlaceholder) usernamePlaceholder.textContent = 'Guest';
+                }
+            }
+        }
+
+
+        /**
+         * Display user information on the dashboard
+         */
+        function displayUserInfo() {
+            if (!currentUser) return;
+
+            const displayName = currentUser.first_name || currentUser.username || currentUser.email || 'User';
+
+            const usernameDisplayElement = DOM.get('username-display');
+            if (usernameDisplayElement) {
+                usernameDisplayElement.textContent = displayName;
+            }
+
+            const usernamePlaceholderElement = DOM.get('usernamePlaceholder'); 
+            if (usernamePlaceholderElement) {
+                usernamePlaceholderElement.textContent = displayName;
+            }
+        }
+        
+        /**
+         * Handle unauthorized access
+         */
+        function handleUnauthorized() {
+            clearAuthData();
+            showMessageBox('Session Expired', 'Your session has expired or is invalid. Please log in again.', 'warning');
+            const usernameElement = DOM.get('username-display');
+            if (usernameElement) usernameElement.textContent = 'Guest';
+            const usernamePlaceholder = DOM.get('usernamePlaceholder');
+            if (usernamePlaceholder) usernamePlaceholder.textContent = 'Guest';
+            
+            setTimeout(() => {
+                redirectToLogin();
+            }, 3000);
+        }
+
+        /**
+         * Clear authentication data
+         */
+        function clearAuthData() {
+            removeLocalStorage('authToken');
+            removeLocalStorage('currentUser');
+            isAuthenticated = false;
+            currentUser = null;
+        }
+
+        /**
+         * Redirect to login page
+         */
+        function redirectToLogin() {
+            window.location.href = 'login.html';
+        }
+
+
+        /**
+         * Make API requests.
+         */
+        async function makeApiRequest(endpoint, options = {}) {
+            const authToken = getLocalStorage('authToken');
+            const defaultHeaders = {
+                'Accept': 'application/json',
+            };
+
+            if (authToken) {
+                defaultHeaders['Authorization'] = `Token ${authToken}`; 
+            }
+
+            const config = {
+                method: 'GET', 
+                ...options, 
+                headers: {
+                    ...defaultHeaders,
+                    ...options.headers 
+                },
+            };
+            
+            const httpMethod = (config.method || 'GET').toUpperCase();
+            if (['POST', 'PUT', 'DELETE', 'PATCH'].includes(httpMethod)) {
+                const csrfToken = getCookie('csrftoken');
+                if (csrfToken) {
+                    config.headers['X-CSRFToken'] = csrfToken;
+                }
+            }
+
+            if (options.body instanceof FormData) {
+                delete config.headers['Content-Type'];
+            } else if (typeof options.body === 'object' && options.body !== null) {
+                 config.headers['Content-Type'] = 'application/json';
+                 config.body = JSON.stringify(options.body); 
+            }
+
+
+            try {
+                const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
+                
+                let responseData = null;
+                const contentType = response.headers.get("content-type");
+                if (contentType && contentType.includes("application/json")) {
+                    responseData = await response.json();
+                } else {
+                    if (response.status === 204) {
+                        responseData = null; 
+                    } else {
+                         try {
+                            responseData = await response.text(); 
+                            if (!response.ok) responseData = { detail: responseData };
+                         } catch (textErr) {
+                            // If text() fails too, responseData remains null
+                         }
+                    }
+                }
+
+                return {
+                    success: response.ok,
+                    status: response.status,
+                    data: response.ok ? responseData : null,
+                    error: !response.ok ? (responseData || { detail: `Request failed with status ${response.status}` }) : null
+                };
+            } catch (error) {
+                 console.error('Fetch API request error:', error);
+                return {
+                    success: false,
+                    status: 0, 
+                    data: null,
+                    error: { detail: error.message || "Network error or request failed" }
+                };
+            }
+        }
+        
+        /**
+         * Make authenticated API requests with explicit pre-check and 401/403 post-check.
+         */
+        async function makeAuthenticatedRequest(endpoint, options = {}) {
+            const authToken = getLocalStorage('authToken');
+            if (!authToken) {
+                handleUnauthorized();
+                return { success: false, status: 401, data: null, error: { detail: "Auth token not found." } };
+            }
+
+            const result = await makeApiRequest(endpoint, options); 
+
+            if (result && !result.success && (result.status === 401 || result.status === 403)) {
+                handleUnauthorized();
+            }
+            return result;
+        }
+
+
+        
+
+        // Cached DOM elements for performance
+        const DOM = {
+            cache: new Map(),
+            get(id) {
+                if (!this.cache.has(id)) {
+                    this.cache.set(id, document.getElementById(id));
+                }
+                return this.cache.get(id);
+            },
+            query(selector) {
+                return document.querySelector(selector);
+            },
+            queryAll(selector) {
+                return document.querySelectorAll(selector);
+            }
+        };
+
+        // Helper function for CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // Helper function for 'time since'
+        function timeSince(dateString) {
+            try {
+                const date = new Date(dateString);
+                if (isNaN(date.getTime())) { 
+                    return 'a while ago';
+                }
+                const seconds = Math.floor((new Date() - date) / 1000);
+                let interval = seconds / 31536000; 
+                if (interval > 1) return Math.floor(interval) + " years ago";
+                interval = seconds / 2592000; 
+                if (interval > 1) return Math.floor(interval) + " months ago";
+                interval = seconds / 86400; 
+                if (interval > 1) return Math.floor(interval) + " days ago";
+                interval = seconds / 3600; 
+                if (interval > 1) return Math.floor(interval) + " hours ago";
+                interval = seconds / 60; 
+                if (interval > 1) return Math.floor(interval) + " minutes ago";
+                if (seconds < 10) return "just now";
+                return Math.floor(seconds) + " seconds ago";
+            } catch (error) {
+                console.error('Error parsing date for timeSince:', dateString, error);
+                return 'a while ago';
+            }
+        }
+
+
+        // Function to safely escape HTML
+        function escapeHtml(text) {
+            if (typeof text !== 'string') return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Function to show toast notifications
+        function showNotification(notification) {
+            if (!notification || typeof notification !== 'object') return false;
+            
+            const toastContainer = DOM.get('toast-container');
+            if (!toastContainer) {
+                console.warn('Toast container not found');
+                return false;
+            }
+
+            try {
+                const toast = document.createElement('div');
+                toast.className = 'toast';
+                toast.setAttribute('role', 'alert');
+                toast.setAttribute('aria-live', 'assertive');
+                toast.setAttribute('aria-atomic', 'true');
+                
+                const iconClass = notification.type === 'success' ? 'bi-check-circle-fill text-success' : 
+                                 notification.type === 'warning' ? 'bi-exclamation-triangle-fill text-warning' :
+                                 notification.type === 'error' ? 'bi-x-circle-fill text-danger' : 'bi-info-circle-fill text-primary';
+                
+                const toastHeader = document.createElement('div');
+                toastHeader.className = 'toast-header';
+                
+                const icon = document.createElement('i');
+                icon.className = `bi ${iconClass} me-2`;
+                
+                const title = document.createElement('strong');
+                title.className = 'me-auto';
+                title.textContent = notification.title || 'Notification';
+                
+                const time = document.createElement('small');
+                time.className = 'text-muted';
+                time.textContent = 'Just now';
+                
+                const closeBtn = document.createElement('button');
+                closeBtn.type = 'button';
+                closeBtn.className = 'btn-close';
+                closeBtn.setAttribute('data-bs-dismiss', 'toast');
+                closeBtn.setAttribute('aria-label', 'Close');
+                
+                const toastBody = document.createElement('div');
+                toastBody.className = 'toast-body';
+                toastBody.textContent = notification.message || '';
+                
+                toastHeader.appendChild(icon);
+                toastHeader.appendChild(title);
+                toastHeader.appendChild(time);
+                toastHeader.appendChild(closeBtn);
+                
+                toast.appendChild(toastHeader);
+                toast.appendChild(toastBody);
+                
+                toastContainer.appendChild(toast);
+                
+                if (typeof bootstrap !== 'undefined' && bootstrap.Toast) {
+                    const bsToast = new bootstrap.Toast(toast, { delay: 5000 });
+                    bsToast.show();
+                    
+                    toast.addEventListener('hidden.bs.toast', function () {
+                        if (toastContainer.contains(toast)) {
+                            toastContainer.removeChild(toast);
+                        }
+                    });
+                }
+                
+                return true;
+            } catch (error) {
+                console.error('Error showing notification:', error);
+                return false;
+            }
+        }
+
+        // Function to show success/error modals
+        function showModalNotification(type, title, message) {
+            if (!type || !title || !message) return false;
+            
+            try {
+                let modalId, modalTitleId, modalMessageId;
+                if (type === 'success') {
+                    modalId = 'successModal';
+                    modalTitleId = 'success-modal-title';
+                    modalMessageId = 'success-message';
+                } else {
+                    modalId = 'errorModal';
+                    modalTitleId = 'error-modal-title';
+                    modalMessageId = 'error-message';
+                }
+                
+                const titleEl = DOM.get(modalTitleId);
+                const messageEl = DOM.get(modalMessageId);
+                const modalEl = DOM.get(modalId);
+                
+                if (titleEl) titleEl.textContent = title;
+                if (messageEl) messageEl.textContent = message;
+                
+                if (modalEl && typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                    const existingModal = bootstrap.Modal.getInstance(modalEl);
+                    if (existingModal) {
+                        existingModal.show();
+                    } else {
+                        const bsModal = new bootstrap.Modal(modalEl);
+                        bsModal.show();
+                    }
+                    return true;
+                }
+            } catch (error) {
+                console.error('Error showing modal notification:', error);
+            }
+            return false;
+        }
+
+        // Safe event listener attachment
+        function safeAddEventListener(elementIdOrElement, event, handler) {
+            const element = typeof elementIdOrElement === 'string' ? DOM.get(elementIdOrElement) : elementIdOrElement;
+            if (element && typeof handler === 'function') {
+                element.addEventListener(event, handler);
+                return true;
+            }
+            if (!element) {
+                 console.warn(`Element not found for event listener: ${elementIdOrElement}`);
+            }
+            return false;
+        }
+
+        // Range slider update function
+        function updateRangeDisplay(slider, displayId, suffix = '', isCurrency = false) {
+            if (!slider) return;
+            const display = DOM.get(displayId);
+            if (display) {
+                const value = parseInt(slider.value);
+                display.textContent = isCurrency ? 
+                                      `${value.toLocaleString()} ${suffix}` : 
+                                      `${value} ${suffix}`;
+            }
+        }
+
+        // Photo upload setup with better error handling
+        function setupPhotoUpload(fileInputId, previewContainerId, maxFiles = 3, maxSize = 5 * 1024 * 1024) {
+            const fileInput = DOM.get(fileInputId);
+            const previewContainer = DOM.get(previewContainerId);
+            
+            if (!fileInput || !previewContainer) {
+                console.warn(`Photo upload setup failed: missing elements for ${fileInputId}`);
+                return false;
+            }
+            
+            const uploadZone = fileInput.closest('.upload-zone');
+            if (!uploadZone) {
+                console.warn(`Upload zone not found for ${fileInputId}`);
+                return false;
+            }
+            
+            let currentFiles = []; 
+            
+            function createDataTransferFromFiles() {
+                const dataTransfer = new DataTransfer();
+                currentFiles.forEach(file => dataTransfer.items.add(file));
+                return dataTransfer.files;
+            }
+            
+            function renderPreviews() {
+                previewContainer.innerHTML = ''; 
+                currentFiles.forEach((file, index) => {
+                    const reader = new FileReader();
+                    reader.onload = e => {
+                        const preview = document.createElement('div');
+                        preview.className = 'photo-preview';
+                        
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.alt = escapeHtml(file.name);
+                        
+                        const removeBtn = document.createElement('button');
+                        removeBtn.type = 'button';
+                        removeBtn.className = 'remove-btn';
+                        removeBtn.innerHTML = '&times;';
+                        removeBtn.setAttribute('aria-label', `Remove ${escapeHtml(file.name)}`);
+                        
+                        removeBtn.addEventListener('click', function() {
+                            currentFiles.splice(index, 1); 
+                            updateFileInput();
+                            renderPreviews(); 
+                        });
+                        
+                        preview.appendChild(img);
+                        preview.appendChild(removeBtn);
+                        previewContainer.appendChild(preview);
+                    };
+                    reader.onerror = () => {
+                        console.error('Error reading file:', escapeHtml(file.name));
+                        showMessageBox('File Error', `Could not read file: ${escapeHtml(file.name)}`, 'error');
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+            
+            function updateFileInput() {
+                try {
+                    fileInput.files = createDataTransferFromFiles();
+                } catch (error) {
+                    if (currentFiles.length === 0) {
+                        fileInput.value = ''; 
+                    }
+                    console.warn('Could not directly update fileInput.files:', error);
+                }
+            }
+            
+            function validateFile(file) {
+                if (file.size > maxSize) {
+                    showMessageBox('File Too Large', `File "${escapeHtml(file.name)}" exceeds ${Math.round(maxSize / (1024 * 1024))}MB limit.`, 'warning');
+                    return false;
+                }
+                
+                const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+                if (!validTypes.includes(file.type)) {
+                    showMessageBox('Invalid File Type', `File "${escapeHtml(file.name)}" is not a valid image type.`, 'warning');
+                    return false;
+                }
+                return true;
+            }
+            
+            function handleFiles(files) {
+                if (!files || files.length === 0) return;
+                
+                const newValidFiles = Array.from(files).filter(validateFile);
+                let allFiles = [...currentFiles, ...newValidFiles];
+                
+                if (allFiles.length > maxFiles) {
+                    showMessageBox('File Limit Exceeded', `Maximum ${maxFiles} files allowed. Only the first ${maxFiles} files were kept.`, 'warning');
+                    allFiles = allFiles.slice(0, maxFiles);
+                }
+                
+                currentFiles = allFiles;
+                updateFileInput();
+                renderPreviews();
+            }
+            
+            uploadZone.addEventListener('click', (e) => {
+                e.preventDefault(); 
+                fileInput.click();
+            });
+            
+            uploadZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadZone.classList.add('border-primary'); 
+            });
+            
+            uploadZone.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                uploadZone.classList.remove('border-primary');
+            });
+            
+            uploadZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadZone.classList.remove('border-primary');
+                if (e.dataTransfer && e.dataTransfer.files.length) {
+                    handleFiles(e.dataTransfer.files);
+                }
+            });
+            
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files) {
+                    handleFiles(e.target.files);
+                }
+            });
+            return true;
+        }
+
+
+        // Tab switching with error handling
+        function initTabSwitching() {
+            const businessTab = DOM.get('business-tab');
+            const truckOwnerTab = DOM.get('truck-owner-tab');
+            const businessContent = DOM.get('business-content');
+            const truckOwnerContent = DOM.get('truck-owner-content');
+            
+            if (!businessTab || !truckOwnerTab || !businessContent || !truckOwnerContent) {
+                console.warn('Tab elements not found');
+                return false;
+            }
+            
+            function switchTab(activeTab, inactiveTab, activeContent, inactiveContent, callback) {
+                if (!activeTab.classList.contains('active')) {
+                    inactiveTab.classList.remove('active');
+                    activeTab.classList.add('active');
+                    inactiveContent.classList.remove('active');
+                    activeContent.classList.add('active');
+                    
+                    if (typeof callback === 'function') {
+                        try {
+                            callback();
+                        } catch (error) {
+                            console.error('Tab callback error:', error);
+                        }
+                    }
+                }
+            }
+            
+            businessTab.addEventListener('click', function() {
+                switchTab(this, truckOwnerTab, businessContent, truckOwnerContent, () => loadAvailableTrucks("trucks/"));
+            });
+            
+            truckOwnerTab.addEventListener('click', function() {
+                switchTab(this, businessTab, truckOwnerContent, businessContent, () => loadCargoListings("cargo-listings/"));
+            });
+            
+            return true;
+        }
+
+        // Enhanced form validation for a collection of forms
+        function validateForms(formElements) {
+            if (!Array.isArray(formElements)) formElements = [formElements];
+            
+            for (const form of formElements) {
+                if (form && typeof form.checkValidity === 'function') {
+                    if (!form.checkValidity()) {
+                        form.reportValidity(); 
+                        return false; 
+                    }
+                } else {
+                    console.warn('Invalid form element passed to validateForms:', form);
+                }
+            }
+            return true; 
+        }
+
+        // Button state management
+        function setButtonLoading(button, isLoading, loadingText = 'Loading...') {
+            if (!button) return false;
+            
+            if (isLoading) {
+                button.dataset.originalText = button.innerHTML;
+                button.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> ${loadingText}`;
+                button.disabled = true;
+            } else {
+                if(button.dataset.originalText) {
+                    button.innerHTML = button.dataset.originalText;
+                }
+                button.disabled = false;
+            }
+            return true;
+        }
+
+
+        // Load cargo listings with comprehensive error handling
+        async function loadCargoListings(apiUrl = "cargo-listings/") { 
+            const container = DOM.get('cargo-listings-container');
+            const template = DOM.get('cargo-listing-template');
+            const paginationContainer = DOM.get('pagination-container');
+            const cargoCountElement = DOM.get('cargo-count');
+            const cargoResultsInfo = DOM.get('cargo-results-info');
+            
+            if (!container || !template) {
+                console.warn('Cargo listings: required elements (container or template) not found');
+                return false;
+            }
+            
+            container.innerHTML = `
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+                    <p class="mt-3">Loading cargo listings...</p>
+                </div>`;
+            
+            if (paginationContainer) paginationContainer.innerHTML = '';
+            
+            let requestEndpoint = apiUrl;
+            if (apiUrl.startsWith(API_BASE_URL)) { 
+                 requestEndpoint = apiUrl.substring(API_BASE_URL.length);
+            }
+
+
+            const result = await makeApiRequest(requestEndpoint); 
+                
+            if (result.success) {
+                const data = result.data;
+                container.innerHTML = ''; 
+                
+                const listings = data.results || data; 
+                if (listings && listings.length > 0) {
+                    listings.forEach(listing => {
+                     try {
+                            const clone = template.content.cloneNode(true);
+                            
+                            clone.querySelector('.cargo-type-badge').textContent = escapeHtml(listing.cargo_type_display || listing.cargo_type || 'N/A');
+                            const statusEl = clone.querySelector('.cargo-status');
+                            statusEl.textContent = escapeHtml(listing.status_display || listing.status || 'N/A');
+                            statusEl.className = 'cargo-status'; 
+                            if (listing.status) statusEl.classList.add(String(listing.status).toLowerCase().replace(/\s+/g, '-'));
+
+                            clone.querySelector('.pickup-location').textContent = escapeHtml(listing.pickup_location_str || 'N/A');
+                            clone.querySelector('.delivery-location').textContent = escapeHtml(listing.delivery_location_str || 'N/A');
+                            clone.querySelector('.route-distance').textContent = listing.distance ? `${escapeHtml(listing.distance.toString())} km` : '';
+                            
+                            clone.querySelector('.cargo-type-detail').textContent = escapeHtml(listing.cargo_type_display || listing.cargo_type || 'N/A');
+                            clone.querySelector('.cargo-weight').textContent = listing.cargo_weight ? 
+                                `${escapeHtml(listing.cargo_weight.toString())} kg` : (escapeHtml(listing.weight_range) || 'N/A');
+                            clone.querySelector('.pickup-date').textContent = listing.pickup_date ? 
+                                new Date(listing.pickup_date).toLocaleDateString() : 'N/A';
+                            
+                            clone.querySelector('.cargo-price').textContent = listing.budget_amount ? 
+                                `KSh ${parseFloat(listing.budget_amount).toLocaleString()}` : 'Negotiable';
+                            
+                            const viewBtn = clone.querySelector('.view-details-btn');
+                            viewBtn.dataset.cargoId = listing.id;
+                            
+                            clone.querySelector('.user-name').textContent = escapeHtml(listing.posted_by_username || 'Shipper');
+                            clone.querySelector('.user-rating').textContent = listing.posted_by_rating ? 
+                                `⭐ ${parseFloat(listing.posted_by_rating).toFixed(1)}` : '';
+                            clone.querySelector('.cargo-posted-time').textContent = listing.created_at ? 
+                                timeSince(listing.created_at) : '';
+
+                            const cardElement = clone.querySelector('.cargo-listing-card');
+                            cardElement.dataset.cargoId = listing.id; 
+
+                            container.appendChild(clone);
+                        } catch (renderError) {
+                            console.error('Error rendering individual cargo listing:', listing.id, renderError);
+                        }
+                    });
+                    
+                    if (cargoCountElement) cargoCountElement.textContent = data.count || data.results.length;
+                    if (cargoResultsInfo) cargoResultsInfo.textContent = `Showing ${data.results.length} of ${data.count || data.results.length} listings.`;
+                    
+                    updatePagination(data, paginationContainer, loadCargoListings);
+                } else {
+                    container.innerHTML = '<p class="text-center p-4">No cargo listings found matching your criteria.</p>';
+                    if (cargoCountElement) cargoCountElement.textContent = '0';
+                    if (cargoResultsInfo) cargoResultsInfo.textContent = "No listings found.";
+                }
+            } else {
+                console.error('Failed to load cargo listings:', result.error);
+                container.innerHTML = `<p class="text-center text-danger p-4">Failed to load cargo listings. ${escapeHtml(result.error?.detail || result.error || "Unknown error")}</p>`;
+                if (cargoCountElement) cargoCountElement.textContent = '0';
+                if (cargoResultsInfo) cargoResultsInfo.textContent = "Error loading listings.";
+            }
+            return result.success;
+        }
+
+        // Enhanced pagination with better error handling
+        function updatePagination(data, container, callback) {
+            if (!container || !data) return false;
+            container.innerHTML = ''; 
+            
+            if (!data.results || (data.results.length === 0 && !data.previous && !data.next)) {
+                return false; 
+            }
+            
+            try {
+                const ul = document.createElement('ul');
+                ul.className = 'pagination justify-content-center';
+                
+                function createPageItem(text, pageUrl, isDisabled = false, isActive = false) {
+                    const li = document.createElement('li');
+                    li.className = `page-item ${isDisabled ? 'disabled' : ''} ${isActive ? 'active' : ''}`;
+                    const a = document.createElement('a');
+                    a.className = 'page-link';
+                    a.href = '#'; 
+                    a.innerHTML = text; 
+                    
+                    if (pageUrl && !isDisabled && typeof callback === 'function') {
+                        a.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            let endpointToLoad = pageUrl;
+                            if (pageUrl.startsWith(API_BASE_URL)) {
+                                endpointToLoad = pageUrl.substring(API_BASE_URL.length);
+                            } else if (pageUrl.startsWith('http://') || pageUrl.startsWith('https://')) {
+                                try {
+                                   const urlObj = new URL(pageUrl);
+                                   endpointToLoad = urlObj.pathname.replace('/api/', '') + urlObj.search; 
+                                } catch {
+                                   // Use as is
+                                }
+                            }
+                            callback(endpointToLoad);
+                        });
+                    }
+                    li.appendChild(a);
+                    return li;
+                }
+
+                ul.appendChild(createPageItem('&laquo; Previous', data.previous, !data.previous));
+                ul.appendChild(createPageItem('Next &raquo;', data.next, !data.next));
+                container.appendChild(ul);
+                return true;
+            } catch (error) {
+                console.error('Error updating pagination:', error);
+                return false;
+            }
+        }
+
+
+       // Load available trucks for the Business tab preview (MODIFIED)      
+       async function loadAvailableTrucks(apiEndpoint = 'trucks/') {          
+            const container = DOM.get('available-trucks-container'); // This is the new container location
+            const template = DOM.get('business-truck-preview-card-template'); // Using the new template ID
+                                        
+            if (!container || !template) {                 
+                console.warn('Truck preview: required elements (container or template) not found.');
+                if(container) container.innerHTML = '<p class="text-center p-3 text-warning">Could not initialize truck preview area.</p>';
+                return false;             
+            }                          
+            
+            container.innerHTML = `                 
+                <div class="col-12 text-center py-4"> {/* Ensure spinner spans full width if needed */}                    
+                    <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>                     
+                    <p class="mt-2">Loading available trucks...</p>                 
+                </div>`;                          
+            
+            const result = await makeApiRequest(apiEndpoint);
+                                    
+            if (result.success) {                 
+                const data = result.data;                 
+                container.innerHTML = ''; // Clear loading spinner
+                // Ensure data is an array, prefer 'results' for paginated data
+                const trucksData = data.results || (Array.isArray(data) ? data : []); 
+                                        
+                if (trucksData.length > 0) {      
+                    // Show a limited number for preview, e.g., first 3 or 4               
+                    trucksData.slice(0, 3).forEach((truck) => { // Changed to 3 previews
+                        try {                             
+                            const clone = template.content.cloneNode(true);
+                            
+                            const typeEl = clone.querySelector('.truck-type');
+                            const capacityEl = clone.querySelector('.truck-capacity');
+                            const locationEl = clone.querySelector('.truck-location');
+                            const availabilityBadgeEl = clone.querySelector('.truck-availability-badge');
+                            const rateEl = clone.querySelector('.truck-rate');
+                            const viewDetailsBtn = clone.querySelector('.view-truck-details-btn');
+                                                                
+                            if (typeEl) typeEl.textContent = escapeHtml(truck.truck_type_display || truck.truck_type || 'N/A');
+                            if (capacityEl) capacityEl.textContent = truck.truck_capacity ? `${escapeHtml(truck.truck_capacity.toString())} tons` : 'N/A';
+                            if (locationEl) locationEl.textContent = escapeHtml(truck.current_location || 'N/A');                                                          
+                            if (rateEl) rateEl.textContent = escapeHtml(truck.rate_description || 'On Request');
+                            
+                            if (availabilityBadgeEl) {
+                                const isUnavailable = truck.availability_status && String(truck.availability_status).toLowerCase().includes('unavailable');
+                                availabilityBadgeEl.textContent = escapeHtml(truck.availability_status || (truck.available_from ? `From ${new Date(truck.available_from).toLocaleDateString()}` : 'Available'));                                                          
+                                availabilityBadgeEl.classList.remove('badge-available', 'badge-unavailable'); // Clear previous
+                                availabilityBadgeEl.classList.add(isUnavailable ? 'badge-unavailable' : 'badge-available');
+                            }
+                            if(viewDetailsBtn && truck.id) {
+                                viewDetailsBtn.dataset.truckId = truck.id;
+                                // Add event listener or href for view details functionality if needed here
+                                // e.g., viewDetailsBtn.href = `Trucks.html?id=${truck.id}`;
+                            }
+                            
+                            container.appendChild(clone); // Appends the <div class="col">...</div> from template
+                        } catch (renderError) {                             
+                            console.error('Error rendering individual truck preview card:', truck.id, renderError);                         
+                        }                     
+                    });                 
+                } else {                     
+                    container.innerHTML = '<div class="col-12"><p class="text-center p-3">No available trucks found matching your criteria at the moment.</p></div>';
+                }             
+            } else {                  
+                console.error('Failed to load trucks for preview:', result.error);                 
+                container.innerHTML = `<div class="col-12"><p class="text-center text-danger p-3">Failed to load available trucks. ${escapeHtml(result.error?.detail || "Error")}</p></div>`;
+            }             
+            return result.success;         
+        }
+
+        // Open cargo details with comprehensive error handling
+        async function openCargoDetails(cargoId) {
+            if (!cargoId) {
+                console.error('Cargo ID is required to open details');
+                return false;
+            }
+            
+            const modalElement = DOM.get('cargoDetailModal');
+            const contentContainer = DOM.get('cargo-detail-content');
+            const bidButtonInModal = DOM.get('bid-cargo-btn-modal'); 
+
+            if (!modalElement || !contentContainer || !bidButtonInModal) {
+                console.warn('Cargo detail modal or its content/button elements not found.');
+                return false;
+            }
+            
+            let modalInstance;
+            if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+            } else {
+                console.warn('Bootstrap Modal not available');
+                return false;
+            }
+
+            contentContainer.innerHTML = `
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+                    <p class="mt-3">Loading cargo details...</p>
+                </div>`;
+            modalInstance.show();
+
+            const result = await makeApiRequest(`cargo-listings/${cargoId}/`); 
+                
+            if (result.success) {
+                const cargoDetails = result.data;
+                contentContainer.innerHTML = createCargoDetailsHtml(cargoDetails);
+                if (bidButtonInModal) {
+                    bidButtonInModal.dataset.cargoId = cargoId; 
+                }
+                initTooltips(contentContainer); 
+                return true;
+            } else {
+                console.error('Failed to load cargo details:', result.error);
+                contentContainer.innerHTML = `<p class="text-center text-danger p-4">Failed to load cargo details. ${escapeHtml(result.error?.detail || "Error")}</p>`;
+                return false;
+            }
+        }
+
+        // Create cargo details HTML safely
+        function createCargoDetailsHtml(cargo) {
+            if (!cargo) return '<p class="text-center p-4">No details available for this cargo.</p>';
+            
+            const safeGet = (value, fallback = 'N/A') => value ? escapeHtml(String(value)) : fallback;
+            const safeCurrency = (value) => value ? `KSh ${parseFloat(value).toLocaleString()}` : 'Negotiable';
+            const safeDate = (dateStr) => dateStr ? new Date(dateStr).toLocaleDateString() : 'N/A';
+            
+            let photosHtml = '';
+            if (cargo.cargo_photos && Array.isArray(cargo.cargo_photos) && cargo.cargo_photos.length > 0) {
+                const photoItems = cargo.cargo_photos.map(photo => {
+                    const imgUrl = escapeHtml(photo.image_url || '');
+                    const thumbUrl = escapeHtml(photo.thumbnail_url || photo.image_url || '');
+                    return `
+                        <a href="${imgUrl}" data-bs-toggle="tooltip" title="View full image" target="_blank" class="me-2 mb-2">
+                            <img src="${thumbUrl}" alt="Cargo photo" class="img-thumbnail" style="width:100px; height:100px; object-fit:cover;">
+                        </a>`;
+                }).join('');
+                photosHtml = `<div class="mb-3"><h5 class="mb-2"><i class="bi bi-images text-accent me-2"></i>Photos</h5><div class="d-flex flex-wrap">${photoItems}</div></div>`;
+            }
+            
+            const avatarHtml = cargo.posted_by_avatar_url ? 
+                `<img src="${escapeHtml(cargo.posted_by_avatar_url)}" alt="Shipper" class="rounded-circle" style="width:40px; height:40px; object-fit:cover;">` :
+                '<i class="bi bi-person-circle fs-2 text-secondary"></i>';
+
+            const statusClass = cargo.status ? String(cargo.status).toLowerCase().replace(/\s+/g, '-') : '';
+            
+            return `
+                <div class="cargo-detail-view p-md-3">
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start mb-4">
+                        <div class="mb-3 mb-md-0">
+                            <div class="mb-2">
+                                <span class="cargo-type-badge">${safeGet(cargo.cargo_type_display || cargo.cargo_type)}</span>
+                                <span class="cargo-status ${statusClass}">${safeGet(cargo.status_display || cargo.status)}</span>
+                            </div>
+                            <h4 class="mb-0 page-title" style="font-size: 1.5rem; margin-bottom: 0.5rem !important;">${safeGet(cargo.title, 'Cargo Listing')}</h4>
+                        </div>
+                        <div class="text-md-end">
+                            <div class="cargo-price mb-1">${safeCurrency(cargo.budget_amount)}</div>
+                            <small class="text-muted">Posted ${timeSince(cargo.created_at)}</small>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-7">
+                            <div class="mb-4">
+                                <h5 class="mb-3"><i class="bi bi-geo-alt text-accent me-2"></i>Route Information</h5>
+                                <div class="p-3 bg-light rounded-md">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="bi bi-flag-fill text-success me-2 fs-5"></i>
+                                        <div>
+                                            <strong class="d-block">From:</strong> ${safeGet(cargo.pickup_location_str)}
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-geo-alt-fill text-danger me-2 fs-5"></i>
+                                        <div>
+                                            <strong class="d-block">To:</strong> ${safeGet(cargo.delivery_location_str)}
+                                        </div>
+                                    </div>
+                                    ${cargo.distance ? `<div class="mt-2 text-muted"><i class="bi bi-arrows-expand"></i> Distance: ${safeGet(cargo.distance)} km</div>` : ''}
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <h5 class="mb-3"><i class="bi bi-box text-accent me-2"></i>Cargo Specifications</h5>
+                                <div class="row">
+                                    <div class="col-sm-6"><p><strong>Type:</strong> ${safeGet(cargo.cargo_type_display || cargo.cargo_type)}</p></div>
+                                    <div class="col-sm-6"><p><strong>Weight:</strong> ${cargo.cargo_weight ? `${safeGet(cargo.cargo_weight)} kg` : safeGet(cargo.weight_range)}</p></div>
+                                    <div class="col-sm-6"><p><strong>Volume:</strong> ${cargo.cargo_volume ? `${safeGet(cargo.cargo_volume)} m³` : 'N/A'}</p></div>
+                                    <div class="col-sm-6"><p><strong>Value:</strong> ${cargo.cargo_value ? `KSh ${parseFloat(cargo.cargo_value).toLocaleString()}`: 'N/A'}</p></div>
+                                    <div class="col-sm-6"><p><strong>Pickup Date:</strong> ${safeDate(cargo.pickup_date)}</p></div>
+                                    <div class="col-sm-6"><p><strong>Delivery Date:</strong> ${safeDate(cargo.delivery_date)}</p></div>
+                                    <div class="col-sm-12"><p><strong>Flexible Dates:</strong> ${cargo.flexible_dates ? 'Yes' : 'No'}</p></div>
+                                </div>
+                            </div>
+                            
+                            ${cargo.description ? `<div class="mb-4"><h5 class="mb-3"><i class="bi bi-file-text text-accent me-2"></i>Description</h5><p class="text-muted" style="white-space: pre-wrap;">${safeGet(cargo.description)}</p></div>` : ''}
+                            ${cargo.additional_requirements ? `<div class="mb-4"><h5 class="mb-3"><i class="bi bi-card-checklist text-accent me-2"></i>Additional Requirements</h5><p class="text-muted" style="white-space: pre-wrap;">${safeGet(cargo.additional_requirements)}</p></div>` : ''}
+                            ${photosHtml}
+                        </div>
+                        
+                        <div class="col-md-5">
+                            <div class="bg-light p-3 rounded-md mb-3 shadow-sm">
+                                <h5 class="mb-3"><i class="bi bi-person-circle text-accent me-2"></i>Shipper Information</h5>
+                                <div class="d-flex align-items-center mb-3">
+                                    ${avatarHtml}
+                                    <div class="ms-2">
+                                        <h6 class="mb-0 fw-bold">${safeGet(cargo.posted_by_username, 'Shipper')}</h6>
+                                        ${cargo.posted_by_rating ? `<div class="text-warning small">⭐ ${parseFloat(cargo.posted_by_rating).toFixed(1)} rating</div>` : '<small class="text-muted">No rating yet</small>'}
+                                    </div>
+                                </div>
+                                <p class="small text-muted">Contact shipper via platform messages for details.</p>
+                            </div>
+                            
+                            <div class="bid-section mt-3">
+                                <button type="button" class="btn btn-primary w-100" id="bid-cargo-btn-modal-action" data-cargo-id="${cargo.id}" data-bs-toggle="modal" data-bs-target="#bidModal">
+                                    <i class="bi bi-hand-thumbs-up me-2"></i>Place Bid
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+        }
+
+
+        // Initialize tooltips safely
+        function initTooltips(container = document) {
+            if (typeof bootstrap === 'undefined' || !bootstrap.Tooltip) {
+                return false;
+            }
+            try {
+                const tooltipElements = container.querySelectorAll('[data-bs-toggle="tooltip"]');
+                tooltipElements.forEach(element => {
+                    const existingTooltip = bootstrap.Tooltip.getInstance(element);
+                    if (existingTooltip) {
+                        existingTooltip.dispose();
+                    }
+                    new bootstrap.Tooltip(element);
+                });
+                return true;
+            } catch (error) {
+                console.error('Error initializing tooltips:', error);
+                return false;
+            }
+        }
+
+        // Search and filter functionality
+        function initSearchAndFilters() {
+            const applyFiltersBtn = DOM.get('apply-filters'); 
+            const clearFiltersBtn = DOM.get('clear-filters'); 
+            const sortSelect = DOM.get('sort-by');
+
+            const filterDistanceSlider = DOM.get('filterDistance');
+            const filterPriceRangeSlider = DOM.get('filterPriceRange');
+            
+            if (applyFiltersBtn) {
+                applyFiltersBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    applyFiltersAndSearch();
+                });
+            }
+            if (clearFiltersBtn) {
+                clearFiltersBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    clearAllFilters();
+                });
+            }
+            if (sortSelect) {
+                sortSelect.addEventListener('change', applyFiltersAndSearch);
+            }
+
+            if (filterDistanceSlider) {
+                updateRangeDisplay(filterDistanceSlider, 'distance-value', 'km'); 
+                filterDistanceSlider.addEventListener('input', () => updateRangeDisplay(filterDistanceSlider, 'distance-value', 'km'));
+            }
+            if (filterPriceRangeSlider) {
+                updateRangeDisplay(filterPriceRangeSlider, 'price-value', 'KSh', true); 
+                filterPriceRangeSlider.addEventListener('input', () => updateRangeDisplay(filterPriceRangeSlider, 'price-value', 'KSh', true));
+            }
+        }
+
+        function applyFiltersAndSearch() {
+            const filterForm = DOM.get('cargoFilterForm');
+            if (!filterForm) {
+                console.warn("Filter form 'cargoFilterForm' not found.");
+                loadCargoListings(); 
+                return;
+            }
+            const formData = new FormData(filterForm);
+            const params = new URLSearchParams();
+
+            for (const [key, value] of formData.entries()) {
+                if (value) { 
+                    if (key === 'cargo_type' || key === 'weight_range') {
+                        params.append(key, value);
+                    } else if (key === 'distance' && value === filterForm.elements['distance'].max) {
+                        // Skip if max
+                    } else if (key === 'price_range' && value === filterForm.elements['price_range'].max) {
+                         // Skip if max
+                    } else {
+                        params.set(key, value);
+                    }
+                }
+            }
+            
+            const sortSelect = DOM.get('sort-by');
+            if (sortSelect && sortSelect.value) {
+                params.set('sort_by', sortSelect.value);
+            }
+            
+            const queryString = params.toString();
+            const baseCargoEndpoint = "cargo-listings/"; 
+            const apiEndpointWithQuery = queryString ? `${baseCargoEndpoint}?${queryString}` : baseCargoEndpoint;
+            
+            loadCargoListings(apiEndpointWithQuery);
+        }
+
+        function clearAllFilters() {
+            const filterForm = DOM.get('cargoFilterForm');
+            if (filterForm) {
+                filterForm.reset(); 
+
+                const filterDistanceSlider = DOM.get('filterDistance');
+                if (filterDistanceSlider) updateRangeDisplay(filterDistanceSlider, 'distance-value', 'km');
+                
+                const filterPriceRangeSlider = DOM.get('filterPriceRange');
+                if (filterPriceRangeSlider) updateRangeDisplay(filterPriceRangeSlider, 'price-value', 'KSh', true);
+            }
+            const sortSelect = DOM.get('sort-by');
+             if(sortSelect) {
+                sortSelect.value = 'newest'; 
+            }
+            loadCargoListings("cargo-listings/"); 
+        }
+
+        // Cargo posting form functionality
+        function initCargoPostingForm() {
+            const postCargoBtn = DOM.get('postCargoBtn');
+            const saveDraftBtn = DOM.get('saveDraftBtn');
+            
+            setupPhotoUpload('cargoPhotos', 'photo-preview-container', 3);
+
+            if (postCargoBtn) {
+                postCargoBtn.addEventListener('click', async function(e) {
+                    e.preventDefault();
+                    await handleCargoFormSubmission('post');
+                });
+            }
+            if (saveDraftBtn) {
+                saveDraftBtn.addEventListener('click', async function(e) {
+                    e.preventDefault();
+                    await handleCargoFormSubmission('draft');
+                });
+            }
+        }
+
+        async function handleCargoFormSubmission(action = 'post') { 
+            const cargoDetailsForm = DOM.get('postCargoForm');
+            const locationForm = DOM.get('locationForm');
+            const budgetForm = DOM.get('budgetForm');
+            const submitBtn = (action === 'post') ? DOM.get('postCargoBtn') : DOM.get('saveDraftBtn');
+
+            if (!validateForms([cargoDetailsForm, locationForm, budgetForm])) {
+                showMessageBox('Validation Error', 'Please fill all required fields correctly.', 'warning');
+                return false;
+            }
+            
+            setButtonLoading(submitBtn, true, action === 'post' ? 'Posting...' : 'Saving...');
+            
+            const combinedFormData = new FormData();
+
+            if (cargoDetailsForm) new FormData(cargoDetailsForm).forEach((value, key) => combinedFormData.append(key, value));
+            if (locationForm) new FormData(locationForm).forEach((value, key) => combinedFormData.append(key, value));
+            if (budgetForm) new FormData(budgetForm).forEach((value, key) => combinedFormData.append(key, value));
+
+            const cargoPhotosInput = DOM.get('cargoPhotos');
+            if (cargoPhotosInput && cargoPhotosInput.files && cargoPhotosInput.files.length > 0) {
+                Array.from(cargoPhotosInput.files).forEach((file) => {
+                    combinedFormData.append('cargo_photos_input', file); 
+                });
+            }
+            
+            combinedFormData.append('action_type', action); 
+            
+            const result = await makeApiRequest('cargo-listings/', { 
+                method: 'POST',
+                body: combinedFormData,
+            });
+                
+            setButtonLoading(submitBtn, false); 
+
+            if (result.success) {
+                showModalNotification('success', 
+                    action === 'post' ? 'Cargo Posted!' : 'Draft Saved!', 
+                    action === 'post' ? 'Your cargo has been posted successfully.' : 'Your cargo draft has been saved.');
+                
+                if (cargoDetailsForm) cargoDetailsForm.reset();
+                if (locationForm) locationForm.reset();
+                if (budgetForm) budgetForm.reset();
+                
+                const photoPreviewContainer = DOM.get('photo-preview-container');
+                if (photoPreviewContainer) photoPreviewContainer.innerHTML = '';
+                if (cargoPhotosInput) {
+                    try { 
+                        cargoPhotosInput.files = new DataTransfer().files;
+                    } catch { cargoPhotosInput.value = '';}
+                }
+
+                if (action === 'post' && DOM.get('cargo-listings-container')) { 
+                    setTimeout(() => loadCargoListings("cargo-listings/"), 1000); 
+                }
+                return true;
+
+            } else {
+                const errorMessage = result.error?.detail || (typeof result.error === 'object' ? JSON.stringify(result.error) : result.error) || "An unknown error occurred.";
+                showModalNotification('error', 'Submission Failed', `Could not ${action} cargo: ${errorMessage}`);
+                return false;
+            }
+        }
+
+       // Simplified Bidding System
+       // Fixed Bidding System
+        class BiddingSystem {
+            constructor() {
+                this.baseUrl = this.detectBaseUrl();
+                this.debugMode = true; // Set to false in production
+                this.init();
+            }
+
+            detectBaseUrl() {
+                const currentOrigin = window.location.origin;
+                const isLocalhost = currentOrigin.includes('localhost') || currentOrigin.includes('127.0.0.1');
+                
+                if (isLocalhost && !currentOrigin.includes(':8000')) {
+                    return 'http://localhost:8000';
+                }
+                return currentOrigin;
+            }
+
+            log(...args) {
+                if (this.debugMode) {
+                    console.log('[BiddingSystem]', ...args);
+                }
+            }
+
+            error(...args) {
+                console.error('[BiddingSystem]', ...args);
+            }
+
+            init() {
+                this.log('Initializing bidding system with base URL:', this.baseUrl);
+                this.initEventListeners();
+                this.initializeCSRF(); // Initialize CSRF on startup
+            }
+
+            initEventListeners() {
+                console.log('🎯 Setting up event listeners...');
+                
+                const bidForm = DOM.get('bidForm');
+                console.log('📋 Bid form element:', bidForm);
+                
+                if (bidForm) {
+                    console.log('✅ Bid form found, adding submit listener');
+                    bidForm.addEventListener('submit', (e) => {
+                        console.log('🚨 FORM SUBMIT EVENT TRIGGERED!', e);
+                        this.handleBidSubmission(e);
+                    });
+                } else {
+                    console.log('❌ Bid form not found - no submit listener added');
+                }
+
+                // Event delegation for bid buttons
+                console.log('🎯 Setting up bid button event delegation...');
+                document.body.addEventListener('click', (event) => {
+                    console.log('👆 Click detected on:', event.target);
+                    
+                    if (event.target && (
+                        event.target.id === 'bid-cargo-btn-modal' || 
+                        event.target.id === 'bid-cargo-btn-modal-action' ||
+                        event.target.classList.contains('bid-btn') ||
+                        event.target.closest('.bid-btn')
+                    )) {
+                        console.log('🎯 Bid button clicked:', event.target.id);
+                        const clickedElement = event.target.closest('[data-cargo-id]') || event.target;
+                        const cargoId = clickedElement.dataset.cargoId;
+                        console.log('📦 Cargo ID from dataset:', cargoId);
+                        
+                        if (cargoId) {
+                            this.log('Opening bid modal for cargo:', cargoId);
+                            this.openBidModal(cargoId);
+                        } else {
+                            console.log('❌ No cargo ID found on button');
+                        }
+                    }
+                });
+                
+                console.log('✅ Event listeners setup complete');
+            }
+
+            openBidModal(cargoId) {
+                const bidModalElement = DOM.get('bidModal');
+                const cargoIdInput = DOM.get('bid_cargo_id'); 
+                
+                if (!bidModalElement) {
+                    this.error('Bid modal (#bidModal) not found');
+                    showMessageBox('Error', 'Bid modal not found. Please refresh the page.', 'error');
+                    return false;
+                }
+
+                if (cargoIdInput) {
+                    cargoIdInput.value = cargoId;
+                    this.log('Set cargo ID in form:', cargoId);
+                } else {
+                    this.error('Hidden input #bid_cargo_id not found in bid modal');
+                }
+                
+                if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                    const modal = bootstrap.Modal.getInstance(bidModalElement) || new bootstrap.Modal(bidModalElement);
+                    modal.show();
+                    this.log('Modal opened successfully');
+                    return true;
+                }
+                
+                this.error('Bootstrap Modal not available');
+                return false;
+            }
+
+            // Helper function to get CSRF token from cookies
+            getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== "") {
+                    const cookies = document.cookie.split(";");
+                    for (let cookie of cookies) {
+                        cookie = cookie.trim();
+                        if (cookie.startsWith(name + "=")) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            // Call this function when the page loads to ensure CSRF cookie is set
+            async initializeCSRF() {
+                try {
+                    await fetch(`${this.baseUrl}/api/csrf/`, { 
+                        credentials: "include",
+                        method: "GET"
+                    });
+                    console.log("✅ CSRF cookie initialized successfully");
+                } catch (err) {
+                    console.error("❌ Failed to initialize CSRF cookie:", err);
+                }
+            }
+
+            async handleBidSubmission(e) {
+                console.log('🚀 FORM SUBMITTED - handleBidSubmission called');
+                e.preventDefault();
+                this.log('=== BID SUBMISSION START ===');
+
+                const bidForm = e.target;
+                const submitBtn = bidForm.querySelector('#submit-bid-btn');
+
+                if (!bidForm.checkValidity()) {
+                    this.log('❌ Form validation failed');
+                    bidForm.reportValidity();
+                    return false;
+                }
+
+                this.log('✓ Form validation passed');
+                if (submitBtn) setButtonLoading(submitBtn, true, 'Placing Bid...');
+
+                try {
+                    // Step 1: Create FormData from the form
+                    const formData = new FormData(bidForm);
+
+                    // Step 2: Get the cargo ID from the form data
+                    const cargoId = formData.get('cargo_id');
+
+                    // Step 3: Validate that the cargo ID exists
+                    if (!cargoId) {
+                        throw new Error('Cargo ID is missing from the form. Cannot submit bid.');
+                    }
+                    
+                    // Step 4: Ensure CSRF cookie is set
+                    // Get auth token
+                    const authToken = localStorage.getItem('authToken');
+                    if (!authToken) {
+                        throw new Error('Not authenticated. Please log in.');
+                    }
+
+                    // Initialize CSRF
+                    await fetch(`${this.baseUrl}/api/csrf/`, {
+                        method: 'GET',
+                        credentials: 'include',
+                        headers: {
+                            'Authorization': `Token ${authToken}`
+                        }
+                    });
+
+                    
+                    // Step 6: Construct the API endpoint
+                    const apiUrl = `${this.baseUrl}/api/bids/bids/`;
+                    this.log('🌐 Preparing API call to:', apiUrl);
+
+                    // Step 7: Make the API request
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        credentials: 'include', // Include cookies for CSRF
+                        headers: {
+                            'X-CSRFToken': this.getCookie('csrftoken'),
+                            'authorization': `Token ${authToken}`,
+                            'Accept': 'application/json'
+                            // Don't set Content-Type - let browser handle it for FormData
+                        },
+                        body: formData,
+                        
+                    });
+
+                    // Step 8: Handle the response
+                    if (response.ok) {
+                        const result = await response.json();
+                        this.log('✅ Bid submitted successfully:', result);
+                        
+                        if (result.success !== false) { // Check for explicit false, not just falsy
+                            showModalNotification('success', 'Bid Placed!', 'Your bid has been placed successfully.');
+                            bidForm.reset(); 
+                            const modalElement = DOM.get('bidModal');
+                            if (modalElement && typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                                const modalInstance = bootstrap.Modal.getInstance(modalElement);
+                                if (modalInstance) modalInstance.hide();
+                            }
+                        } else {
+                            throw new Error(result.error?.detail || result.message || 'Failed to place bid');
+                        }
+                    } else {
+                        let errorMessage = `Server error: ${response.status}`;
+                        try {
+                            const errorData = await response.json();
+                            this.error('❌ Failed to submit bid:', errorData);
+                            errorMessage = errorData.error?.detail || errorData.message || errorMessage;
+                        } catch (parseError) {
+                            this.error('❌ Could not parse error response:', parseError);
+                        }
+                        throw new Error(errorMessage);
+                    }
+                } catch (error) {
+                    this.error('❌ Error during bid submission:', error);
+                    showModalNotification('error', 'Bid Submission Failed', `Could not place bid: ${error.message}`);
+                } finally {
+                    if (submitBtn) setButtonLoading(submitBtn, false);
+                }
+                
+                this.log('=== BID SUBMISSION END ===');
+                return true;
+            }
+        }
+
+        // Initialize the bidding system
+        let biddingSystem;
+
+        function initBiddingSystem() {
+            try {
+                biddingSystem = new BiddingSystem();
+                console.log('✅ Bidding system initialized successfully');
+            } catch (error) {
+                console.error('❌ Failed to initialize bidding system:', error);
+            }
+        }
+
+        // Legacy function for backward compatibility
+        function openBidModal(cargoId) {
+            if (biddingSystem) {
+                return biddingSystem.openBidModal(cargoId);
+            } else {
+                console.error('Bidding system not initialized');
+                return false;
+            }
+        }
+
+        // Auto-initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initBiddingSystem);
+        } else {
+            initBiddingSystem();
+        }
+       
+
+        // Truck Posting Form Functionality
+        function initTruckPostingForm() {
+            const postTruckForm = DOM.get('postTruckForm'); 
+            const submitTruckBtn = DOM.get('submit-truck-btn'); 
+
+            if (!postTruckForm || !submitTruckBtn) {
+                console.warn('Truck posting form or submit button not found.');
+                return;
+            }
+
+            setupPhotoUpload('truckPhotosInput', 'truck-photo-preview', 3); 
+
+            submitTruckBtn.addEventListener('click', async function(e) {
+                e.preventDefault();
+                if (!validateForms(postTruckForm)) {
+                    showMessageBox('Validation Error', 'Please fill all required fields for the truck.', 'warning');
+                    return;
+                }
+
+                setButtonLoading(submitTruckBtn, true, 'Posting Truck...');
+                const formData = new FormData(postTruckForm);
+                
+                const truckPhotosInputEl = DOM.get('truckPhotosInput');
+                if (truckPhotosInputEl && truckPhotosInputEl.files) {
+                    Array.from(truckPhotosInputEl.files).forEach(file => {
+                        formData.append('truck_photos_input', file); 
+                    });
+                }
+
+                const result = await makeApiRequest('trucks/', { 
+                    method: 'POST',
+                    body: formData
+                });
+                
+                setButtonLoading(submitTruckBtn, false);
+
+                if (result.success) {
+                    showModalNotification('success', 'Truck Posted!', 'Your truck details have been posted successfully.');
+                    
+                    postTruckForm.reset(); 
+                    const truckPhotoPreview = DOM.get('truck-photo-preview');
+                    if (truckPhotoPreview) truckPhotoPreview.innerHTML = ''; 
+                    if (truckPhotosInputEl) {
+                         try { truckPhotosInputEl.files = new DataTransfer().files; }
+                         catch { truckPhotosInputEl.value = '';}
+                    }
+
+                    const postTruckModalEl = DOM.get('postTruckModal');
+                    if (postTruckModalEl && bootstrap.Modal.getInstance(postTruckModalEl)) {
+                        bootstrap.Modal.getInstance(postTruckModalEl).hide();
+                    }
+                } else {
+                    const errorMessage = result.error?.detail || (typeof result.error === 'object' ? JSON.stringify(result.error) : result.error) || "Could not post truck.";
+                    showModalNotification('error', 'Truck Posting Failed', `Could not post truck: ${errorMessage}`);
+                }
+            });
+        }
+
+
+        // Main initialization function
+        async function initializeApp() { 
+            console.log('Initializing application...');
+            
+            try {
+                await initializeDashboard(); 
+
+                flatpickr(".date-picker", {
+                    altInput: true,
+                    altFormat: "F j, Y",
+                    dateFormat: "Y-m-d",
+                    minDate: "today" 
+                });
+
+                initTabSwitching();
+                initSearchAndFilters();
+                initCargoPostingForm();
+                initBiddingSystem();
+                initTruckPostingForm(); 
+                
+                initTooltips(); 
+                
+                // Initial content load based on active tab
+                if (DOM.get('truck-owner-content')?.classList.contains('active')) {
+                    loadCargoListings("cargo-listings/");
+                } else if (DOM.get('business-content')?.classList.contains('active')) {
+                    loadAvailableTrucks("trucks/"); // For the business tab's truck preview
+                } else {
+                    // Default if no tab is active (though one usually is by default HTML)
+                    // Load for truck owner tab by default if no specific active tab is found
+                    if(DOM.get('truck-owner-tab')) DOM.get('truck-owner-tab').click(); // Programmatically click to trigger load
+                    else loadCargoListings("cargo-listings/");
+                }
+                
+                const cargoListingsContainer = DOM.get('cargo-listings-container');
+                if (cargoListingsContainer) {
+                    cargoListingsContainer.addEventListener('click', function(e) {
+                        const viewDetailsButton = e.target.closest('.view-details-btn');
+                        const cargoCard = e.target.closest('.cargo-listing-card');
+
+                        if (viewDetailsButton) {
+                            e.preventDefault(); 
+                            const cargoId = viewDetailsButton.dataset.cargoId;
+                            if (cargoId) openCargoDetails(cargoId);
+                        } else if (cargoCard) { // Allow clicking anywhere on the card
+                            const cargoId = cargoCard.dataset.cargoId;
+                            if (cargoId) openCargoDetails(cargoId);
+                        }
+                    });
+                }
+
+                // Logout functionality
+                const logoutBtn = DOM.get('logout-btn');
+                const sidebarLogoutBtn = DOM.get('sidebar-logout-btn');
+
+                function handleLogout(e) {
+                    e.preventDefault();
+                    clearAuthData();
+                    showMessageBox('Logged Out', 'You have been successfully logged out.', 'success');
+                    const usernameElement = DOM.get('username-display');
+                    if (usernameElement) usernameElement.textContent = 'Guest';
+                    const usernamePlaceholder = DOM.get('usernamePlaceholder');
+                    if (usernamePlaceholder) usernamePlaceholder.textContent = 'Guest';
+                    
+                    setTimeout(() => redirectToLogin(), 1500);
+                }
+
+                if (logoutBtn) logoutBtn.addEventListener('click', handleLogout);
+                if (sidebarLogoutBtn) sidebarLogoutBtn.addEventListener('click', handleLogout);
+
+
+                console.log('Application initialized successfully');
+                return true;
+            } catch (error) {
+                console.error('Error initializing application:', error);
+                showMessageBox('Initialization Error', 'Some features may not work properly. Please refresh the page.', 'error');
+                return false;
+            }
+        }
+
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeApp);
+        } else {
+            initializeApp(); 
+        }
+
+        window.addEventListener('beforeunload', function() {
+            try {
+                if (typeof bootstrap !== 'undefined') {
+                    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(element => {
+                        const tooltip = bootstrap.Tooltip.getInstance(element);
+                        if (tooltip) tooltip.dispose();
+                    });
+                    
+                    document.querySelectorAll('.modal').forEach(element => {
+                        const modal = bootstrap.Modal.getInstance(element);
+                        if (modal) modal.dispose();
+                    });
+                }
+            } catch (error) {
+                console.warn('Error during beforeunload cleanup:', error);
+            }
+        });
+    </script>
+</body>
+</html>
