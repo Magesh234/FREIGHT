@@ -122,3 +122,8 @@ This document details the development progress of the FreightLink system, which 
 ## June 20, 2025
 - Final testing and validation of HTML inputs and backend responses.
 - Prepared full repo for GitHub structure and documentation.
+  
+---
+## June 22, 2025
+- Migrated the database from sqlite to PostgreSQL
+- Facing some minor challenges in migration 
