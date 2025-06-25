@@ -127,3 +127,8 @@ This document details the development progress of the FreightLink system, which 
 ## June 22, 2025
 - Migrated the database from sqlite to PostgreSQL
 - Facing some minor challenges in migration 
+
+--
+## June 23, 2025
+- Intergrated the payment system
+- Applied for daraja Credentials
