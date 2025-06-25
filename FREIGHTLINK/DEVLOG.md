@@ -132,3 +132,7 @@ This document details the development progress of the FreightLink system, which 
 ## June 23, 2025
 - Intergrated the payment system
 - Applied for daraja Credentials
+
+--
+## June 24, 2025 
+- Updated the bidding system 
